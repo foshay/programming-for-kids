@@ -1,4 +1,4 @@
-#!/bin.bash
+#!/bin/bash
 
 # Installs docker on linux minut
 sudo apt-get remove docker docker-engine docker.io containerd runc
