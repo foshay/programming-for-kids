@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Editor from './Editor';
+//import Editor from './Editor.jsx'
 
-const editor = React.createElement(Editor);
-
-ReactDOM.render(editor, document.getElementById('blockly'));
+require('./Editor.jsx');
+ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
