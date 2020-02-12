@@ -91,6 +91,15 @@ componentDidMount = () => {
 //on load we create an element of the class created above and insert into the element 'blockly'
 window.addEventListener('load', () => {
     const button = document.getElementById('gradeButton');
+
+    const util = require('util');
+    const execFile = util.promisify(require('child_process').execFile);
+    async function runTest() {
+    const { stdout } = await execFile('node', ['--version']);
+        console.log('stdout: ', stdout);
+    }
+    runTest();
+
     button.addEventListener('click', function(e) {
         alert(document.getElementById('code').value);
     });
