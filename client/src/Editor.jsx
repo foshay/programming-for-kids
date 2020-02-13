@@ -90,7 +90,6 @@ componentDidMount = () => {
 
 //on load we create an element of the class created above and insert into the element 'blockly'
 window.addEventListener('load', () => {
-    const button = document.getElementById('gradeButton');
 
     //const util = require('util');
     //const execFile = util.promisify(require('child_process').execFile);
@@ -108,11 +107,6 @@ window.addEventListener('load', () => {
     //  console.log('stdout: ${stdout}');
     //  console.error('stderr: ${stderr}');
     //});
-
-
-    button.addEventListener('click', function(e) {
-        alert(document.getElementById('code').value);
-    });
     const editor = React.createElement(Editor);
     ReactDOM.render(editor, document.getElementById('blockly'));
 });
