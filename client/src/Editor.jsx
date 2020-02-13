@@ -92,13 +92,23 @@ componentDidMount = () => {
 window.addEventListener('load', () => {
     const button = document.getElementById('gradeButton');
 
-    const util = require('util');
-    const execFile = util.promisify(require('child_process').execFile);
-    async function runTest() {
-    const { stdout } = await execFile('node', ['--version']);
-        console.log('stdout: ', stdout);
-    }
-    runTest();
+    //const util = require('util');
+    //const execFile = util.promisify(require('child_process').execFile);
+    //async function runTest() {
+    //const { stdout } = await execFile('node', ['--version']);
+    //    console.log('stdout: ', stdout);
+    //}
+    //runTest();
+    //const { exec } = require('child_process').exec;
+    //exec('echo "The \\$Home variable is $HOME"', (error, stdout, stderr) => {
+    //  if (error) {
+    //    console.error('exec error: ${error}');
+    //    return;
+    //  }
+    //  console.log('stdout: ${stdout}');
+    //  console.error('stderr: ${stderr}');
+    //});
+
 
     button.addEventListener('click', function(e) {
         alert(document.getElementById('code').value);
