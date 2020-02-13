@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Blockly from 'blockly';
 
 
-import ReactBlocklyComponent from 'react-blockly';
+import ReactBlocklyComponent from 'react-blockly/dist-modules';
 import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
 

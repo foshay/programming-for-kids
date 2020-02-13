@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-require('./Editor.jsx');
+require('./Editor.jsx.js');
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
