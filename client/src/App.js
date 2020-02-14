@@ -27,13 +27,21 @@ class App extends Component {
   
   handleSubmit = async e => {
     e.preventDefault();
-    var code = document.getElementById('code').value;
+    var ucode = document.getElementById('code').value;
+    //var lesson = "1";
+    //var formData = new FormData();
+    //formData.append('code', code);
+    //formData.append('lesson', lesson);
     const response = await fetch('/api/grade', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ post: code }),
+      body: JSON.stringify({
+        lesson: '1',
+        code: ucode,
+      })
+      
     });
     const body = await response.text();
     

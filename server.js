@@ -24,6 +24,7 @@ function runCmd(cmd,callback) {
       }
       console.log(stdout);
       if (callback) {
+          console.log("Callback stdout");
       return callback("\`\`\`"+stdout+"\`\`\`");
       }
    });
@@ -34,12 +35,14 @@ app.get('/api/connect', (req, res) => {
 });
 
 app.post('/api/grade', (req, res) => {
-  console.log(req.body);
-  runCmd("echo received data",function(text,error) {
+    console.log("body "+req.body.code+" "+req.body.lesson);
+    console.log(req.body);
+    var rand = Math.floor((Math.random() * 10000) + 1);
+    runCmd("echo \'"+req.body.code+"\' > temp"+rand+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./temp"+rand,function(text,error) {
   console.log(text);
 });
   res.send(
-    `I received your POST request. This is what you sent me: ${req.body.post}`,
+    `I received your POST request. This is what you sent me: ${req.body.code}`,
   );
 });
 

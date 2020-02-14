@@ -3,6 +3,7 @@
 # grading script MUST include a line at the bottom that starts the student's function. Example would be adding:
 # def student(potential args) {
 #this script will add the missing "}"
+touch ranscript
 if [ "$1" == "-h" ]
 then
     echo "Use with grading script for arg 1 and student's submission as arg 2."
