@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Blockly from 'blockly';
+import Blockly, { Generator } from 'blockly';
 
 
 import ReactBlocklyComponent from 'react-blockly/dist-modules';
@@ -61,6 +61,7 @@ componentDidMount = () => {
     //this prints out the blocks to actual python code to the page.
     //TODO send the const code to backend for grading
     require('blockly/python');
+    //python = new Generator(name = "Python", INDENT = "4");
     const code = Blockly.Python.workspaceToCode(workspace);
     document.getElementById('code').value = code;
   }
