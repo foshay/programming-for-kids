@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Blockly, { Generator } from 'blockly';
+import Blockly from 'blockly';
 
 
 import ReactBlocklyComponent from 'react-blockly/dist-modules';
@@ -54,10 +54,13 @@ componentDidMount = () => {
     });
     */
     //We can use this for saving user's progress
-    /*
+    
     const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    document.getElementById('generated-xml').innerText = newXml;
-    */
+    console.log(newXml);
+
+    //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
+    //document.getElementById('generated-xml').innerText = newXml;
+    
     //this prints out the blocks to actual python code to the page.
     //TODO send the const code to backend for grading
     require('blockly/python');

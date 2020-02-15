@@ -31,7 +31,7 @@ function runCmd(cmd,callback) {
 }
 
 app.get('/api/connect', (req, res) => {
-  res.send({ express: 'Connected to server' });
+  res.send({ express: 'Connected to the grading server' });
 });
 
 app.post('/api/grade', (req, res) => {

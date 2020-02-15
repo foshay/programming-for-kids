@@ -14,7 +14,8 @@ class App extends Component {
   componentDidMount() {
     this.callApi()
       .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
+      
   }
   
   callApi = async () => {
@@ -57,6 +58,7 @@ render() {
         <form onSubmit={this.handleSubmit}>
           <textarea
             type="text"
+            disabled
             id="code"
             value={this.state.post}
             onChange={e => this.setState({ post: e.target.value })}
