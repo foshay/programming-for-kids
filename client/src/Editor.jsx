@@ -56,7 +56,7 @@ componentDidMount = () => {
     //We can use this for saving user's progress
     
     const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    console.log(newXml);
+    console.info(newXml);
 
     //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
     //document.getElementById('generated-xml').innerText = newXml;

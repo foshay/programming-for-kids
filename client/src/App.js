@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 
 import './App.css';
+require('./Editor.jsx');
 
 class App extends Component {
   state = {
