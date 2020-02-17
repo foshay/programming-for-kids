@@ -38,7 +38,7 @@ app.post('/api/grade', (req, res) => {
     console.log("body "+req.body.code+" "+req.body.lesson);
     console.log(req.body);
     var rand = Math.floor((Math.random() * 10000) + 1);
-    runCmd("cd ./temp && echo \'"+req.body.code+"\' > temp"+rand+" && ../backend/run_python_script.sh ../grading_scripts/"+req.body.lesson+" ./temp"+rand,function(text,error) {
+    runCmd("echo \'"+req.body.code+"\' > ./temp/temp"+rand+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./temp/temp"+rand,function(text,error) {
   console.log(text);
 });
   res.send(
