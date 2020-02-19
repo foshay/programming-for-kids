@@ -12,14 +12,16 @@ then
     echo "Incorrect amount of arguments. use -h for help"
     exit 1
 fi
-lines=$(wc -l < $2)
-counter=1
-while [ $counter -le $lines ]
-do
-    sed -i $counter's/^/\t/g' $2
-    ((counter++))
-done
+#lines=$(wc -l < $2)
+#counter=1
+#while [ $counter -le $lines ]
+#do
+#    sed -i $counter's/^/\t/g' $2
+#    ((counter++))
+#done
+
+#sed -r 's/  /   /g' $2
 
 cat $1 $2 > "temp$$.py"
-#Run the newly generated file in a docker doc here
+#Run the newly generated file in a docker doc here1
 exit 0
