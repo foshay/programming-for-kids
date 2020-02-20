@@ -21,7 +21,7 @@ fi
 #done
 
 #sed -r 's/  /   /g' $2
-
-cat $1 $2 > "temp$$.py"
+#6969 is user id. 1 is lesson number
+cat $1 $2 > "users/6969/pcode/6969-1.py"
 #Run the newly generated file in a docker doc here1
 exit 0
