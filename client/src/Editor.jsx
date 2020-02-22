@@ -78,7 +78,7 @@ componentDidMount = () => {
         grid: {
           spacing: 20,
           length: 3,
-          colour: '#ccc',
+          colour: '#0000FF',
           snap: true,
         },
       }}
@@ -112,5 +112,6 @@ window.addEventListener('load', () => {
     //  console.error('stderr: ${stderr}');
     //});
     const editor = React.createElement(Editor);
-    ReactDOM.render(editor, document.getElementById('blockly'));
+    if( document.getElementById('blockly') != null)
+      ReactDOM.render(editor, document.getElementById('blockly'));
 });
