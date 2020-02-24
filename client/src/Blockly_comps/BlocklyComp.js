@@ -61,7 +61,7 @@ class BlocklyComp extends Component {
                     value={this.state.post}
                     onChange={e => this.setState({ post: e.target.value })}
                 />
-                <button type="submit" id="gradeButton" onclick="handleSubmit()">Grade code</button>
+                <button type="submit" id="gradeButton" onClick="handleSubmit()">Grade code</button>
                 </form>
                 <p>{this.state.responseToPost}</p>
             </div>

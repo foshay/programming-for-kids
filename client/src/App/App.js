@@ -23,10 +23,10 @@ render() {
               <Route exact={true} path="/Home" component={HomeScreen} />
               <Route exact={true} path="/LessonMenu" component={LessonMenu} />
 
-              <Link to="/Home"><button>Home</button></Link>
+              {/* <Link to="/Home"><button>Home</button></Link>
               
               <Link to="/LessonMenu"><button>Lessons</button></Link>
-              <Link to="/"><button>Log in</button></Link>
+              <Link to="/"><button>Log in</button></Link> */}
           </Router>
 
         </div>

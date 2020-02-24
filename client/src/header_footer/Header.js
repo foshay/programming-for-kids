@@ -8,7 +8,7 @@ class Header extends Component {
     render(){
         return(
             <div>
-                <Router>
+                {/* <Router> */}
                     {/* <Route exact={true} path="/" component={HomeScreen} />
                     <Route exact={true} path="/LessonMenu" component={LessonMenu} /> */}
                     {/* <Link to="/"><button>Home</button></Link>
@@ -23,7 +23,7 @@ class Header extends Component {
                     </Navbar.Group>
                 </Navbar>
 
-            </Router>
+            {/* </Router> */}
         </div>
         )
     }
