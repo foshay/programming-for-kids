@@ -12,26 +12,26 @@ require('../Editor.jsx')
 
 class LessonMenu extends Component {
 
-  
-render() {
+
+  render() {
     return (
       <div className="App">
-        
-        <div>
-          <Header />
-        </div>
-        <Router>
-            <div>
-                <h1>Component LessonMenu</h1>
-                <BlocklyComp />
-            </div>
-        </Router>
-        
-        <div>
-          <Footer />
-        </div>
 
-        </div>
+        {/* <div> */}
+        <Header />
+        {/* </div> */}
+        {/* <Router>
+            <div> */}
+        <h1>Component LessonMenu</h1>
+        <BlocklyComp />
+        {/* </div> */}
+        {/* </Router> */}
+
+        {/* <div> */}
+        <Footer />
+        {/* </div> */}
+
+      </div>
     );
   }
 }

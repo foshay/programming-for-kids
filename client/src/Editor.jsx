@@ -111,7 +111,13 @@ window.addEventListener('load', () => {
     //  console.log('stdout: ${stdout}');
     //  console.error('stderr: ${stderr}');
     //});
-    const editor = React.createElement(Editor);
-    if( document.getElementById('blockly') != null)
-      ReactDOM.render(editor, document.getElementById('blockly'));
+
+
+    // This was commented out because it the same code is
+    // run inside BlocklyComp.js
+    // const editor = React.createElement(Editor);
+    // if( document.getElementById('blockly') != null)
+    //   ReactDOM.render(editor, document.getElementById('blockly'));
 });
+
+export default Editor;
