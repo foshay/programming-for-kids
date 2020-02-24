@@ -3,13 +3,15 @@ import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
 //import logo from './logo.svg';
 //import { Text, View, StyleSheet } from 'react-native';
 //import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import Header from './header_footer/Header.js'
-import Footer from './header_footer/Footer.js'
-import BlocklyComp from './BlocklyComp.js'
-import HomeScreen from './HomeScreen.js'
-import LessonMenu from './LessonMenu.js'
-import './App.css';
-require('./Editor.jsx')
+//import Header from '../header_footer/Header.js'
+//import Footer from '../header_footer/Footer.js'
+//import BlocklyComp from '../BlocklyComp.js'
+import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
+import HomeScreen from '../Menus/HomeScreen.js'
+import LessonMenu from '../Menus/LessonMenu.js'
+import LoginMenu from '../Menus/LoginMenu.js'
+import '../CSS_files/App.css';
+//require('./Editor.jsx')
 
 class App extends Component {
 render() {
@@ -17,10 +19,14 @@ render() {
       <div className="App">
         
           <Router>
+              <Route exact={true} path="/" component={LoginMenu} />
               <Route exact={true} path="/Home" component={HomeScreen} />
               <Route exact={true} path="/LessonMenu" component={LessonMenu} />
+
               <Link to="/Home"><button>Home</button></Link>
+              
               <Link to="/LessonMenu"><button>Lessons</button></Link>
+              <Link to="/"><button>Log in</button></Link>
           </Router>
 
         </div>

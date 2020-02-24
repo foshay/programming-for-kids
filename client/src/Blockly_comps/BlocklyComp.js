@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-require('./Editor.jsx')
+import '../CSS_files/App.css';
+require('../Editor.jsx')
 
 
 class BlocklyComp extends Component {
