@@ -13,6 +13,7 @@ class Editor extends React.Component {
     this.state = {
       toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
+      // add deletable="false" to <block field of xml to make not deletable.
       initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defnoreturn" deletable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">do something</field><comment pinned="false" h="80" w="160">Describe this function...</comment></block></xml>',
     };
     
