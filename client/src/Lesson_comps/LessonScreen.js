@@ -17,11 +17,15 @@ class LessonScreen extends Component {
         return(
             <div>
                 <Header />
-                    <LessonTemp change={{
-                     question:"real Question",
-                     blockly: <BlocklyComp />,
-                     hints: "real Hints",
-                     answer: "real Answer"}}/>
+                    <LessonTemp 
+                    // change={{
+                    //  blockly: <BlocklyComp />,
+                    //  hints: "real Hints",
+                    //  answer: "real Answer"}}
+                    // We can get these other things in an api/database call inside the lesson
+                    // rather than passing them in
+                    lessonID={this.props.match.params.lessonID}
+                />
                 <Footer />
             </div>
         )

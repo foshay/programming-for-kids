@@ -21,10 +21,10 @@ render() {
       <div className="App">
         
           <Router>
-              <Route exact={true} path="/" component={LoginMenu} />
-              <Route exact={true} path="/Home" component={HomeScreen} />
-              <Route exact={true} path="/LessonMenu" component={LessonMenu} />
-              <Route exact={true} path="/Lesson" component={LessonScreen} />
+              <Route exact path="/" component={LoginMenu} />
+              <Route exact path="/Home" component={HomeScreen} />
+              <Route exact path="/LessonMenu" component={LessonMenu} />
+              <Route path='/Lesson/:lessonID' component={LessonScreen} />
               {/* <Route path={`${LessonScreen}/:id`}  /> */}
 
               {/* <Link to="/Home"><button>Home</button></Link>
