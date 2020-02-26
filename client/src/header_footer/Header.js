@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
 import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
-import HomeScreen from "../Menus/HomeScreen.js"
-import LessonMenu from "../Menus/LessonMenu.js"
+//import HomeScreen from "../Menus/HomeScreen.js"
+//import LessonMenu from "../Menus/LessonMenu.js"
 
 class Header extends Component {
     render(){
