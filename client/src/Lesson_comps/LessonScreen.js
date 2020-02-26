@@ -14,7 +14,7 @@ class LessonScreen extends Component {
                 <Header />
                     <LessonTemp change={{
                      question:"real Question",
-                     blockly: <BlocklyComp />,
+                     blockly: <BlocklyComp lessonID={'1'}/>,
                      hints: "real Hints",
                      answer: "real Answerr"}}/>
                 <Footer />

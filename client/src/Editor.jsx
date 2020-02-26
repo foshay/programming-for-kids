@@ -12,6 +12,8 @@ class Editor extends React.Component {
     super(props);
     this.state = {
       toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
+      //can use this.props.lessonID to select xml for the lesson based on lesson selected.
+      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defnoreturn" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">do something</field><comment pinned="false" h="80" w="160">Describe this function...</comment></block></xml>',
     };
   }
 
@@ -83,7 +85,7 @@ componentDidMount = () => {
         },
       }}
       //we can possibly change the initial xml on a per lesson basis... or not
-      initialXml={ConfigFiles.INITIAL_XML}
+      initialXml={this.state.initialXml}
       //the div wrapper that will be generated for blockly
       wrapperDivClassName="fill-height"
       //what method to call when the workspace changes
