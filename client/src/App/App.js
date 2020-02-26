@@ -10,6 +10,8 @@ import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alig
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
 import LoginMenu from '../Menus/LoginMenu.js'
+import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
+import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import '../CSS_files/App.css';
 //require('./Editor.jsx')
 
@@ -22,6 +24,7 @@ render() {
               <Route exact={true} path="/" component={LoginMenu} />
               <Route exact={true} path="/Home" component={HomeScreen} />
               <Route exact={true} path="/LessonMenu" component={LessonMenu} />
+              <Route exact={true} path="/Lesson" component={LessonScreen} />
 
               {/* <Link to="/Home"><button>Home</button></Link>
               
