@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router,  Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
 //import logo from './logo.svg';
 //import { Text, View, StyleSheet } from 'react-native';
 //import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -23,10 +23,27 @@ render() {
         <Router>
             <main>
                 <h1>Button component log-in</h1>
-                <ButtonGroup>
-                    <Button>Log in</Button>
-                    <Divider />
-                </ButtonGroup>
+                    {/* <Button><Link to="/login">Log in</Link></Button>
+                    <Divider /> */}
+
+                    <Switch>
+                      <Route path="/login">
+                        <h4>Username:</h4>
+                        <h4>Password:</h4>
+                        <Button>Submit</Button>
+                        <Button><Link to="/">Back</Link></Button>
+                      </Route>
+                      <Route path="/register">
+                        <h4>Username:</h4>
+                        <h4>Password:</h4>
+                        <Button>Submit</Button>
+                        <Button><Link to="/">Back</Link></Button>
+                      </Route>
+                      <Route path="/">
+                        <Button><Link to="/login">Log in</Link></Button>
+                        <Button><Link to="/register">Register</Link></Button>
+                      </Route>
+                    </Switch>
             </main>
         </Router>
         
