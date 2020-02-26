@@ -15,12 +15,14 @@ class Editor extends React.Component {
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
       initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defnoreturn" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">do something</field><comment pinned="false" h="80" w="160">Describe this function...</comment></block></xml>',
     };
+    
   }
 
 //this is optional for adding custom categories of blocks
-/*
-componentDidMount = () => {
+
+componentDidMount = (workspace) => {
     window.setTimeout(() => {
+      
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
           {
@@ -46,7 +48,6 @@ componentDidMount = () => {
       });
     }, 2000);
   }
-*/
 
   workspaceDidChange = (workspace) => {
       //this part you can do something when the workspace changes (when they place or move a block)
@@ -56,7 +57,7 @@ componentDidMount = () => {
     });
     */
     //We can use this for saving user's progress
-    
+    workspace.addChangeListener(Blockly.Events.disableOrphans);
     const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
     console.info(newXml);
 
@@ -91,6 +92,7 @@ componentDidMount = () => {
       //what method to call when the workspace changes
       workspaceDidChange={this.workspaceDidChange}
     />
+    
   )
 }
 
