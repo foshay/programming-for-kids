@@ -14,14 +14,19 @@ class BlocklyComp extends Component {
       post: '',
       responseToPost: '',
     };
+    props = {
+      lessonID: '',
+    };
     
     componentDidMount() {
       this.callApi()
         .then(res => this.setState({ response: res.express }))
         .catch(err => console.error(err));
-
+      
       // Adding this allows the blockly edit area to show up after routing to the page
-      const editor = React.createElement(Editor);
+      // lessonID is send to editor.jsx for xml loading as well as storing progress
+      // lessonID is passed to blockly comp from lessonScreen.
+      const editor = React.createElement(Editor, {lessonID: this.props.lessonID});
       if( document.getElementById('blockly') != null)
         ReactDOM.render(editor, document.getElementById('blockly'));
     }
@@ -63,6 +68,7 @@ class BlocklyComp extends Component {
         <div style={{ height: '600px', width: `100%` }} id="blockly"/>
 
         <p>{this.state.response}</p> 
+       
         <form onSubmit={this.handleSubmit}>
           <textarea
             type="text"
