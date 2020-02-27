@@ -31,13 +31,22 @@ function runCmd(cmd,callback) {
 }
 
 app.post('/api/register', (req, res) => {
-    console.log("body "+req.body.code+" "+req.body.lesson);
+    console.log("body "+req.body.username+" "+req.body.password);
     console.log(req.body);
     runCmd("echo registering", function(text,error) {
-        console.log(text);
+        //console.log(text);
     });
     res.send(`Registration complete`,
     );
+});
+app.post('/api/login', (req, res) => {
+   console.log("body "+req.body.username+" "+req.body.password);
+   console.log(req.body);
+   runCmd("echo logging in", function(text,error) {
+       //console.log(text);
+   });
+   res.send(`Login complete`,
+   );
 });
 //---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 
@@ -51,7 +60,7 @@ app.post('/api/grade', (req, res) => {
     var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
     runCmd("echo \'"+req.body.code+"\' > ./users/6969/pcode/temp"+rand+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/temp"+rand+" && rm ./users/6969/pcode/temp"+rand,function(text,error) {
-  console.log(text);
+  //console.log(text);
 });
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.code}`,
