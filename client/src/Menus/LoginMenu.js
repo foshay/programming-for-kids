@@ -32,6 +32,10 @@ class LoginMenu extends Component {
     const body = await response.text();
     
     this.setState({ responseToPost: body });
+    //body is the response from the server after receiving the login information
+    //we can use this for authenticating users (cookie or something)
+    console.info(this.state.responseToPost);
+
   };
 
   handleRegister = async e => {
@@ -52,6 +56,8 @@ class LoginMenu extends Component {
     const body = await response.text();
     
     this.setState({ responseToPost: body });
+    //body is the response from the server after receiving the registration information
+    //we can use this for authenticating users (cookie or something)
     console.info(this.state.responseToPost);
 
   };
