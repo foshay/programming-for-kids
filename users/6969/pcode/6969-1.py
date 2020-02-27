@@ -6,6 +6,6 @@ def grade():
  else:
   print("False")
 # Describe this function...
-def usercode():
-  pass
+def do_something():
+  print(abc)
 

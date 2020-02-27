@@ -57,9 +57,9 @@ app.get('/api/connect', (req, res) => {
 app.post('/api/grade', (req, res) => {
     console.log("body "+req.body.code+" "+req.body.lesson);
     console.log(req.body);
-    var rand = Math.floor((Math.random() * 10000) + 1);
+    //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("echo \'"+req.body.code+"\' > ./users/6969/pcode/temp"+rand+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/temp"+rand+" && rm ./users/6969/pcode/temp"+rand,function(text,error) {
+    runCmd("echo \'"+req.body.code+"\' > ./users/6969/pcode/temp"+req.body.lesson+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/temp"+req.body.lesson+" && rm ./users/6969/pcode/temp"+req.body.lesson,function(text,error) {
   //console.log(text);
 });
   res.send(
