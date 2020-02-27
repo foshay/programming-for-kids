@@ -56,7 +56,7 @@ class BlocklyComp extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "lesson": '1',
+          "lesson": this.props.lessonID,
           "code": ucode,
         })
         

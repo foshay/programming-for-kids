@@ -22,10 +22,10 @@ function runCmd(cmd,callback) {
             return callback("\`\`\`"+stderr+"\n"+stdout+"\`\`\`");
          }
       }
-      console.log(stdout);
+      //console.log(stdout);
       if (callback) {
-          console.log("Callback stdout");
-      return callback("\`\`\`"+stdout+"\`\`\`");
+          //console.log("Callback stdout");
+      return callback(stdout);
       }
    });
 }
@@ -57,14 +57,17 @@ app.get('/api/connect', (req, res) => {
 app.post('/api/grade', (req, res) => {
     console.log("body "+req.body.code+" "+req.body.lesson);
     console.log(req.body);
-    var rand = Math.floor((Math.random() * 10000) + 1);
+    var response;
+    //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("echo \'"+req.body.code+"\' > ./users/6969/pcode/temp"+rand+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/temp"+rand+" && rm ./users/6969/pcode/temp"+rand,function(text,error) {
-  //console.log(text);
-});
+    runCmd("printf \""+req.body.code+"\" > ./users/6969/pcode/"+req.body.lesson+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/"+req.body.lesson+" "+req.body.lesson +" && rm ./users/6969/pcode/"+req.body.lesson,function(text,error) {
+  console.log(text);
+  
   res.send(
-    `I received your POST request. This is what you sent me: ${req.body.code}`,
-  );
+   `I received your POST request. This is what you sent me: ` + text,
+ );
+});
+  
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
