@@ -1,0 +1,39 @@
+.Header {
+    background-color: #282c34;
+    min-height: 10vh;
+}
+
+.Header-Title{
+    position: absolute;
+    text-align: center;
+    color: white;
+    top: 2vh;
+
+}
+
+.Header-Hamburger {
+    background-color: #282c34;
+    position: absolute;
+    align-items: center;
+    /* display:flex; */
+    right: 5vw;
+    top: 3vh;
+    size: 200%;
+}
+
+.Header-Hamburger-Menu {
+    margin: 0;
+    border-radius: 3px;
+    background: tomato;
+    min-width: 12vh;
+    padding: 1vh;
+    list-style: none;
+    text-align: left;
+    color: white;
+}
+
+.Footer {
+    background-color: #282c34;
+    text-align: center;
+
+}
