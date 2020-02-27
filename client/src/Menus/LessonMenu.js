@@ -1,23 +1,45 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
-import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch, Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
+import Header from '../header_footer/Header.js'
+import Footer from '../header_footer/Footer.js'
+import { Button } from "@blueprintjs/core";
+import '../CSS_files/App.css';
+
+// import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
+// import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch, Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
 //import logo from './logo.svg';
 //import { Text, View, StyleSheet } from 'react-native';
 //import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import Header from '../header_footer/Header.js'
-import Footer from '../header_footer/Footer.js'
-import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
+// import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
 //import LessonTemp from "./LessonTemplate.js"
-import '../CSS_files/App.css';
-require('../Editor.jsx')
+// require('../Editor.jsx')
 
 class LessonMenu extends Component {
 
-    goToLesson = (lessonID) => {
-      // changes the url on click
-        this.props.history.push(`/Lesson/${lessonID}`);
-    }
+  state = {
+    lessonIDs: [],
+    lessonNames: []
+  }
 
+  componentDidMount = () => {
+    // This is where the arrays would be set from the database
+    this.setState({
+      lessonIDs: [
+        'lesson_1',
+        'lesson_2'
+      ]
+    });
+
+    this.setState({
+      lessonNames: [
+        'Lesson 1',
+        'Lesson 2'
+      ]
+    });
+  }
+  goToLesson = (lessonID) => {
+    // changes the url when a button is clicked
+    this.props.history.push(`/Lesson/${lessonID}`);
+  }
 
   render() {
     return (
@@ -26,11 +48,14 @@ class LessonMenu extends Component {
         <Header />
 
         <h1>Component LessonTemplate</h1>
-        { /* We can change this so that the buttons come from an array of 
-        lesson id's from the database*/}
-        <Button id="1" text="Lesson 1" onClick ={() => this.goToLesson("Lesson_1")} />
-        <Button id="2" text="Lesson 2" onClick ={() => this.goToLesson("Lesson_2")} />
-        <Button id="3" text="Lesson 3" onClick ={() => this.goToLesson("Lesson_3")} />
+
+        <div>
+          { /* This prints out a bunch of buttons based on arrays 
+                These arrays should be taken from the database*/}
+          {this.state.lessonIDs.map((value, index) => {
+            return <Button id={index} text={this.state.lessonNames[index]} onClick={() => this.goToLesson(value)} />
+          })}
+        </div>
 
         <Footer />
 
