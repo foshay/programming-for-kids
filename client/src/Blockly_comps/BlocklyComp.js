@@ -4,6 +4,10 @@ import '../CSS_files/App.css';
 import ReactDOM from 'react-dom';
 import Editor from '../Editor.jsx';
 
+import "../../../node_modules/normalize.css";
+import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+
 require('../Editor.jsx')
 
 
@@ -77,7 +81,7 @@ class BlocklyComp extends Component {
             value={this.state.post}
             onChange={e => this.setState({ post: e.target.value })}
           />
-          <button type="submit" id="gradeButton" onClick={this.handleSubmit}>Grade code</button>
+          <button type="submit" class="bp3-button bp3-icon-tick" icon="tick" id="gradeButton" intent="success" onClick={this.handleSubmit}>Grade code</button>
         </form>
         <p>{this.state.responseToPost}</p>
       </div>

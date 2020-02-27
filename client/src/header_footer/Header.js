@@ -18,12 +18,12 @@ class Header extends Component {
                         <li><Link to="/Home"><MenuItem class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li>
                         <Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link>
                         <MenuDivider />
-                        <MenuItem class="bp3-menu-item bp3-icon-layout-cog" icon="cog" text="Settings">
+                        <MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
                             {/* TODO */}
                             <MenuItem class="bp3-menu-item" text="option coming soon"/>
                         </MenuItem>
                         <MenuDivider />
-                        <Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" icon="log-out" text="Log-Out" /></Link>
+                        <Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link>
                     </ul>
                 </h6>
             </Menu>

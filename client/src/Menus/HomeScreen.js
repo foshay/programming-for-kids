@@ -15,7 +15,7 @@ class HomeScreen extends Component {
   
 render() {
     return (
-      <div className="App">
+      <div className="App" position="fixed">
         
         <div>
           <Header />
