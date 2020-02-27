@@ -30,6 +30,17 @@ function runCmd(cmd,callback) {
    });
 }
 
+app.post('/api/register', (req, res) => {
+    console.log("body "+req.body.code+" "+req.body.lesson);
+    console.log(req.body);
+    runCmd("echo registering", function(text,error) {
+        console.log(text);
+    });
+    res.send(`Registration complete`,
+    );
+});
+//---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
+
 app.get('/api/connect', (req, res) => {
   res.send({ express: 'Connected to the grading server' });
 });

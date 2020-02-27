@@ -11,7 +11,50 @@ import '../CSS_files/App.css';
 //require('./Editor.jsx')
 
 class LoginMenu extends Component {
+  state= {
+    responseToPost: '',
+  };
+  handleLogin = async e => {
+    e.preventDefault();
+    var username = document.getElementById("unameL").value;
+    var password = document.getElementById("pwordL").value;
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": password,
+      })
+      
+    });
+    const body = await response.text();
+    
+    this.setState({ responseToPost: body });
+  };
 
+  handleRegister = async e => {
+    e.preventDefault();
+    var username = document.getElementById("unameR").value;
+    var password = document.getElementById("pwordR").value;
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": password,
+      })
+      
+    });
+    const body = await response.text();
+    
+    this.setState({ responseToPost: body });
+    console.info(this.state.responseToPost);
+
+  };
   
 render() {
     return (
@@ -28,15 +71,25 @@ render() {
 
                     <Switch>
                       <Route path="/login">
+                      <form onSubmit={this.handleLogin}>
                         <h4>Username:</h4>
+                        <input type="text" placeholder="Enter Username" id="unameL" required></input>
                         <h4>Password:</h4>
-                        <Button>Submit</Button>
+                        <input type="password" placeholder="Enter Password" id="pwordL" required></input>
+                        <button type="submit" id="loginButton" onClick={this.handleLogin}>Log in</button>
+                      </form>
                         <Button><Link to="/">Back</Link></Button>
                       </Route>
                       <Route path="/register">
+                        
+                      <form onSubmit={this.handleRegister}>
                         <h4>Username:</h4>
+                        <input type="text" placeholder="Enter Username" id="unameR" required></input>
                         <h4>Password:</h4>
-                        <Button>Submit</Button>
+                        <input type="password" placeholder="Enter Password" id="pwordR" required></input>
+                        <button type="submit" id="registerButton" onClick={this.handleRegister}>Register</button>
+                      </form>
+                        
                         <Button><Link to="/">Back</Link></Button>
                       </Route>
                       <Route path="/">
