@@ -33,11 +33,17 @@ function runCmd(cmd,callback) {
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
     console.log(req.body);
-    runCmd("echo registering", function(text,error) {
-        //console.log(text);
+
+    //Check to see if username is already used in DB
+    
+
+    runCmd("./backend/create_user.sh "+req.body.username, function(text,error) {
+        console.log(text);
     });
-    res.send(`Registration complete`,
-    );
+    res.send({
+       status: "True",
+       message: `Registration complete`,
+   });
 });
 app.post('/api/login', (req, res) => {
    console.log("body "+req.body.username+" "+req.body.password);
