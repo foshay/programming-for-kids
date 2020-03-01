@@ -34,12 +34,12 @@ class DatabaseHandler {
     ***********************************/
     addLessonXML(lessonNumber, fileName){
         var lessonxml = fs.readFileSync(fileName, 'utf-8');
-        _openDB();
-        var sql = 'UPDATE Lesson SET lesson_xml = ? WHERE lesson_id = lessonNumber';
-        this.db.run(sql, [lessonxml], (err) =>{
+        this._openDB();
+        var sql = 'UPDATE Lesson SET lesson_xml = ? WHERE lesson_id = ?';
+        this.db.run(sql, [lessonxml, lessonNumber], (err) =>{
             if(err) throw err;
         });
-        _closeDB();
+        this._closeDB();
     }
 
     /************************************************
