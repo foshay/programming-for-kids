@@ -54,11 +54,10 @@ class DatabaseHandler {
           as [lessonid, next_lesson_id, prev_lesson_id, name, hint]
           On fail, it returns an ampty list.
     */
-    async _getLesson(lessonNumber){
+    async getLesson(lessonNumber){
         this._openDB();
         let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
         await this.db.get(sql, [lessonNumber], await function(err, rows){
-            //console.log("==Row: " + rows.lesson_id);
             //Error handling
             if(err){
                 throw err;
@@ -66,14 +65,13 @@ class DatabaseHandler {
             }
             //Success: save data
             this.lessonRows = rows;
+            console.log("Row id in getLesson, inside callback: " + this.lessonRows.lesson_id);
         });
         //close db and return lessonRows
         this._closeDB();
+        console.log("Row id in getLesson, outside callback: " + this.lessonRows.lesson_id);
+
         return this.lessonRows;
-    }
-    getLesson(lessonNumber){
-        this._getLesson(lessonNumber).then(result => {
-            return this.lessonRows;});
     }
 }
 module.exports = {DatabaseHandler};
