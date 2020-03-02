@@ -58,14 +58,14 @@ app.get('/api/lesson/:id', (req, res) => {
                 "xml" : row.lesson_xml
             });
         });
-    }
+    });
     //close database
     db.close((err) =>{
         if(err){
             throw err;
         }
     });
-}
+});
 
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
