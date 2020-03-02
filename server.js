@@ -50,16 +50,52 @@ app.get('/api/lesson/:id', (req, res) => {
                 return;
             }
             res.json({
-                "lesson_id" : row.lesson_id,
+                message: "Success",
+                data: row
+                /*
+                [{"lesson_id" : row.lesson_id,
                 "next_lesson_id" : row.next_lesson_id,
                 "prev_lesson_id" : row.prev_lesson_id,
                 "name" : row.name,
                 "hint" : row.hint,
                 "xml" : row.lesson_xml
+                }]*/
             });
         });
     });
     //close database
+    db.close((err) =>{
+        if(err){
+            throw err;
+        }
+    });
+});
+/*GET all lessons. Returns in this format:
+    data: [{ "lesson_id" : lesson_id1, ...}, {"lesson_id" : lesson_id2, ...}]
+*/
+app.get('/api/Lesson/all', (req,res) => {
+    let sql = 'SELECT * FROM Lesson  ';
+    let params = [];
+    //Open database
+    let db = new sqlite3.Database('./client/src/database.db', (err) =>{
+        if (err){
+            throw err;
+        }
+    });
+
+    //In case we need to run multiple queries in the future
+    db.serialize( () => {
+        db.all(sql, params, (err, rows) =>{
+            if (err){
+                res.status(400).json({"error" : err.message});
+                return;
+            }
+            res.json({
+                message: "Success",
+                data: rows
+            });
+        });
+    });
     db.close((err) =>{
         if(err){
             throw err;
