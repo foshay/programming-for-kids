@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const sqlite = require('sqlite3');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -28,6 +28,43 @@ function runCmd(cmd,callback) {
       return callback(stdout);
       }
    });
+}
+
+//Return lesson information
+app.get('/api/lesson/:id', (req, res) => {
+    let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
+    let lessonNum = [req.params.id];
+    //Open database
+    let db = new sqlite3.Database('./client/src/database.db', (err) =>{
+        if (err){
+            throw err;
+        }
+    });
+
+    //If we need to do more than one query here in the future
+    db.serialize( () => {
+        //get query to database for lesson with :id
+        db.get(sql, lessoNum, (err, row) => {
+            if (err){
+                res.status(400).json({"error" : err.message});
+                return;
+            }
+            res.json({
+                "lesson_id" : row.lesson_id,
+                "next_lesson_id" : row.next_lesson_id,
+                "prev_lesson_id" : row.prev_lesson_id,
+                "name" : row.name,
+                "hint" : row.hint,
+                "xml" : row.lesson_xml
+            });
+        });
+    }
+    //close database
+    db.close((err) =>{
+        if(err){
+            throw err;
+        }
+    });
 }
 
 app.post('/api/register', (req, res) => {
@@ -62,12 +99,12 @@ app.post('/api/grade', (req, res) => {
 //right now it is hard coded for saving to user id 6969. this can be changed
     runCmd("printf \""+req.body.code+"\" > ./users/6969/pcode/"+req.body.lesson+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/"+req.body.lesson+" "+req.body.lesson +" && rm ./users/6969/pcode/"+req.body.lesson,function(text,error) {
   console.log(text);
-  
+
   res.send(
    `I received your POST request. This is what you sent me: ` + text,
  );
 });
-  
+
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
