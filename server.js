@@ -30,20 +30,20 @@ function runCmd(cmd,callback) {
    });
 }
 
+//DANGER DANGER UNSANITIZED USER INPUT
+
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
     console.log(req.body);
 
-    //Check to see if username is already used in DB
-    
+    //Returns "Failure" When username is taken
+    //Returns "Success" When not
 
     runCmd("./backend/create_user.sh "+req.body.username, function(text,error) {
         console.log(text);
+        res.send(text);
     });
-    res.send({
-       status: "True",
-       message: `Registration complete`,
-   });
+
 });
 app.post('/api/login', (req, res) => {
    console.log("body "+req.body.username+" "+req.body.password);
@@ -67,8 +67,8 @@ app.post('/api/grade', (req, res) => {
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
    runCmd("printf \""+req.body.code+"\" > ./users/6969/pcode/"+req.body.lesson+
-   " && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/"+req.body.lesson+" "+req.body.lesson +
-   " && rm ./users/6969/pcode/"+req.body.lesson,
+   " && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/"+"6969"+"/pcode/"+req.body.lesson+" "+"6969" +
+   " && rm ./users/"+"6969"+"/pcode/"+req.body.lesson,
       function(text,error) {
          console.log(text);
   

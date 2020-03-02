@@ -9,8 +9,6 @@ then
     exit 1
 fi
 
-mkdir "users/"$1 && mkdir "users/"$1"/pcode"
-
-echo "Success"
+mkdir "users/"$1 2>/dev/null && mkdir "users/"$1"/pcode"  && printf "Success" || printf "Failure"
 
 exit 0

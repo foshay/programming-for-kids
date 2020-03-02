@@ -53,12 +53,19 @@ class LoginMenu extends Component {
       })
       
     });
-    const body = await response.json();
+    const body = await response.text();
     
-    this.setState({ responseToPost: body.status });
+    //this.setState({ responseToPost: body });
     //body is the response from the server after receiving the registration information
     //we can use this for authenticating users (cookie or something)
-    console.info(this.state.responseToPost);
+    
+    if (body == 'Failure') {
+      alert("Username taken");
+      console.info("Taken: " + body);
+    } else {
+      console.info("Created " + body);
+      alert("User created");
+    }
 
   };
   
