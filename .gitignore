@@ -11,8 +11,6 @@ build
 
 # production
 /build
-!users/
-users/*
 /client/build
 
 #temp for user generated code
