@@ -46,7 +46,9 @@ app.get('/api/lesson/:id', (req, res) => {
         //get query to database for lesson with :id
         db.get(sql, lessoNum, (err, row) => {
             if (err){
-                res.status(400).json({"error" : err.message});
+                res.status(400).json({
+                    "error" : err.message,
+                    "message" : "Failure"});
                 return;
             }
             res.json({
@@ -87,7 +89,9 @@ app.get('/api/Lesson/all', (req,res) => {
     db.serialize( () => {
         db.all(sql, params, (err, rows) =>{
             if (err){
-                res.status(400).json({"error" : err.message});
+                res.status(400).json({
+                    "error" : err.message,
+                    "message" : "Failure"});
                 return;
             }
             res.json({
