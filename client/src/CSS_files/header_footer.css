@@ -1,24 +1,30 @@
 .Header {
     background-color: #282c34;
-    min-height: 10vh;
+    position: fixed;
+    top: 0;
+    min-height: 5vh;
+    width:100%;
+    z-index: 10;
 }
 
 .Header-Title{
-    position: absolute;
+    position: flex;
+    top: 0;
+    left: 0;
     text-align: center;
     color: white;
-    top: 2vh;
 
 }
 
 .Header-Hamburger {
     background-color: #282c34;
-    position: absolute;
+    position: fixed;
     align-items: center;
     /* display:flex; */
     right: 5vw;
-    top: 3vh;
+    top: 1vh;
     size: 200%;
+
 }
 
 .Header-Hamburger-Menu {
@@ -34,6 +40,18 @@
 
 .Footer {
     background-color: #282c34;
+    position: fixed;
+    bottom: 0;
+    min-height: 4vh;
+    width: 100%;
+
+}
+
+.Footer-Title{
+    position: flex;
+    bottom: 0;
+    left: 0;
     text-align: center;
+    color:white;
 
 }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 //import logo from './logo.svg';
 //import { Text, View, StyleSheet } from 'react-native';
 //import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 //import Header from '../header_footer/Header.js'
 //import Footer from '../header_footer/Footer.js'
 //import BlocklyComp from '../BlocklyComp.js'
-import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
+//import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
 import LoginMenu from '../Menus/LoginMenu.js'

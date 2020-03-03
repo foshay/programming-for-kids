@@ -69,7 +69,7 @@ class BlocklyComp extends Component {
   render() {
     return (
       <div className="App">
-        <div style={{ height: '600px', width: `100%` }} id="blockly"/>
+        <div style={{ height: '60vh', width: `100%` }} id="blockly"/>
 
         <p>{this.state.response}</p> 
        

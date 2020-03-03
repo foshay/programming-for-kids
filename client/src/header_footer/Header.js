@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
-import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
+import {BrowserRouter as Router, Link} from "react-router-dom";
+import { Button, Switch as bpSwitch, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 //import HomeScreen from "../Menus/HomeScreen.js"
 //import LessonMenu from "../Menus/LessonMenu.js"
@@ -43,7 +43,7 @@ class Header extends Component {
                     </Navbar.Group>
                 </Navbar> */}
                 {/* <div className = "Header-Hamburger"> */}
-                    <Popover content={popMenu} position={Position.LEFT_BOTTOM} className = "Header-Hamburger" >
+                    <Popover content={popMenu} position={Position.LEFT_TOP} className = "Header-Hamburger" >
                         <Button icon="menu" />
                     </Popover>
                 {/* </div> */}
