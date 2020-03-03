@@ -16,14 +16,15 @@ class Header extends Component {
                 <h6>
                     <ul class="bp3-menu bp3-elevation-1">
                         <li><Link to="/Home"><MenuItem class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li>
-                        <Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link>
+                        <li><Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link></li>
+                        <li><Link to="/CardGame"><MenuItem class="bp3-menu-item bp3-icon-layout-ninja" icon="ninja" text="Card Game" /></Link></li>
                         <MenuDivider />
-                        <MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
+                        <li><MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
                             {/* TODO */}
-                            <MenuItem class="bp3-menu-item" text="option coming soon"/>
-                        </MenuItem>
+                            <li><MenuItem class="bp3-menu-item" text="option coming soon"/></li>
+                        </MenuItem></li>
                         <MenuDivider />
-                        <Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link>
+                        <li><Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></li>
                     </ul>
                 </h6>
             </Menu>

@@ -10,6 +10,7 @@ import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alig
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
 import LoginMenu from '../Menus/LoginMenu.js'
+import CardGame from '../Menus/CardGameMenu.js'
 //import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
 import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import '../CSS_files/App.css';
@@ -24,6 +25,7 @@ render() {
               <Route exact path="/" component={LoginMenu} />
               <Route exact path="/Home" component={HomeScreen} />
               <Route exact path="/LessonMenu" component={LessonMenu} />
+              <Route exact path="/CardGame" component={CardGame} />
               <Route path='/Lesson/:lessonID' component={LessonScreen} />
               {/* <Route path={`${LessonScreen}/:id`}  /> */}
 
