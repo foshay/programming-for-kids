@@ -3,6 +3,13 @@
 # Installs open vino on linux mint plus usb driver for linux
 sudo apt update
 sudo apt install curl
+sudo apt install python3
+sudo apt install python3-pip
+sudo apt install git-all
+pip install --upgrade pip
+pip install tensorflow
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+nvm install node
 curl -fsSL https://apt.repos.intel.com/openvino/2020/GPG-PUB-KEY-INTEL-OPENVINO-2020 | sudo apt-key add -
 sudo add-apt-repository "deb https://apt.repos.intel.com/openvino/2020 all main"
 sudo apt update
