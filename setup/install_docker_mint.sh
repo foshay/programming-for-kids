@@ -9,4 +9,7 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt update
 sudo apt upgrade
 sudo apt install docker-ce docker-ce-cli containerd.io
-docker pull python
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker pull python:buster
