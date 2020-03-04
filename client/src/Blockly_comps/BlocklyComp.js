@@ -7,6 +7,7 @@ import Editor from '../Editor.jsx';
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import { Button } from '@blueprintjs/core';
 
 require('../Editor.jsx')
 
@@ -81,8 +82,14 @@ class BlocklyComp extends Component {
   render() {
     return (
       <div className="App">
-          {/* This button needs to be changed to be prettier, perhaps a checkbox?*/}
-        <button id="hideToolbox" onClick={this.toggleToolbox}>hide toolbox</button>
+        {/* <button id="hideToolbox" onClick={this.toggleToolbox}>show toolbox</button> */}
+        <Button 
+        type="button"
+        class="bp3-button bp3-icon-menu-closed"
+        icon={this.state.toolboxHidden ? "menu-closed" : "menu-open"}
+        onClick={this.toggleToolbox}
+        text={this.state.toolboxHidden ? "Hide Toolbox" : "Show Toolbox"}
+        />
 
         <div style={{ height: '600px', width: `100%` }} id="blockly"/>
 
