@@ -72,9 +72,9 @@ class BlocklyComp extends Component {
       this.setState({toolboxHidden: !this.state.toolboxHidden});
       var array = document.getElementsByClassName("blocklyToolboxDiv blocklyNonSelectable");
       // getElementsByClassName returns an array, so we must loop through it
-      for (var i = 0, len = array.length; i < len; i++) {
+      for (let item of array) {
         // this hides/shows the toolbox
-        array[i].style["display"] = this.state.toolboxHidden ? "none": "block";
+        item.style["display"] = this.state.toolboxHidden ? "none": "block";
       }
     }
 
