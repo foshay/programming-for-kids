@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
-//import logo from './logo.svg';
-//import { Text, View, StyleSheet } from 'react-native';
-//import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import { Button,Navbar ,Alignment, ButtonGroup, Divider } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import Header from '../header_footer/Header.js'
 import Footer from '../header_footer/Footer.js'
-//import BlocklyComp from '../BlocklyComp.js'
 import '../CSS_files/App.css';
-//require('./Editor.jsx')
+import '../CSS_files/Body.css';
+
+import "../../../node_modules/normalize.css";
+import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class LoginMenu extends Component {
   state= {
@@ -71,43 +71,42 @@ class LoginMenu extends Component {
   
 render() {
     return (
-      <div className="App">
+      <div>
         
         <Header>
           <Header />
         </Header>
         <Router>
-            <main>
+            <main className="BodyMenu">
                 <h1>Button component log-in</h1>
                     {/* <Button><Link to="/login">Log in</Link></Button>
                     <Divider /> */}
 
                     <Switch>
                       <Route path="/login">
-                      <form onSubmit={this.handleLogin}>
-                        <h4>Username:</h4>
-                        <input type="text" placeholder="Enter Username" id="unameL" required></input>
-                        <h4>Password:</h4>
-                        <input type="password" placeholder="Enter Password" id="pwordL" required></input>
-                        <button type="submit" id="loginButton" onClick={this.handleLogin}>Log in</button>
-                      </form>
-                        <Button><Link to="/">Back</Link></Button>
+                        <form onSubmit={this.handleLogin}>
+                          <h4>Username:</h4>
+                          <input type="text" placeholder="Enter Username" id="unameL" required></input>
+                          <h4>Password:</h4>
+                          <input type="password" placeholder="Enter Password" id="pwordL" required></input>
+                          <ul><Button type="submit" id="loginButton" class="bp3-button bp3-icon-layout-log-in" intent="success" icon="log-in" text="Log In" onClick={this.handleLogin} /></ul>
+                        </form>
+                          <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-small-cross" intent="warning" icon="small-cross" text="Back" /></Link></ul>
                       </Route>
-                      <Route path="/register">
-                        
-                      <form onSubmit={this.handleRegister}>
-                        <h4>Username:</h4>
-                        <input type="text" placeholder="Enter Username" id="unameR" required></input>
-                        <h4>Password:</h4>
-                        <input type="password" placeholder="Enter Password" id="pwordR" required></input>
-                        <button type="submit" id="registerButton" onClick={this.handleRegister}>Register</button>
-                      </form>
-                        
-                        <Button><Link to="/">Back</Link></Button>
+                      
+                      <Route path="/register"> 
+                        <form onSubmit={this.handleRegister}>
+                          <h4>Username:</h4>
+                          <input type="text" placeholder="Enter Username" id="unameR" required></input>
+                          <h4>Password:</h4>
+                          <input type="password" placeholder="Enter Password" id="pwordR" required></input>
+                          <ul><Button type="submit" id="registerButton" class="bp3-button bp3-icon-layout-confirm" intent="success" icon="confirm" text="Register" onClick={this.handleRegister} /></ul>
+                        </form>
+                          <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-small-cross" intent="warning" icon="small-cross" text="Back" /></Link></ul>
                       </Route>
                       <Route path="/">
-                        <Button><Link to="/login">Log in</Link></Button>
-                        <Button><Link to="/register">Register</Link></Button>
+                        <Link to="/login"><Button type="submit" id="loginButton" class="bp3-button bp3-icon-layout-log-in bp3-large" icon="log-in" text="Log In" /></Link>
+                        <Link to="/register"><Button type="submit" id="registerButton" class="bp3-button bp3-icon-layout-confirm bp3-large" icon="confirm" text="Register" /></Link>
                       </Route>
                     </Switch>
             </main>

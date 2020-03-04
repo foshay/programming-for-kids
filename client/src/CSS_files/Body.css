@@ -1,0 +1,20 @@
+.BodyMenu {
+    background-color: whitesmoke;
+    /* position: flex; */
+    /* top: 500px; */
+    z-index: -1;
+    position: fixed;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.BodyMenu-Lesson{
+    position: absolute;
+    /* top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%); */
+    width:100%;
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+}

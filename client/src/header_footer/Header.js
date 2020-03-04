@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
-import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
+import {BrowserRouter as Router, Link} from "react-router-dom";
+import { Button, Switch as bpSwitch, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 //import HomeScreen from "../Menus/HomeScreen.js"
 //import LessonMenu from "../Menus/LessonMenu.js"
@@ -16,14 +16,15 @@ class Header extends Component {
                 <h6>
                     <ul class="bp3-menu bp3-elevation-1">
                         <li><Link to="/Home"><MenuItem class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li>
-                        <Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link>
+                        <li><Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link></li>
+                        <li><Link to="/CardGame"><MenuItem class="bp3-menu-item bp3-icon-layout-ninja" icon="ninja" text="Card Game" /></Link></li>
                         <MenuDivider />
-                        <MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
+                        <li><MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
                             {/* TODO */}
-                            <MenuItem class="bp3-menu-item" text="option coming soon"/>
-                        </MenuItem>
+                            <li><MenuItem class="bp3-menu-item" text="option coming soon"/></li>
+                        </MenuItem></li>
                         <MenuDivider />
-                        <Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link>
+                        <li><Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></li>
                     </ul>
                 </h6>
             </Menu>
@@ -31,7 +32,7 @@ class Header extends Component {
 
         return(
             <div className = "Header">
-                <h2 className = "Header-Title">App Name</h2>
+                <h2 className = "Header-Title">Native Code Creator</h2>
                 {/* <Navbar>
                     <Navbar.Group align={Alignment.LEFT}>
                         <Navbar.Heading>Teach kids code</Navbar.Heading>
@@ -41,11 +42,11 @@ class Header extends Component {
                         <Link to="/"><Button className="bp3-minimal" icon="log-out" text="Log-Out" /></Link>
                     </Navbar.Group>
                 </Navbar> */}
-                {/* <div className = "Header-Hamburger"> */}
-                    <Popover content={popMenu} position={Position.LEFT_BOTTOM} className = "Header-Hamburger" >
+                <div className = "Header-Hamburger">
+                    <Popover content={popMenu} position={Position.LEFT_TOP} >
                         <Button icon="menu" />
                     </Popover>
-                {/* </div> */}
+                </div>
 
         </div>
         )
