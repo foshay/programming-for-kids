@@ -82,7 +82,6 @@ class BlocklyComp extends Component {
   render() {
     return (
       <div className="App">
-        {/* <button id="hideToolbox" onClick={this.toggleToolbox}>show toolbox</button> */}
         <Button 
         type="button"
         class="bp3-button bp3-icon-menu-closed"
