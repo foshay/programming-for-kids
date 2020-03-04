@@ -78,8 +78,6 @@ class BlocklyComp extends Component {
             type="text"
             disabled
             id="code"
-            value={this.state.post}
-            onChange={e => this.setState({ post: e.target.value })}
           />
           <button type="submit" class="bp3-button bp3-icon-tick" icon="tick" id="gradeButton" intent="success" onClick={this.handleSubmit}>Grade code</button>
         </form>
