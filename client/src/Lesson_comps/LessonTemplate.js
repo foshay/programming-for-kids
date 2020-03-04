@@ -8,7 +8,7 @@ import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
 class LessonTemp extends Component {
     state = {
         question: "Return 20.",
-        hints: "Drag blocks from the toolbar to return 20.",
+        hints: "Drag blocks from the toolbox to return 20.",
         answer: "20",
     }
 
@@ -16,11 +16,11 @@ class LessonTemp extends Component {
         return(
             <div>
                 <h3>Goal: {this.state.question}</h3>
+                <h3>Hints: {this.state.hints}</h3>
                 {/* <h3>Lesson ID (temporarily displayed): {this.props.lessonID}</h3> */}
                 <BlocklyComp
                 lessonID={this.props.lessonID}
                 />
-                <h3>Hints: {this.state.hints}</h3>
                 <h3>Answer: {this.state.answer}</h3>
             </div>
         )
