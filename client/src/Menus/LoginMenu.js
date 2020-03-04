@@ -4,6 +4,7 @@ import { Button } from "@blueprintjs/core";
 import Header from '../header_footer/Header.js'
 import Footer from '../header_footer/Footer.js'
 import '../CSS_files/App.css';
+import '../CSS_files/Body.css';
 
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
@@ -70,13 +71,13 @@ class LoginMenu extends Component {
   
 render() {
     return (
-      <div className="App">
+      <div>
         
         <Header>
           <Header />
         </Header>
         <Router>
-            <main>
+            <main className="BodyMenu">
                 <h1>Button component log-in</h1>
                     {/* <Button><Link to="/login">Log in</Link></Button>
                     <Divider /> */}

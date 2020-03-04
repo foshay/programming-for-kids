@@ -4,6 +4,7 @@ import { Button} from "@blueprintjs/core";
 import Header from '../header_footer/Header.js'
 import Footer from '../header_footer/Footer.js'
 import '../CSS_files/App.css';
+import '../CSS_files/Body.css';
 
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
@@ -13,12 +14,13 @@ class HomeScreen extends Component {
 render() {
     return (
       //<div className="App" position="fixed">
-      <div className="App" >
+      <div >
         
         <div>
           <Header />
         </div>
-            <div class="bp3-button-group bp3-large bp3-vertical">
+        <main className="BodyMenu">
+            <div className="bp3-button-group bp3-large bp3-vertical" >
 
                   {/* <li><Link to="/Home"><Button class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li> */}
                   <ul><Link to="/LessonMenu"><Button type="button" class="bp3-button bp3-icon-layout-book" icon="book" text="Lessons" /></Link></ul>
@@ -27,7 +29,7 @@ render() {
                   <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></ul>
 
             </div>
-        
+        </main>
         <div>
           <Footer />
         </div>

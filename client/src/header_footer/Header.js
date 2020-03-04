@@ -32,7 +32,7 @@ class Header extends Component {
 
         return(
             <div className = "Header">
-                <h2 className = "Header-Title">App Name</h2>
+                <h2 className = "Header-Title">Native Code Creator</h2>
                 {/* <Navbar>
                     <Navbar.Group align={Alignment.LEFT}>
                         <Navbar.Heading>Teach kids code</Navbar.Heading>
@@ -42,11 +42,11 @@ class Header extends Component {
                         <Link to="/"><Button className="bp3-minimal" icon="log-out" text="Log-Out" /></Link>
                     </Navbar.Group>
                 </Navbar> */}
-                {/* <div className = "Header-Hamburger"> */}
-                    <Popover content={popMenu} position={Position.LEFT_TOP} className = "Header-Hamburger" >
+                <div className = "Header-Hamburger">
+                    <Popover content={popMenu} position={Position.LEFT_TOP} >
                         <Button icon="menu" />
                     </Popover>
-                {/* </div> */}
+                </div>
 
         </div>
         )

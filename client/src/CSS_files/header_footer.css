@@ -18,12 +18,14 @@
 
 .Header-Hamburger {
     background-color: #282c34;
-    position: fixed;
-    align-items: center;
-    /* display:flex; */
-    right: 5vw;
-    top: 1vh;
-    size: 200%;
+    position:absolute;
+    transition: .5s ease;
+    top: 20%;
+    left: 90%;
+    /* position: fixed;
+    top: 5%;
+    left: 95%;
+    transform: translate(-50%,-50%); */
 
 }
 

@@ -3,6 +3,7 @@ import Header from '../header_footer/Header.js'
 import Footer from '../header_footer/Footer.js'
 //import { Button } from "@blueprintjs/core";
 import '../CSS_files/App.css';
+import '../CSS_files/Body.css';
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
@@ -76,9 +77,9 @@ class CardGameMenu extends Component {
         return(
             <div className="App">
                 <Header />
-                    <body>
+                    <main className="BodyMenu">
                         <h1>Card Game Place Holder</h1>
-                    </body>
+                    </main>
                 <Footer />
             </div>
         )
