@@ -19,29 +19,31 @@ import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 class LessonMenu extends Component {
 
   state = {
-    lessonIDs: [],
-    lessonNames: []
-  }
-
-  componentDidMount = () => {
-    // This is where the arrays would be set from the database
-    this.setState({
-      lessonIDs: [
-        'lesson_1',
-        'lesson_2'
-      ]
-    });
-
-    this.setState({
-      lessonNames: [
-        'Lesson 1',
-        'Lesson 2'
-      ]
-    });
+    lessons : [{}]
+  };
+  getLessons = async () => {
+      console.log("Requesting all lessons data.");
+      return fetch('api/Lesson/all')
+      .then(response => {
+          return response.json();
+      })
+      .then(json =>{
+          console.log("Then: " + json.data);
+          this.setState({lessons: json.data});
+      });
+      //const response = await fetch('/api/Lesson/all');
+      //const body = await response.json();
+      //console.log("LessonMenu getLessons body: " + body.data[0].lesson_id);
+      //this.setState({lessons: body.data});
+      //console.log("State within getLessons: " + this.state.lessons[0].lesson_id);
+     // return body.data;
   }
   goToLesson = (lessonID) => {
     // changes the url when a button is clicked
     this.props.history.push(`/Lesson/${lessonID}`);
+  }
+  componentDidMount(){
+      this.getLessons();
   }
 
   render() {
@@ -53,12 +55,12 @@ class LessonMenu extends Component {
         <h1>Component LessonTemplate</h1>
 
         <div>
-          { /* This prints out a bunch of buttons based on arrays 
+          { /* This prints out a bunch of buttons based on arrays
                 These arrays should be taken from the database*/}
-          {this.state.lessonIDs.map((value, index) => {
+          {this.state.lessons.map((value, index) => {
             return (
               <div>
-                <Button id={`lesson_button`} type="button" class="bp3-button bp3-icon-code-block" icon="code-block" text={this.state.lessonNames[index]} onClick={() => this.goToLesson(value)} />
+                <Button id={`lesson_button`} type="button" class="bp3-button bp3-icon-code-block" icon="code-block" text={"Lesson " + this.state.lessons[index].lesson_id} onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} />
                 <br />
               </div>
             )

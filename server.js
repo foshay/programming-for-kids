@@ -88,7 +88,7 @@ app.get('/api/lesson/:id', (req, res) => {
                 return;
             }
             res.json({
-                message: "Success",
+                message: "Succ2",
                 data: row
                 /*
                 [{"lesson_id" : row.lesson_id,
