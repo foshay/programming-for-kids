@@ -7,10 +7,34 @@ import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
 
 class LessonTemp extends Component {
     state = {
-        question: "Return 20.",
-        hints: "Drag blocks from the toolbox to return 20.",
-        answer: "20",
+
+        question: "question temp",
+        hints: "HintTemp",
+        answer: "AnswerTemp",
     }
+    // }
+    getLesson = async () => {
+        const string = this.props.lessonID;
+        console.log("String: " + string);
+        return fetch(string)
+        .then(response =>{
+            console.log("Getting json...");
+            return response.json();
+        })
+        .then(json =>{
+            console.log("Got json");
+            console.log("Json: " + json.data);
+            this.setState({
+                question: json.data.name,
+                hints: json.data.hint
+            });
+        });
+    }
+    componentDidMount(){
+        console.log("props.history = " + this.props.lessonID);
+        this.getLesson();
+    }
+
 
     render(){
         return(
