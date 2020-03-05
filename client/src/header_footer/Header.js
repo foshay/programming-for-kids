@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Link} from "react-router-dom";
-import { Button, Switch as bpSwitch, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
+import { Button, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 //import HomeScreen from "../Menus/HomeScreen.js"
 //import LessonMenu from "../Menus/LessonMenu.js"
-import Header_Footer from "../CSS_files/header_footer.css"
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
@@ -15,16 +13,30 @@ class Header extends Component {
             <Menu >
                 <h6>
                     <ul class="bp3-menu bp3-elevation-1">
-                        <li><Link to="/Home"><MenuItem class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li>
-                        <li><Link to="/LessonMenu"><MenuItem class="bp3-menu-item bp3-icon-layout-book" icon="book" text="Lessons" /></Link></li>
-                        <li><Link to="/CardGame"><MenuItem class="bp3-menu-item bp3-icon-layout-ninja" icon="ninja" text="Card Game" /></Link></li>
+                        <li><MenuItem
+                            class="bp3-menu-item bp3-icon-layout-home"
+                            icon="home" text="Home" href="/Home" />
+                        </li>
+                        <li><MenuItem
+                            class="bp3-menu-item bp3-icon-layout-book"
+                            icon="book" text="Lessons" href="/LessonMenu" />
+                        </li>
+                        <li><MenuItem
+                            class="bp3-menu-item bp3-icon-layout-ninja"
+                            icon="ninja" text="Card Game" href="CardGame" />
+                        </li>
                         <MenuDivider />
-                        <li><MenuItem class="bp3-menu-item bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings">
+                        <li><MenuItem
+                            class="bp3-menu-item bp3-icon-layout-cog"
+                            disabled={true} icon="cog" text="Settings">
                             {/* TODO */}
                             <li><MenuItem class="bp3-menu-item" text="option coming soon"/></li>
                         </MenuItem></li>
                         <MenuDivider />
-                        <li><Link to="/"><MenuItem class="bp3-menu-item bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></li>
+                        <li><MenuItem
+                            class="bp3-menu-item bp3-icon-layout-log-out"
+                            intent="danger" icon="log-out" text="Log-Out" href="/" />
+                        </li>
                     </ul>
                 </h6>
             </Menu>
