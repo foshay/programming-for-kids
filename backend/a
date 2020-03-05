@@ -1,6 +1,0 @@
-if usercode() == 1:
-    return True
-else:
-    return False
-
-def usercode():

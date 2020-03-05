@@ -10,7 +10,6 @@ class LessonTemp extends Component {
     //     super(props);
     state = {
         question: "question temp", 
-        blockly: <BlocklyComp lessonID={this.props.lessonID}/>,
         hints: "HintTemp",
         answer: "AnswerTemp",
     }
@@ -21,7 +20,9 @@ class LessonTemp extends Component {
             <div>
                 <h3>Question: {this.state.question}</h3>
                 <h3>Lesson ID (temporarily displayed): {this.props.lessonID}</h3>
-                <h3>{this.state.blockly}</h3>
+                <BlocklyComp
+                lessonID={this.props.lessonID}
+                />
                 <h3>Hints: {this.state.hints}</h3>
                 <h3>Answer: {this.state.answer}</h3>
             </div>
