@@ -8,7 +8,8 @@ class Footer extends Component {
     render(){
         return(
             <div className = "Footer">
-                <h3 className = "Footer-Title">Footer test</h3>
+                {/* <h3 className = "Footer-Title">Footer test</h3> */}
+                <h3 className = "Footer-Title"></h3>
             </div>
         )
     }

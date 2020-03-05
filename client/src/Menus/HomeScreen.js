@@ -16,9 +16,6 @@ render() {
       //<div className="App" position="fixed">
       <div >
         
-        <div>
-          <Header />
-        </div>
         <main className="BodyMenu">
             <div className="bp3-button-group bp3-large bp3-vertical" >
 
@@ -30,9 +27,6 @@ render() {
 
             </div>
         </main>
-        <div>
-          <Footer />
-        </div>
 
         </div>
     );

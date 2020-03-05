@@ -7,12 +7,16 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 //import Footer from '../header_footer/Footer.js'
 //import BlocklyComp from '../BlocklyComp.js'
 //import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
+import Header from '../header_footer/Header.js';
+import Footer from '../header_footer/Footer.js';
+import LoginMenu from '../Menus/LoginMenu.js'
+import LoginScreen from '../Menus/LoginScreen.js';
+import RegisterScreen from '../Menus/RegisterScreen.js';
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
-import LoginMenu from '../Menus/LoginMenu.js'
+import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import CardGame from '../Menus/CardGameMenu.js'
 //import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
-import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import '../CSS_files/App.css';
 //require('./Editor.jsx')
 
@@ -20,9 +24,12 @@ class App extends Component {
 render() {
     return (
       <div className="App">
+        <Header/>
         
           <Router>
               <Route exact path="/" component={LoginMenu} />
+              <Route exact path="/register" component={RegisterScreen} />
+              <Route exact path="/login" component={LoginScreen} />
               <Route exact path="/Home" component={HomeScreen} />
               <Route exact path="/LessonMenu" component={LessonMenu} />
               <Route exact path="/CardGame" component={CardGame} />
@@ -35,6 +42,7 @@ render() {
               <Link to="/"><button>Log in</button></Link> */}
           </Router>
 
+        <Footer/>
         </div>
     );
   }
