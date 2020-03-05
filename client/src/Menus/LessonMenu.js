@@ -23,21 +23,13 @@ class LessonMenu extends Component {
     lessons : [{}]
   };
   getLessons = async () => {
-      console.log("Requesting all lessons data.");
       return fetch('api/Lesson/all')
       .then(response => {
           return response.json();
       })
       .then(json =>{
-          console.log("Then: " + json.data);
           this.setState({lessons: json.data});
       });
-      //const response = await fetch('/api/Lesson/all');
-      //const body = await response.json();
-      //console.log("LessonMenu getLessons body: " + body.data[0].lesson_id);
-      //this.setState({lessons: body.data});
-      //console.log("State within getLessons: " + this.state.lessons[0].lesson_id);
-     // return body.data;
   }
   goToLesson = (lessonID) => {
     // changes the url when a button is clicked
@@ -59,7 +51,7 @@ class LessonMenu extends Component {
           <div class="bp3-button-group bp3-large bp3-vertical">
             { /* This prints out a bunch of buttons based on arrays
                   These arrays should be taken from the database*/}
-            {this.state.lessonIDs.map((value, index) => {
+            {this.state.lessons.map((value, index) => {
               return (
                 <div >
                   <Button id={`lesson_button`} type="button" class="bp3-button bp3-icon-code-block" icon="code-block" text={"Lesson " + this.state.lessons[index].lesson_id} onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} />

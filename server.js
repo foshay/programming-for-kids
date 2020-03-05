@@ -67,7 +67,8 @@ app.get('/api/Lesson/all', (req,res) => {
 });
 
 //GET single lesson
-app.get('/api/lesson/:id', (req, res) => {
+app.get('/Lesson/:id', (req, res) => {
+    console.log("Requesting single Lesson");
     let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
     let lessonNum = [req.params.id];
     //Open database
@@ -113,15 +114,11 @@ app.get('/api/lesson/:id', (req, res) => {
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
     console.log(req.body);
-
-    //Returns "Failure" When username is taken
-    //Returns "Success" When not
-
-    runCmd("./backend/create_user.sh "+req.body.username, function(text,error) {
-        console.log(text);
-        res.send(text);
+    runCmd("echo registering", function(text,error) {
+        //console.log(text);
     });
-
+    res.send(`Registration complete`,
+    );
 });
 app.post('/api/login', (req, res) => {
    console.log("body "+req.body.username+" "+req.body.password);
@@ -144,16 +141,13 @@ app.post('/api/grade', (req, res) => {
     var response;
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-   runCmd("printf \""+req.body.code+"\" > ./users/6969/pcode/"+req.body.lesson+
-   " && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/"+"6969"+"/pcode/"+req.body.lesson+" "+"6969" +
-   " && rm ./users/"+"6969"+"/pcode/"+req.body.lesson,
-      function(text,error) {
-         console.log(text);
+    runCmd("printf \""+req.body.code+"\" > ./users/6969/pcode/"+req.body.lesson+" && ./backend/run_python_script.sh ./grading_scripts/"+req.body.lesson+" ./users/6969/pcode/"+req.body.lesson+" "+req.body.lesson +" && rm ./users/6969/pcode/"+req.body.lesson,function(text,error) {
+  console.log(text);
 
-         res.send(
-            `Result of grading your submission: ` + text
-         );
-      });
+  res.send(
+   `I received your POST request. This is what you sent me: ` + text,
+ );
+});
 
 });
 

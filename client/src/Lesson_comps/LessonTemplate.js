@@ -9,11 +9,32 @@ class LessonTemp extends Component {
     // constructor(){
     //     super(props);
     state = {
-        question: "question temp", 
+        question: "question temp",
         hints: "HintTemp",
         answer: "AnswerTemp",
     }
     // }
+    getLesson = async () => {
+        const string = this.props.lessonID;
+        console.log("String: " + string);
+        return fetch(string)
+        .then(response =>{
+            console.log("Getting json...");
+            return response.json();
+        })
+        .then(json =>{
+            console.log("Got json");
+            console.log("Json: " + json.data);
+            this.setState({
+                question: json.data.name,
+                hints: json.data.hint
+            });
+        });
+    }
+    componentDidMount(){
+        console.log("props.history = " + this.props.lessonID);
+        this.getLesson();
+    }
 
     render(){
         return(
