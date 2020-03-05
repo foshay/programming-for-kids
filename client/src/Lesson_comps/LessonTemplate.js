@@ -8,9 +8,9 @@ import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
 class LessonTemp extends Component {
     state = {
 
-        question: "question temp",
-        hints: "HintTemp",
-        answer: "AnswerTemp",
+        question: "[Loading]",
+        hint: "[Loading]",
+        answer: "[Loading]",
     }
     // }
     getLesson = async () => {
@@ -18,15 +18,13 @@ class LessonTemp extends Component {
         console.log("String: " + string);
         return fetch(string)
         .then(response =>{
-            console.log("Getting json...");
             return response.json();
         })
         .then(json =>{
-            console.log("Got json");
-            console.log("Json: " + json.data);
             this.setState({
-                question: json.data.name,
-                hints: json.data.hint
+                question: json.data.question,
+                hint: json.data.hint,
+                answer: json.data.answer
             });
         });
     }
@@ -40,7 +38,7 @@ class LessonTemp extends Component {
         return(
             <div>
                 <h3>Goal: {this.state.question}</h3>
-                <h3>Hints: {this.state.hints}</h3>
+                <h3>Hint: {this.state.hint}</h3>
                 {/* <h3>Lesson ID (temporarily displayed): {this.props.lessonID}</h3> */}
                 <BlocklyComp
                 lessonID={this.props.lessonID}
