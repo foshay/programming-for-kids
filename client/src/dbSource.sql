@@ -1,4 +1,7 @@
 ----------------------------------------------------------------------
+DROP TABLE IF EXISTS Lesson;
+DROP TABLE IF EXISTS Student;
+
 CREATE TABLE Lesson(
   lesson_id INT PRIMARY KEY NOT NULL,
   question TEXT NOT NULL,
@@ -7,27 +10,40 @@ CREATE TABLE Lesson(
   hint TEXT,
   xml TEXT
 );
-
 INSERT INTO Lesson(lesson_id,question, answer, name, hint)
 VALUES(1,
-        'Create a program that will print out the text \"Hello World!\"'
+        'Return 20',
+        '20',
+        'Proof of Concept 1',
+        'To declare a variable, do "var [variable name]"');
+
+INSERT INTO Lesson(lesson_id,question, answer, name, hint)
+VALUES(2,
+        'Return 10',
+        '10',
+        'Proof of Concept 2',
+        'To declare a variable, do "var [variable name]"');
+
+INSERT INTO Lesson(lesson_id,question, answer, name, hint)
+VALUES(3,
+        'Create a program that will print out the text \"Hello World!\"',
         'Use the print function',
         'Hello world!',
         'Use the function print()');
 
 INSERT INTO Lesson(lesson_id,question, answer, name, hint)
-VALUES(2,
+VALUES(4,
         'Create an integer, float, char, and string, assign values to them,
             and print them out with their type',
         'var a = 10\n
-            var b = 10.05\n
-            var c = \'C\'\n
-            var d = \'words\'',
+            var b = 10.05
+            var c = "C"
+            var d = "words" ',
         'Variables',
         'Use the type() function');
 
 INSERT INTO Lesson(lesson_id,question, answer, name, hint)
-VALUES(3,
+VALUES(5,
         'Declare 3 integers. Add the first two together and save the result.\n
             Then subtract the third from that result. \n
             Then multiply that result by the first number.\n
