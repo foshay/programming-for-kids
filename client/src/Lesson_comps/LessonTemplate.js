@@ -6,24 +6,21 @@ import React, { Component } from 'react';
 import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
 
 class LessonTemp extends Component {
-    // constructor(){
-    //     super(props);
     state = {
-        question: "question temp", 
-        hints: "HintTemp",
-        answer: "AnswerTemp",
+        question: "Return 20.",
+        hints: "Drag blocks from the toolbox to return 20.",
+        answer: "20",
     }
-    // }
 
     render(){
         return(
             <div>
-                <h3>Question: {this.state.question}</h3>
-                <h3>Lesson ID (temporarily displayed): {this.props.lessonID}</h3>
+                <h3>Goal: {this.state.question}</h3>
+                <h3>Hints: {this.state.hints}</h3>
+                {/* <h3>Lesson ID (temporarily displayed): {this.props.lessonID}</h3> */}
                 <BlocklyComp
                 lessonID={this.props.lessonID}
                 />
-                <h3>Hints: {this.state.hints}</h3>
                 <h3>Answer: {this.state.answer}</h3>
             </div>
         )
