@@ -17,7 +17,7 @@ class LessonScreen extends Component {
     render(){
         return(
             <div>
-                <Header />
+                {/* <Header /> */}
                     <main className="BodyMenu-Lesson">
                         <LessonTemp 
                         // change={{
@@ -29,7 +29,7 @@ class LessonScreen extends Component {
                         lessonID={this.props.match.params.lessonID}
                       />
                     </main>
-                <Footer />
+                {/* <Footer /> */}
             </div>
         )
     }

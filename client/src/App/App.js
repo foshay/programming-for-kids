@@ -14,12 +14,15 @@ import CardGame from '../Menus/CardGameMenu.js'
 //import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
 import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import '../CSS_files/App.css';
+import Header from '../header_footer/Header.js';
+import Footer from '../header_footer/Footer.js';
 //require('./Editor.jsx')
 
 class App extends Component {
 render() {
     return (
       <div className="App">
+        <Header/>
         
           <Router>
               <Route exact path="/" component={LoginMenu} />
@@ -35,6 +38,7 @@ render() {
               <Link to="/"><button>Log in</button></Link> */}
           </Router>
 
+        <Footer/>
         </div>
     );
   }

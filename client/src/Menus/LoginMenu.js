@@ -3,6 +3,7 @@ import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
 import { Button } from "@blueprintjs/core";
 import Header from '../header_footer/Header.js'
 import Footer from '../header_footer/Footer.js'
+import HomeScreen from '../Menus/HomeScreen.js'
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
 
@@ -78,7 +79,7 @@ render() {
         </Header>
         <Router>
             <main className="BodyMenu">
-                <h1>Button component log-in</h1>
+                {/* <h1>Button component log-in</h1> */}
                     {/* <Button><Link to="/login">Log in</Link></Button>
                     <Divider /> */}
 
@@ -104,7 +105,12 @@ render() {
                         </form>
                           <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-small-cross" intent="warning" icon="small-cross" text="Back" /></Link></ul>
                       </Route>
+                      <Route path="/Home" component={HomeScreen}/>
                       <Route path="/">
+                        {/* TODO REMOVE THIS TEMPORARY BUTTON */}
+                        <Link to="/Home"><Button type="submit" id="homeButton" class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home" /></Link>
+                        <br/>
+                        <br/>
                         <Link to="/login"><Button type="submit" id="loginButton" class="bp3-button bp3-icon-layout-log-in bp3-large" icon="log-in" text="Log In" /></Link>
                         <Link to="/register"><Button type="submit" id="registerButton" class="bp3-button bp3-icon-layout-confirm bp3-large" icon="confirm" text="Register" /></Link>
                       </Route>
