@@ -1,7 +1,13 @@
-# Programming-for-Kids
-to install the node modules run npm install in root folder and inside ./client folder
-to run the app, use *npm start* inside client folder. to run proxy server use *node server.js* in root folder.
-if you get this error:
-Proxy error: Could not proxy request /api/grade from localhost:3000 to http://localhost:5000/ (ECONNREFUSED).
-the proxy server has crashed and needs to be relaunched.
-need node version 13.8.0
+# Programming-for-Kids (Native Code Creator)
+Native Code Creator is a web based application served via an Intel NUC or other wifi hotspot enabled linux system. 
+
+The application in a broad view, provides an environment that teaches users with slow / no access to the internet computer science topics progressing from "Hello World" to machine learning.
+
+The application is served via an Intel NUC and accessed via the web browser. The lessons are stored locally so don't require an internet connection to complete. The lessons are completed using [Google's Blockly ](https://developers.google.com/blockly) and graded via custom python scripts.
+In the future, users will be awarded with cards on lesson completion to be used in a card game.
+
+To work on the project you will need node version 13.8.x. To work with the Intel Neural Compute Stick 2 for AI lessons in the future you will need Ubuntu 18.x
+1. Clone the repo by doing ```git clone https://github.com/foshay/programming-for-kids.git```
+2. Inside the `programming-for-kids` directory, do ```npm install```
+3. Inside the `programming-for-kids` directory, do ```nodemon server.js```
+4. Inside the `client` directory, do ```npm start```
