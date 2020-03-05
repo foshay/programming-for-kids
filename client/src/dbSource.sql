@@ -1,21 +1,48 @@
 ----------------------------------------------------------------------
 CREATE TABLE Lesson(
   lesson_id INT PRIMARY KEY NOT NULL,
-  next_lesson_id INT,
-  prev_lesson_id INT,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
   name TEXT NOT NULL,
   hint TEXT,
-  lesson_xml TEXT
+  xml TEXT
 );
 
-INSERT INTO Lesson(lesson_id, next_lesson_id, prev_lesson_id, name, hint)
-VALUES(1, 2, NULL, 'Hello World!', 'Print the name of this lesson.');
+INSERT INTO Lesson(lesson_id,question, answer, name, hint)
+VALUES(1,
+        'Create a program that will print out the text \"Hello World!\"'
+        'Use the print function',
+        'Hello world!',
+        'Use the function print()');
 
-INSERT INTO Lesson(lesson_id, next_lesson_id, prev_lesson_id, name, hint)
-VALUES(2, 1, 3, 'Variables', 'Declare the variables, then print them.');
+INSERT INTO Lesson(lesson_id,question, answer, name, hint)
+VALUES(2,
+        'Create an integer, float, char, and string, assign values to them,
+            and print them out with their type',
+        'var a = 10\n
+            var b = 10.05\n
+            var c = \'C\'\n
+            var d = \'words\'',
+        'Variables',
+        'Use the type() function');
 
-INSERT INTO Lesson(lesson_id, next_lesson_id, prev_lesson_id, name, hint)
-VALUES(3, NULL, 2, 'Simple Operators', 'Use the appropriate operators.');
+INSERT INTO Lesson(lesson_id,question, answer, name, hint)
+VALUES(3,
+        'Declare 3 integers. Add the first two together and save the result.\n
+            Then subtract the third from that result. \n
+            Then multiply that result by the first number.\n
+            Then divide the result by the second number.\n
+            Print the final result.\n',
+        'var a = 2\n
+            var b = 5\n
+            var c = 8\n
+            var result = a + b\n
+            result = result - c\n
+            result = result * a\n
+            result = result / 2\n
+            print result\n',
+        'Basic Operators',
+        'Remember these operators: (+,-,*,/)');
 
 ---------------------------------------------------------------------
 CREATE TABLE Student(
