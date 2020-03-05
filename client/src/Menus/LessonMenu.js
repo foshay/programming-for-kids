@@ -54,7 +54,7 @@ class LessonMenu extends Component {
             {this.state.lessons.map((value, index) => {
               return (
                 <div >
-                  <Button id={`lesson_button`} type="button" class="bp3-button bp3-icon-code-block" icon="code-block" text={"Lesson " + this.state.lessons[index].lesson_id} onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} />
+                  <Button id={`lesson_button`} type="button" class="bp3-button bp3-icon-code-block" icon="code-block" text={"Lesson " + this.state.lessons[index].lesson_id + ": " + this.state.lessons[index].name} onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} />
                   <br />
                 </div>
               )
