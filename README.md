@@ -1,5 +1,5 @@
-# Programming-for-Kids (Native Code Creator)
-Native Code Creator is a web based application served via an Intel NUC or other wifi hotspot enabled linux system. 
+# Programming-for-Kids (Native Coder Creator)
+Native Coder Creator is a web based application served via an Intel NUC or other wifi hotspot enabled linux system. 
 
 The application in a broad view, provides an environment that teaches users with slow / no access to the internet computer science topics progressing from "Hello World" to machine learning.
 
