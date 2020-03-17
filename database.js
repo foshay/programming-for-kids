@@ -1,5 +1,4 @@
 var sqlite = require('sqlite3').verbose();
-var fs = require('fs');
 const DBSOURCE = "./client/src/database.db";
 
 module.exports = (app) =>{
