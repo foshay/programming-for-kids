@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 DROP TABLE IF EXISTS Lesson;
-DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS User;
 
 CREATE TABLE Lesson(
   lesson_id INT PRIMARY KEY NOT NULL,
@@ -61,14 +61,17 @@ VALUES(3,
 --         'Remember these operators: (+,-,*,/)');
 
 ---------------------------------------------------------------------
-CREATE TABLE Student(
+CREATE TABLE User(
   student_id INT PRIMARY KEY NOT NULL,
   first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL
+  last_name TEXT NOT NULL,
+  username TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  session_id INT
 );
+--
+--INSERT INTO User(student_id, first_name, last_name)
+--VALUES(1, 'John', 'Smith');
 
-INSERT INTO Student(student_id, first_name, last_name)
-VALUES(1, 'John', 'Smith');
-
-INSERT INTO Student(student_id, first_name, last_name)
-VALUES(2, 'Jane', 'Doe');
+--INSERT INTO User(student_id, first_name, last_name)
+--VALUES(2, 'Jane', 'Doe');
