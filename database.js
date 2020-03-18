@@ -33,7 +33,6 @@ module.exports = (app) =>{
 
     //GET single Lesson
     app.get('/Lesson/:id', (req, res) => {
-        console.log("Requesting single Lesson");
         let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
         let lessonNum = [req.params.id];
 
@@ -54,7 +53,6 @@ module.exports = (app) =>{
 /****************** User Requests *****************/
 
     app.get('/User/:userid', (req,res) => {
-        console.log("Requesting user " + req.params.userid);
         let sql = 'SELECT * FROM User WHERE user_id = ?';
 
         db.get(sql, req.params.userid, (err,row) => {
@@ -64,7 +62,6 @@ module.exports = (app) =>{
                     "message" : "Failure"})
                     return;
             }
-            console.log(" Row data: " + row);
             res.json({
                 message: "Success",
                 data: row});
