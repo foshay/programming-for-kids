@@ -4,6 +4,7 @@ const sqlite = require('sqlite3');
 
 const app = express();
 const port = process.env.PORT || 5000;
+require('./database.js')(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,87 +30,6 @@ function runCmd(cmd,callback) {
       }
    });
 }
-
-/*GET all lessons. Returns in this format:
-    data: [{ "lesson_id" : lesson_id1, ...}, {"lesson_id" : lesson_id2, ...}]
-*/
-app.get('/api/Lesson/all', (req,res) => {
-    let sql = 'SELECT * FROM Lesson  ';
-    let params = [];
-    //Open database
-    let db = new sqlite.Database('./client/src/database.db', (err) =>{
-        if (err){
-            throw err;
-        }
-    });
-
-    //In case we need to run multiple queries in the future
-    db.serialize( () => {
-        db.all(sql, params, (err, rows) =>{
-            if (err){
-                res.status(400).json({
-                    "error" : err.message,
-                    "message" : "Failure"});
-                return;
-            }
-            console.log("All rows: " + rows[0] + rows[1] + rows[2]);
-            res.json({
-                message: "Succ",
-                data: rows
-            });
-        });
-    });
-    db.close((err) =>{
-        if(err){
-            throw err;
-        }
-    });
-});
-
-//GET single lesson
-app.get('/Lesson/:id', (req, res) => {
-    console.log("Requesting single Lesson");
-    let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
-    let lessonNum = [req.params.id];
-    //Open database
-    let db = new sqlite.Database('./client/src/database.db', (err) =>{
-        if (err){
-            throw err;
-        }
-    });
-
-    //If we need to do more than one query here in the future
-    db.serialize( () => {
-        //get query to database for lesson with :id
-        db.get(sql, lessonNum, (err, row) => {
-            if (err){
-                res.status(400).json({
-                    "error" : err.message,
-                    "message" : "Failure"});
-                return;
-            }
-            res.json({
-                message: "Succ2",
-                data: row
-                /*
-                [{"lesson_id" : row.lesson_id,
-                "next_lesson_id" : row.next_lesson_id,
-                "prev_lesson_id" : row.prev_lesson_id,
-                "name" : row.name,
-                "hint" : row.hint,
-                "xml" : row.lesson_xml
-                }]*/
-            });
-        });
-    });
-    //close database
-    db.close((err) =>{
-        if(err){
-            throw err;
-        }
-    });
-});
-
 
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
