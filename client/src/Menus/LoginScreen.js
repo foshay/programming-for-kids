@@ -23,7 +23,6 @@ class LoginScreen extends Component {
 
         });
         const body = await response.text();
-        console.log("In login: " + body);
         if(body == "Success"){
             alert("Login successful");
         }else{

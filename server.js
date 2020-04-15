@@ -86,14 +86,9 @@ app.post('/api/login', (req, res) => {
         console.log(row);
         //If the query is successful, compare the hash and return result
         if(!err && row != undefined){
-            console.log("In true block");
             let hash = row.password;
-            console.log(password);
             bcrypt.compare(password, hash, (err, result) => {
-                console.log("bcrypt = " + result);
-                console.log(typeof(result));
                 if(result == true){
-                    console.log("Succesful Login");
                     res.send("Success");
                 }else{
                     console.log(err);
