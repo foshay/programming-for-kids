@@ -31,10 +31,13 @@ class RegisterScreen extends Component {
         if (body == 'Failure') {
             alert("Username taken");
             console.info("Taken: " + body);
-        } else {
+        }else if(body == "DB Failure"){
+            alert("Issue creating account");
+        }else {
             console.info("Created " + body);
             alert("User created");
         }
+
 
     };
 

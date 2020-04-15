@@ -62,16 +62,16 @@ VALUES(3,
 
 ---------------------------------------------------------------------
 CREATE TABLE User(
-  user_id INT PRIMARY KEY NOT NULL,
+  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   username TEXT NOT NULL,
-  --hash TEXT NOT NULL,
+  password TEXT NOT NULL,
   session_id INT
 );
 
-INSERT INTO User(user_id, first_name, last_name, username)
-VALUES(1, 'John', 'Smith', 'smithj');
+INSERT INTO User(user_id, first_name, last_name, username, password)
+VALUES(1, 'John', 'Smith', 'smithj', 'password');
 
-INSERT INTO User(user_id, first_name, last_name, username)
-VALUES(2, 'Jane', 'Doe', 'doej');
+INSERT INTO User(user_id, first_name, last_name, username, password)
+VALUES(2, 'Jane', 'Doe', 'doej', '12345678');

@@ -1,17 +1,8 @@
 var sqlite = require('sqlite3').verbose();
 const DBSOURCE = "./client/src/database.db";
 
-module.exports = (app) =>{
+module.exports = (app, db) =>{
 
-    //Open and load database into object
-    let db = new sqlite.Database('./client/src/database.db', (err) =>{
-        if (err){
-            throw err;
-                }
-        else{
-            console.log("Connected to database");
-        }
-    });
 
 /************** Lesson Requests ****************/
     //GET all Lessons
