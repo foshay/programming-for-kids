@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite = require('sqlite3');
-
+const rimraf = require('rimraf')
 const app = express();
 const port = process.env.PORT || 5000;
 //Open and load database into object
@@ -53,6 +53,7 @@ app.post('/api/register', (req, res) => {
             db.run(sql, params, (err) => {
                 if(err){
                     console.log(err);
+                    rimraf("./users/" + username);
                     res.send("DB Failure");
                 }else{
                     console.log("User creation succecssful: " + username);
