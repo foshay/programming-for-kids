@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite = require('sqlite3');
 const rimraf = require('rimraf')
+const bcrypt  = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 5000;
 //Open and load database into object
@@ -44,27 +45,34 @@ app.post('/api/register', (req, res) => {
     let body = req.body;
     let username = body.username;
     let password = body.password;
-    let sql = 'INSERT INTO User(first_name, last_name, username, password) VALUES (?,?,?,?)';
-    let params = ['Johnny', 'Test', username, password];
 
-    //Create user via script, then insert them into the database
-    runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
-        if(text !== "Failure"){
-            db.run(sql, params, (err) => {
-                if(err){
-                    console.log(err);
-                    rimraf("./users/" + username);
-                    res.send("DB Failure");
+
+    //Hash Password
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+            let sql = 'INSERT INTO User(first_name, last_name, username, password) VALUES (?,?,?,?)';
+            let params = ['Johnny', 'Test', username, hash];
+            //Create user via script, then insert them into the database
+            runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
+                if(text !== "Failure"){
+                    db.run(sql, params, (err) => {
+                        if(err){
+                            console.log(err);
+                            rimraf("./users/" + username);
+                            res.send("DB Failure");
+                        }else{
+                            console.log("User creation succecssful: " + username);
+                            res.send(text);
+                        }
+                    });
                 }else{
-                    console.log("User creation succecssful: " + username);
                     res.send(text);
                 }
             });
-        }else{
-            res.send(text);
-        }
+        });
     });
 });
+
 app.post('/api/login', (req, res) => {
    console.log("body "+req.body.username+" "+req.body.password);
    console.log(req.body);
