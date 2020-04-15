@@ -34,11 +34,9 @@ function runCmd(cmd,callback) {
 app.post('/api/register', (req, res) => {
     console.log("body "+req.body.username+" "+req.body.password);
     console.log(req.body);
-    runCmd("./backend/create_user.sh " + req.body.username, function(text,error) {
-        //console.log(text);
+    runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
+        res.send(text);
     });
-    res.send(`Registration complete`,
-    );
 });
 app.post('/api/login', (req, res) => {
    console.log("body "+req.body.username+" "+req.body.password);
