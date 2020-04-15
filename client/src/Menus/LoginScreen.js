@@ -23,12 +23,16 @@ class LoginScreen extends Component {
 
         });
         const body = await response.text();
-
+        console.log("In login: " + body);
+        if(body == "Success"){
+            alert("Login successful");
+        }else{
+            alert("Invalid username or password");
+        }
         this.setState({ responseToPost: body });
         //body is the response from the server after receiving the login information
         //we can use this for authenticating users (cookie or something)
         console.info(this.state.responseToPost);
-
     };
 
     render = () => {

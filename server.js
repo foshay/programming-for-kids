@@ -73,14 +73,37 @@ app.post('/api/register', (req, res) => {
     });
 });
 
+//Login checking via hash. TODO: give session cookie
 app.post('/api/login', (req, res) => {
-   console.log("body "+req.body.username+" "+req.body.password);
-   console.log(req.body);
-   runCmd("echo logging in", function(text,error) {
-       //console.log(text);
-   });
-   res.send(`Login complete`,
-   );
+    let body = req.body;
+    let username = body.username;
+    let password = body.password;
+    let sql = 'SELECT * FROM User WHERE username = ?';
+
+    db.get(sql, [username], (err,row) => {
+        //console.log("Before hash");
+    //    console.log(err);
+        console.log(row);
+        //If the query is successful, compare the hash and return result
+        if(!err && row != undefined){
+            console.log("In true block");
+            let hash = row.password;
+            console.log(password);
+            bcrypt.compare(password, hash, (err, result) => {
+                console.log("bcrypt = " + result);
+                console.log(typeof(result));
+                if(result == true){
+                    console.log("Succesful Login");
+                    res.send("Success");
+                }else{
+                    console.log(err);
+                    res.send("Failure");
+                }
+            });
+        }else{
+            res.send("Failure");
+        }
+    });
 });
 //---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 
