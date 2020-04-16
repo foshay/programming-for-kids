@@ -58,8 +58,10 @@ class LoginScreen extends Component {
                             id="loginButton"
                             class="bp3-button bp3-icon-layout-log-in"
                             intent="success"
-                            icon="log-in" text="Log In"
-                            onClick={this.handleLogin} />
+                            icon="log-in" 
+                            text="Log In"
+                            onClick={this.handleLogin} 
+                        />
                     </ul>
                 </form>
                 <ul style={{paddingLeft: 0}}>
@@ -74,7 +76,6 @@ class LoginScreen extends Component {
                     </Link>
                 </ul>
             </main>
-
         );
     }
 }

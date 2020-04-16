@@ -33,7 +33,7 @@ class RegisterScreen extends Component {
             console.info("Taken: " + body);
         }else if(body == "DB Failure"){
             alert("Issue creating account");
-        }else {
+        } else {
             console.info("Created " + body);
             alert("User created");
         }
@@ -46,12 +46,41 @@ class RegisterScreen extends Component {
             <main className="BodyMenu">
                 <form onSubmit={this.handleRegister}>
                     <h4>Username:</h4>
-                    <input type="text" placeholder="Enter Username" id="unameR" required></input>
+                    <input
+                        type="text"
+                        placeholder="Enter Username"
+                        id="unameR"
+                        required>
+                    </input>
                     <h4>Password:</h4>
-                    <input type="password" placeholder="Enter Password" id="pwordR" required></input>
-                    <ul><Button type="submit" id="registerButton" class="bp3-button bp3-icon-layout-confirm" intent="success" icon="confirm" text="Register" onClick={this.handleRegister} /></ul>
+                    <input
+                        type="password"
+                        placeholder="Enter Password"
+                        id="pwordR"
+                        required> 
+                    </input>
+                    <ul style={{paddingLeft: 0}}>
+                        <Button
+                            type="submit"
+                            id="registerButton"
+                            class="bp3-button bp3-icon-layout-confirm"
+                            intent="success"
+                            icon="confirm"
+                            text="Register"
+                            onClick={this.handleRegister}
+                        />
+                    </ul>
                 </form>
-                <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-small-cross" intent="warning" icon="small-cross" text="Back" /></Link></ul>
+                <ul style={{ paddingLeft: 0 }}>
+                    <Link to="/">
+                        <Button
+                            type="button"
+                            class="bp3-button bp3-icon-layout-small-cross"
+                            intent="warning"
+                            icon="small-cross"
+                            text="Back" />
+                    </Link>
+                </ul>
             </main>
 
         );
