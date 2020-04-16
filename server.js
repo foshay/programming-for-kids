@@ -1,10 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite = require('sqlite3');
-
+const rimraf = require('rimraf')
+const bcrypt  = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 5000;
-require('./database.js')(app);
+//Open and load database into object
+let db = new sqlite.Database('./client/src/database.db', (err) =>{
+    if (err){
+        throw err;
+            }
+    else{
+        console.log("Connected to database");
+    }
+});
+require('./database.js')(app, db);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,24 +40,65 @@ function runCmd(cmd,callback) {
       }
    });
 }
-
+//Register a user. If username already exists, return "Failure"
 app.post('/api/register', (req, res) => {
-    console.log("body "+req.body.username+" "+req.body.password);
-    console.log(req.body);
-    runCmd("echo registering", function(text,error) {
-        //console.log(text);
+    let body = req.body;
+    let username = body.username;
+    let password = body.password;
+
+
+    //Hash Password
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+            let sql = 'INSERT INTO User(first_name, last_name, username, password) VALUES (?,?,?,?)';
+            let params = ['Johnny', 'Test', username, hash];
+            //Create user via script, then insert them into the database
+            runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
+                if(text !== "Failure"){
+                    db.run(sql, params, (err) => {
+                        if(err){
+                            console.log(err);
+                            rimraf("./users/" + username);
+                            res.send("DB Failure");
+                        }else{
+                            console.log("User creation succecssful: " + username);
+                            res.send(text);
+                        }
+                    });
+                }else{
+                    res.send(text);
+                }
+            });
+        });
     });
-    res.send(`Registration complete`,
-    );
 });
+
+//Login checking via hash. TODO: give session cookie
 app.post('/api/login', (req, res) => {
-   console.log("body "+req.body.username+" "+req.body.password);
-   console.log(req.body);
-   runCmd("echo logging in", function(text,error) {
-       //console.log(text);
-   });
-   res.send(`Login complete`,
-   );
+    let body = req.body;
+    let username = body.username;
+    let password = body.password;
+    let sql = 'SELECT * FROM User WHERE username = ?';
+
+    db.get(sql, [username], (err,row) => {
+        //console.log("Before hash");
+    //    console.log(err);
+        console.log(row);
+        //If the query is successful, compare the hash and return result
+        if(!err && row != undefined){
+            let hash = row.password;
+            bcrypt.compare(password, hash, (err, result) => {
+                if(result == true){
+                    res.send("Success");
+                }else{
+                    console.log(err);
+                    res.send("Failure");
+                }
+            });
+        }else{
+            res.send("Failure");
+        }
+    });
 });
 //---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 
