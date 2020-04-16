@@ -39,12 +39,40 @@ class LoginScreen extends Component {
             <main className="BodyMenu">
                 <form onSubmit={this.handleLogin}>
                     <h4>Username:</h4>
-                    <input type="text" placeholder="Enter Username" id="unameL" required></input>
+                    <input
+                        type="text"
+                        placeholder="Enter Username"
+                        id="unameL"
+                        required>
+                    </input>
                     <h4>Password:</h4>
-                    <input type="password" placeholder="Enter Password" id="pwordL" required></input>
-                    <ul><Button type="submit" id="loginButton" class="bp3-button bp3-icon-layout-log-in" intent="success" icon="log-in" text="Log In" onClick={this.handleLogin} /></ul>
+                    <input
+                        type="password"
+                        placeholder="Enter Password"
+                        id="pwordL"
+                        required>
+                    </input>
+                    <ul style={{paddingLeft: 0}}>
+                        <Button
+                            type="submit"
+                            id="loginButton"
+                            class="bp3-button bp3-icon-layout-log-in"
+                            intent="success"
+                            icon="log-in" text="Log In"
+                            onClick={this.handleLogin} />
+                    </ul>
                 </form>
-                <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-small-cross" intent="warning" icon="small-cross" text="Back" /></Link></ul>
+                <ul style={{paddingLeft: 0}}>
+                    <Link to="/">
+                        <Button
+                            type="button"
+                            class="bp3-button bp3-icon-layout-small-cross"
+                            intent="warning"
+                            icon="small-cross"
+                            text="Back"
+                        />
+                    </Link>
+                </ul>
             </main>
 
         );
