@@ -11,14 +11,15 @@ import Header from '../header_footer/Header.js';
 import Footer from '../header_footer/Footer.js';
 import LoginMenu from '../Menus/LoginMenu.js'
 import LoginScreen from '../Menus/LoginScreen.js';
-import RegisterScreen from '../Menus/RegisterScreen.js';
+import RegisterStudent from '../Menus/RegisterStudent.js';
+import RegisterTeacher from '../Menus/RegisterTeacher.js';
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
 import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import CardGame from '../Menus/CardGameMenu.js'
 //import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
 import '../CSS_files/App.css';
-//require('./Editor.jsx')
+import RegisterChoice from '../Menus/RegisterChoice.js';
 
 class App extends Component {
 render() {
@@ -28,7 +29,9 @@ render() {
         
           <Router>
               <Route exact path="/" component={LoginMenu} />
-              <Route exact path="/register" component={RegisterScreen} />
+              <Route exact path="/register" component={RegisterChoice} />
+              <Route exact path="/register/student" component={RegisterStudent} />
+              <Route exact path="/register/teacher" component={RegisterTeacher} />
               <Route exact path="/login" component={LoginScreen} />
               <Route exact path="/Home" component={HomeScreen} />
               <Route exact path="/LessonMenu" component={LessonMenu} />

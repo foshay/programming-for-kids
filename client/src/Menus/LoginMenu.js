@@ -21,6 +21,7 @@ class LoginMenu extends Component {
               class="bp3-button bp3-icon-layout-log-in bp3-large"
               icon="log-in"
               text="Log In"
+              intent="success"
             />
           </Link>
         </ul>
@@ -32,6 +33,7 @@ class LoginMenu extends Component {
               class="bp3-button bp3-icon-layout-confirm bp3-large"
               icon="confirm"
               text="Register"
+              intent="primary"
             />
           </Link>
         </ul>
