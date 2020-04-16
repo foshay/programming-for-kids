@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 //import logo from './logo.svg';
 //import { Text, View, StyleSheet } from 'react-native';
 //import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -22,33 +22,72 @@ import '../CSS_files/App.css';
 import RegisterChoice from '../Menus/RegisterChoice.js';
 
 class App extends Component {
-render() {
+  state = {
+    loggedIn: false,
+  };
+  // need to add a handle login function
+  // this needs to get whether the user successfully logged in
+  // from LoginScreen
+
+
+  render() {
     return (
       <div className="App">
-        <Header/>
-        
-          <Router>
-              <Route exact path="/" component={LoginMenu} />
-              <Route exact path="/register" component={RegisterChoice} />
-              <Route exact path="/register/student" component={RegisterStudent} />
-              <Route exact path="/register/teacher" component={RegisterTeacher} />
-              <Route exact path="/login" component={LoginScreen} />
-              <Route exact path="/Home" component={HomeScreen} />
-              <Route exact path="/LessonMenu" component={LessonMenu} />
-              <Route exact path="/CardGame" component={CardGame} />
-              <Route path='/Lesson/:lessonID' component={LessonScreen} />
-              {/* <Route path={`${LessonScreen}/:id`}  /> */}
+        <Header loggedIn={this.state.loggedIn} />
 
-              {/* <Link to="/Home"><button>Home</button></Link>
-              
-              <Link to="/LessonMenu"><button>Lessons</button></Link>
-              <Link to="/"><button>Log in</button></Link> */}
-          </Router>
+        <Router>
+          <Route exact path="/" component={LoginMenu} />
+          <Route exact path="/register" component={RegisterChoice} />
+          <Route exact path="/register/student" component={RegisterStudent} />
+          <Route exact path="/register/teacher" component={RegisterTeacher} />
+          <Route exact path="/login" component={LoginScreen} />
 
-        <Footer/>
-        </div>
+          {/* The components below should only be accessible for logged in students*/}
+          <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
+          {/* <Route exact path="/Home" component={HomeScreen} /> */}
+          <ProtectedRoute exact path="/LessonMenu" loggedIn={this.state.loggedIn} component={LessonMenu} />
+          {/* <Route exact path="/LessonMenu" component={LessonMenu} /> */}
+          <ProtectedRoute exact path="/CardGame" loggedIn={this.state.loggedIn} component={CardGame} />
+          {/* <Route exact path="/CardGame" component={CardGame} /> */}
+          <ProtectedRoute path='/Lesson/:lessonID' loggedIn={this.state.loggedIn} component={LessonScreen} />
+          {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
+
+          {/* The components below should only be accessible for logged in teachers*/}
+        </Router>
+
+        <Footer />
+      </div>
     );
   }
 }
+
+// This component was made with code from a tutorial
+// https://codedaily.io/tutorials/49/Create-a-ProtectedRoute-for-Logged-In-Users-with-Route-Redirect-and-a-Render-Prop-in-React-Router
+const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={(props) => {
+        return loggedIn ? (
+          <Comp {...props} />
+        ) : (
+            // When the user tries to go to a page that they should not be able
+            // to see unless logged in, they are redirected to "/"
+            <Redirect
+              to={{
+                pathname: "/",
+                state: {
+                  prevLocation: path,
+                  error: "You need to login first!",
+                },
+              }}
+            />
+          );
+      }}
+    />
+  );
+};
+
 
 export default App;
