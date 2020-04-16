@@ -49,14 +49,14 @@ class RegisterTeacher extends Component {
                     <h4>Username:</h4>
                     <input
                         type="text"
-                        placeholder="Enter Username"
+                        placeholder=" Enter Username..."
                         id="unameR"
                         required>
                     </input>
                     <h4>Password:</h4>
                     <input
                         type="password"
-                        placeholder="Enter Password"
+                        placeholder=" Enter Password..."
                         id="pwordR"
                         required> 
                     </input>

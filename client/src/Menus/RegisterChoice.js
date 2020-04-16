@@ -20,7 +20,7 @@ class RegisterChoice extends Component {
               id="registerStudentButton"
               class="bp3-button bp3-icon-layout-log-in bp3-large"
               icon="confirm"
-              text="Register New Student"
+              text="New Student"
               intent="primary"
             />
           </Link>
@@ -32,7 +32,7 @@ class RegisterChoice extends Component {
               id="registerTeacherButton"
               class="bp3-button bp3-icon-layout-confirm bp3-large"
               icon="confirm"
-              text="Register New Teacher"
+              text="New Teacher"
               intent="primary"
             />
           </Link>

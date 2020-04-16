@@ -8,6 +8,7 @@ import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class Header extends Component {
+    // TODO add functionality so that user that has not logged in cannot press these buttons
     render(){
         const popMenu = (
             <Menu >

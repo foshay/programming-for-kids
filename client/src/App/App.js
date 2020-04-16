@@ -24,6 +24,7 @@ import RegisterChoice from '../Menus/RegisterChoice.js';
 class App extends Component {
   state = {
     loggedIn: false,
+    teacherLoggedIn: false,
   };
   // need to add a handle login function
   // this needs to get whether the user successfully logged in
@@ -36,11 +37,12 @@ class App extends Component {
         <Header loggedIn={this.state.loggedIn} />
 
         <Router>
+          {/* The components below are accessible to users that have not logged in*/}
           <Route exact path="/" component={LoginMenu} />
-          <Route exact path="/register" component={RegisterChoice} />
-          <Route exact path="/register/student" component={RegisterStudent} />
-          <Route exact path="/register/teacher" component={RegisterTeacher} />
-          <Route exact path="/login" component={LoginScreen} />
+          <Route exact path="/Register" component={RegisterChoice} />
+          <Route exact path="/Register/Student" component={RegisterStudent} />
+          <Route exact path="/Register/Teacher" component={RegisterTeacher} />
+          <Route exact path="/Login" component={LoginScreen} />
 
           {/* The components below should only be accessible for logged in students*/}
           <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
@@ -53,6 +55,31 @@ class App extends Component {
           {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
 
           {/* The components below should only be accessible for logged in teachers*/}
+          <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} />
+
+            {/* /teacherHome/managestudents */}
+              {/* should be a list of all students with their overall grades */}
+              {/* should have */}
+                {/* button for delete student */}
+                {/* student's overall grade */}
+                {/* student's grade for each assignment */}
+          <ProtectedRoute exact path='/teacherHome/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
+
+            {/* /teacherHome/managestudents/:studentID */}
+          <ProtectedRoute path='/teacherHome/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
+
+            {/* /teacherHome/managelessons */}
+                {/* teacher can click individual lessons */}
+                {/* teacher can make new lesson */}
+          <ProtectedRoute exact path='/teacherHome/manageLessons' loggedIn={this.state.teacherLoggedIn} component={ManageAllLessons} />
+
+              {/* /teacherHome/managelessons/:lessonID */}
+              {/* should be able to edit all parts of lesson, save, or delete */}
+          <ProtectedRoute path='/teacherHome/manageLessons/:lessonID' loggedIn={this.state.teacherLoggedIn} component={ManageLesson} />
+
+              {/* /teacherHome/managelessons/newLesson */}
+          <ProtectedRoute exact path='/teacherHome/manageLessons/newLesson' loggedIn={this.state.teacherLoggedIn} component={NewLesson} />
+
         </Router>
 
         <Footer />
@@ -77,6 +104,7 @@ const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
             <Redirect
               to={{
                 pathname: "/",
+                // Not sure how to access this state
                 state: {
                   prevLocation: path,
                   error: "You need to login first!",
