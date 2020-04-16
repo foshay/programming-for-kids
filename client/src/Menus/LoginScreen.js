@@ -76,6 +76,7 @@ class LoginScreen extends Component {
                     </Link>
                 </ul>
             </main>
+
         );
     }
 }

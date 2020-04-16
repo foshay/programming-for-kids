@@ -13,8 +13,28 @@ class LoginMenu extends Component {
   render() {
     return (
       <main className="BodyMenu">
-        <Link to="/login"><Button type="submit" id="loginButton" class="bp3-button bp3-icon-layout-log-in bp3-large" icon="log-in" text="Log In" /></Link>
-        <Link to="/register"><Button type="submit" id="registerButton" class="bp3-button bp3-icon-layout-confirm bp3-large" icon="confirm" text="Register" /></Link>
+        <ul style={{ paddingLeft: 0 }}>
+          <Link to="/login">
+            <Button
+              type="submit"
+              id="loginButton"
+              class="bp3-button bp3-icon-layout-log-in bp3-large"
+              icon="log-in"
+              text="Log In"
+            />
+          </Link>
+        </ul>
+        <ul style={{ paddingLeft: 0 }}>
+          <Link to="/register">
+            <Button
+              type="submit"
+              id="registerButton"
+              class="bp3-button bp3-icon-layout-confirm bp3-large"
+              icon="confirm"
+              text="Register"
+            />
+          </Link>
+        </ul>
       </main>
     );
   }
