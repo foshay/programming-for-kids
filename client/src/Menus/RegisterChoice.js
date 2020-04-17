@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
+// import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
+
 import { Button } from "@blueprintjs/core";
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';

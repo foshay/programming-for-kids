@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header_Footer from "../CSS_files/header_footer.css"
+import "../CSS_files/header_footer.css"
 import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";

@@ -25,6 +25,7 @@ class LoginScreen extends Component {
         const body = await response.text();
         if(body == "Success"){
             alert("Login successful");
+            // this.props.logInStudent();
         }else{
             alert("Invalid username or password");
         }
@@ -56,7 +57,7 @@ class LoginScreen extends Component {
                         <Button
                             type="submit"
                             id="loginButton"
-                            class="bp3-button bp3-icon-layout-log-in"
+                            className="bp3-button bp3-icon-layout-log-in"
                             intent="success"
                             icon="log-in" 
                             text="Log In"
@@ -68,7 +69,7 @@ class LoginScreen extends Component {
                     <Link to="/">
                         <Button
                             type="button"
-                            class="bp3-button bp3-icon-layout-small-cross"
+                            className="bp3-button bp3-icon-layout-small-cross"
                             intent="warning"
                             icon="small-cross"
                             text="Back"

@@ -8,7 +8,7 @@ class RegisterTeacher extends Component {
     }
 
     handleRegister = async e => {
-        // TODO add code to handle the 'teacher code'
+        // TODO add code to handle the 'teacher code' otp
         e.preventDefault();
         var username = document.getElementById("unameR").value;
         var password = document.getElementById("pwordR").value;

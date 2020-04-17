@@ -24,11 +24,23 @@ import RegisterChoice from '../Menus/RegisterChoice.js';
 class App extends Component {
   state = {
     loggedIn: false,
-    teacherLoggedIn: false,
+    teacherLoggedIn: true,
   };
   // need to add a handle login function
   // this needs to get whether the user successfully logged in
   // from LoginScreen
+
+  // logInTeacher = () => {
+  //   this.setState({teacherLoggedIn: true});
+  // }
+
+  // logInStudent = () => {
+  //   this.setState({loggedIn: true});
+  // }
+
+  componentDidMount = () => {
+    // TODO figure out if this is where to check JWT token
+  }
 
 
   render() {
@@ -42,8 +54,20 @@ class App extends Component {
           <Route exact path="/Register" component={RegisterChoice} />
           <Route exact path="/Register/Student" component={RegisterStudent} />
           <Route exact path="/Register/Teacher" component={RegisterTeacher} />
-          <Route exact path="/Login" component={LoginScreen} />
-
+          <Route exact path="/login" component={LoginScreen} />
+          {/* <Route exact path="/Login" 
+            render = {(props) => <LoginScreen 
+              // the two functions below run in a successful login
+              logInStudent={this.logInStudent}
+              logInTeacher={this.logInTeacher}
+            />}
+          /> */}
+          {/* <Route exact path="/Login" component={<LoginScreen
+            // the two functions below run in a successful login
+            logInStudent={() => this.logInStudent}
+            logInTeacher={() => this.logInTeacher}
+          />}
+          /> */}
           {/* The components below should only be accessible for logged in students*/}
           <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
           {/* <Route exact path="/Home" component={HomeScreen} /> */}
@@ -53,32 +77,6 @@ class App extends Component {
           {/* <Route exact path="/CardGame" component={CardGame} /> */}
           <ProtectedRoute path='/Lesson/:lessonID' loggedIn={this.state.loggedIn} component={LessonScreen} />
           {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
-
-          {/* The components below should only be accessible for logged in teachers*/}
-          <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} />
-
-            {/* /teacherHome/managestudents */}
-              {/* should be a list of all students with their overall grades */}
-              {/* should have */}
-                {/* button for delete student */}
-                {/* student's overall grade */}
-                {/* student's grade for each assignment */}
-          <ProtectedRoute exact path='/teacherHome/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
-
-            {/* /teacherHome/managestudents/:studentID */}
-          <ProtectedRoute path='/teacherHome/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
-
-            {/* /teacherHome/managelessons */}
-                {/* teacher can click individual lessons */}
-                {/* teacher can make new lesson */}
-          <ProtectedRoute exact path='/teacherHome/manageLessons' loggedIn={this.state.teacherLoggedIn} component={ManageAllLessons} />
-
-              {/* /teacherHome/managelessons/:lessonID */}
-              {/* should be able to edit all parts of lesson, save, or delete */}
-          <ProtectedRoute path='/teacherHome/manageLessons/:lessonID' loggedIn={this.state.teacherLoggedIn} component={ManageLesson} />
-
-              {/* /teacherHome/managelessons/newLesson */}
-          <ProtectedRoute exact path='/teacherHome/manageLessons/newLesson' loggedIn={this.state.teacherLoggedIn} component={NewLesson} />
 
         </Router>
 
@@ -90,11 +88,11 @@ class App extends Component {
 
 // This component was made with code from a tutorial
 // https://codedaily.io/tutorials/49/Create-a-ProtectedRoute-for-Logged-In-Users-with-Route-Redirect-and-a-Render-Prop-in-React-Router
-const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
+const ProtectedRoute = ({ component: Comp, loggedIn, path, ...params }) => {
   return (
     <Route
       path={path}
-      {...rest}
+      {...params}
       render={(props) => {
         return loggedIn ? (
           <Comp {...props} />

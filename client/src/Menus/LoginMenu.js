@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { Button } from "@blueprintjs/core";
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
@@ -18,7 +18,7 @@ class LoginMenu extends Component {
             <Button
               type="submit"
               id="loginButton"
-              class="bp3-button bp3-icon-layout-log-in bp3-large"
+              className="bp3-button bp3-icon-layout-log-in bp3-large"
               icon="log-in"
               text="Log In"
               intent="success"
@@ -30,7 +30,7 @@ class LoginMenu extends Component {
             <Button
               type="submit"
               id="registerButton"
-              class="bp3-button bp3-icon-layout-confirm bp3-large"
+              className="bp3-button bp3-icon-layout-confirm bp3-large"
               icon="confirm"
               text="Register"
               intent="primary"
