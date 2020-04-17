@@ -16,7 +16,6 @@ class HomeScreen extends Component {
           <Link to="/LessonMenu">
             <Button
               text="Lessons" 
-              type="button"
               icon="book"
               intent="primary" 
             />
@@ -32,13 +31,12 @@ class HomeScreen extends Component {
           <br/>
           <Button
             text="Settings"
-            type="button"
             icon="cog"
             disabled
           />
           <br/>
           <Link to="/">
-            <Button type="button"
+            <Button 
               text="Log-Out" 
               icon="log-out"
               intent="danger"
