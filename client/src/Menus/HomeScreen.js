@@ -11,40 +11,43 @@ import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 class HomeScreen extends Component {
   render() {
     return (
-      <div className="BodyMenu">
-        <ButtonGroup large vertical>
-          <Link to="/LessonMenu">
+      <div className="BodyContainer">
+        <div className="BodyMenu">
+          <ButtonGroup large vertical>
+            <Link to="/LessonMenu">
+              <Button
+                text="Lessons"
+                icon="book"
+                intent="primary"
+              />
+            </Link>
+            <br />
+            <Link to="/CardGame">
+              <Button
+                text="Card Game"
+                type="button"
+                icon="ninja"
+              />
+            </Link>
+            <br />
             <Button
-              text="Lessons" 
-              icon="book"
-              intent="primary" 
+              text="Settings"
+              icon="cog"
+              disabled
             />
-          </Link>
-          <br/>
-          <Link to="/CardGame">
-            <Button
-              text="Card Game"
-              type="button"
-              icon="ninja"
-            />
-          </Link>
-          <br/>
-          <Button
-            text="Settings"
-            icon="cog"
-            disabled
-          />
-          <br/>
-          <Link to="/">
-            <Button 
-              text="Log-Out" 
-              icon="log-out"
-              intent="danger"
+            <br />
+            <Link to="/">
+              <Button
+                text="Log-Out"
+                icon="log-out"
+                intent="danger"
               // TODO implement logout functionality
               // onClick = {}
               />
-          </Link>
-        </ButtonGroup>
+            </Link>
+          </ButtonGroup>
+        </div>
+
       </div>
     );
   }

@@ -54,7 +54,7 @@ class App extends Component {
       <div className="App">
         <Header loggedIn={this.state.loggedIn} />
 
-        <Router className="AppBody">
+        <Router >
           {/* The components below are accessible to users that have not logged in*/}
           <Route exact path="/" component={LoginMenu} />
           <Route exact path="/Register" component={RegisterChoice} />
@@ -74,7 +74,7 @@ class App extends Component {
             logInTeacher={() => this.logInTeacher}
           />}
           /> */}
-                    {/* The components below should only be accessible for logged in students*/}
+          {/* The components below should only be accessible for logged in students*/}
           <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
           {/* <Route exact path="/Home" component={HomeScreen} /> */}
           <ProtectedRoute exact path="/LessonMenu" loggedIn={this.state.loggedIn} component={LessonMenu} />
@@ -85,23 +85,22 @@ class App extends Component {
           {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
 
           {/* The components below should only be accessible for logged in teachers*/}
-          {/* <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} /> */}
-          <Route exact path='/teacherHome' component={TeacherHome} />
+          <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} />
 
-              {/* should be a list of all students with their overall grades */}
-              {/* should have */}
-                {/* button for delete student */}
-                {/* student's overall grade */}
-                {/* student's grade for each assignment */}
+          {/* should be a list of all students with their overall grades */}
+          {/* should have */}
+          {/* button for delete student */}
+          {/* student's overall grade */}
+          {/* student's grade for each assignment */}
           <ProtectedRoute exact path='/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
 
           <ProtectedRoute path='/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
 
-                {/* teacher can click individual lessons */}
-                {/* teacher can make new lesson */}
+          {/* teacher can click individual lessons */}
+          {/* teacher can make new lesson */}
           <ProtectedRoute exact path='/manageLessons' loggedIn={this.state.teacherLoggedIn} component={ManageAllLessons} />
 
-              {/* should be able to edit all parts of lesson, save, or delete */}
+          {/* should be able to edit all parts of lesson, save, or delete */}
           <ProtectedRoute path='/manageLessons/:lessonID' loggedIn={this.state.teacherLoggedIn} component={ManageLesson} />
 
           <ProtectedRoute exact path='/newLesson' loggedIn={this.state.teacherLoggedIn} component={NewLesson} />

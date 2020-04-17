@@ -1,20 +1,19 @@
 .BodyMenu {
     background-color: whitesmoke;
-    /* position: flex; */
-    /* top: 500px; */
-    /* z-index: -1; */
-    /* position: fixed; */
-    /* vertical-align: middle; */
-    padding-left: 20%;
-    padding-right: 20%;
-    /* padding-top: 30%; */
-    transform: translate(0%,100%);
+    padding-top: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.BodyContainer {
-    /* margin-top: 10px; */
-    /* vertical-align: middle; */
-    position: relative;
+.BodyTable {
+    padding-top: 130px;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    align-items: center;
+
 }
 
 .BodyMenu-Lesson{
