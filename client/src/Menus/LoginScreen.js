@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from '@blueprintjs/core';
+import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
 class LoginScreen extends Component {
@@ -37,47 +37,49 @@ class LoginScreen extends Component {
 
     render = () => {
         return (
-            <main className="BodyMenu">
-                <form onSubmit={this.handleLogin}>
-                    <h4>Username:</h4>
-                    <input
-                        type="text"
-                        placeholder=" Enter Username..."
-                        id="unameL"
-                        required>
-                    </input>
-                    <h4>Password:</h4>
-                    <input
-                        type="password"
-                        placeholder=" Enter Password..."
-                        id="pwordL"
-                        required>
-                    </input>
-                    <ul style={{paddingLeft: 0}}>
+            <div className="Body">
+                <ControlGroup vertical>
+                    <FormGroup
+                        label="Username"
+                        labelFor="text-input"
+                    >
+                        <InputGroup
+                            id="unameL"
+                            placeholder="Enter Username..."
+                        />
+                    </FormGroup>
+                    <FormGroup
+                        label="Password"
+                        labelFor="text-input"
+                    >
+                        <InputGroup
+                            id="pwordL"
+                            placeholder="Enter Password..."
+                        />
+                    </FormGroup>
+                    <ButtonGroup vertical>
                         <Button
                             type="submit"
                             id="loginButton"
                             className="bp3-button bp3-icon-layout-log-in"
                             intent="success"
-                            icon="log-in" 
+                            icon="log-in"
                             text="Log In"
-                            onClick={this.handleLogin} 
+                            onClick={() => this.handleLogin()}
                         />
-                    </ul>
-                </form>
-                <ul style={{paddingLeft: 0}}>
-                    <Link to="/">
-                        <Button
-                            type="button"
-                            className="bp3-button bp3-icon-layout-small-cross"
-                            intent="warning"
-                            icon="small-cross"
-                            text="Back"
-                        />
-                    </Link>
-                </ul>
-            </main>
-
+                        <br />
+                        <Link to="/">
+                            <Button
+                                type="button"
+                                className="bp3-button bp3-icon-layout-small-cross"
+                                intent="warning"
+                                icon="small-cross"
+                                text="Back"
+                            />
+                        </Link>
+                    </ButtonGroup>
+                </ControlGroup>
+            </div>
         );
     }
 }

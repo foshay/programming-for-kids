@@ -1,19 +1,17 @@
-.BodyMenu {
-    background-color: whitesmoke;
+.Body {
     padding-top: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.BodyMenu {
+    background-color: whitesmoke;
+}
+
 .BodyTable {
-    padding-top: 130px;
-    display: flex;
-    justify-content: center;
     left: 0;
     right: 0;
-    align-items: center;
-
 }
 
 .BodyMenu-Lesson{

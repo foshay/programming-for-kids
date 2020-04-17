@@ -11,6 +11,10 @@ class Header extends Component {
         alert("Logged out of account");
     }
 
+    logIn = () => {
+
+    }
+
     render() {
         const student = this.props.studentLoggedIn;
         const teacher = this.props.teacherLoggedIn;
