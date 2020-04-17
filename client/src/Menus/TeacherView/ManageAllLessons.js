@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { Button} from "@blueprintjs/core";
+import { HTMLTable, Icon } from "@blueprintjs/core";
 import '../../CSS_files/App.css';
 import '../../CSS_files/Body.css';
 
@@ -9,24 +10,53 @@ import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class ManageAllLessons extends Component {
-render() {
+  state = {
+    lessons : [{}]
+  };
+
+  getLessons = async () => {
+      return fetch('api/Lesson/all')
+      .then(response => {
+          return response.json();
+      })
+      .then(json =>{
+          this.setState({lessons: json.data});
+      });
+  }
+
+  goToLesson = (lessonID) => {
+    // changes the url when a button is clicked
+    // TODO change this to bringing to edit lesson page
+    this.props.history.push(`/Lesson/${lessonID}`);
+  }
+ 
+  componentDidMount(){
+      this.getLessons();
+  }
+
+  render() {
     return (
-      //<div className="App" position="fixed">
-      <div >
-        
-        <main className="BodyMenu">
-            <div className="bp3-button-group bp3-large bp3-vertical" >
+      <div className="BodyTable">
+        <HTMLTable striped interactive>
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.lessons.map((value, index) => {
+              return (
+                <tr onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} >
+                  <td> {this.state.lessons[index].lesson_id} </td>
+                  <td> {this.state.lessons[index].name} </td>
+                </tr>
+              )
+            })}
+          </tbody>
 
-                  {/* <li><Link to="/Home"><Button class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li> */}
-                  <ul><Link to="/LessonMenu"><Button type="button" class="bp3-button bp3-icon-layout-book" icon="book" text="Lessons" /></Link></ul>
-                  <ul><Link to="/CardGame"><Button type="button" class="bp3-button bp3-icon-layout-ninja" icon="ninja" text="Card Game" /></Link></ul>
-                  <ul><Button type="button" class="bp3-button bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings" /></ul>
-                  <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></ul>
-
-            </div>
-        </main>
-
-        </div>
+        </HTMLTable>
+      </div>
     );
   }
 }
