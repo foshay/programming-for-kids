@@ -5,11 +5,11 @@
     align-items: center;
 }
 
-.BackTopLeft {
+/* .BackTopLeft {
     padding-top: 130px;
     display: flex;
     justify-content: left;
-}
+} */
 
 .BodyTable {
     display: flex;

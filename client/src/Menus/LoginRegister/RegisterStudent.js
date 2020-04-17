@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, ControlGroup, InputGroup, ButtonGroup } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
+import RegisterForm from './RegisterForm';
+import { user } from 'blockly';
 
 class RegisterStudent extends Component {
     state = {
-        responseToPost: ''
+        responseToPost: '',
+        username: '',
+        password: ''
     }
 
     handleRegister = async e => {
         e.preventDefault();
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
+        var username = this.state.username;
+        var password = this.state.password;
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -20,7 +22,6 @@ class RegisterStudent extends Component {
                 "username": username,
                 "password": password,
             })
-
         });
 
         const body = await response.text();
@@ -43,60 +44,13 @@ class RegisterStudent extends Component {
     render = () => {
         return (
             <div className="Body">
-                <ControlGroup vertical>
-                    <FormGroup label="Username:" labelFor="text-input">
-                        <InputGroup
-                            id="username"
-                            placeholder="Enter Username..."
-                        />
-                    </FormGroup>
-                    <FormGroup label="Password:" labelFor="text-input">
-                        <InputGroup
-                            id="password"
-                            placeholder="Enter Password..."
-                            type="password"
-                        />
-                    </FormGroup>
-                    <FormGroup label="Confirm Password:" labelFor="text-input">
-                        <InputGroup
-                            id="passwordConfirm"
-                            placeholder="Confirm Password..."
-                            type="password"
-                        />
-                    </FormGroup>
-                    <ButtonGroup vertical large>
-                        <Link to="/">
-                            <Button
-                                icon="confirm"
-                                text="Register Student"
-                                onClick={() => this.handleRegister()}
-                                type="submit"
-                                id="registerButton"
-                                intent="success"
-                            />
-                        </Link>
-                        <br />
-                        <Link to="/register">
-                            <Button
-                                intent="warning"
-                                icon="small-cross"
-                                text="Back" />
-                        </Link>
-
-                        <br />
-                        <br />
-
-                    <FormGroup label="Already Have an Account?"/>
-                        <Link to="/login">
-                            <Button
-                                intent="primary"
-                                icon="log-in"
-                                text="Log In Instead" />
-                        </Link>
-                    </ButtonGroup>
-                </ControlGroup>
+                <RegisterForm
+                    registerText="Register Student"
+                    handleRegister={(e)=> this.handleRegister(e)}
+                    setUsername={(username)=> this.setState({username: username})}
+                    setPassword={(password)=> this.setState({password: password})}
+                />
             </div>
-
         );
     }
 }

@@ -4,13 +4,18 @@ import { Link } from 'react-router-dom';
 
 class LoginScreen extends Component {
     state = {
-        responseToPost: ''
+        responseToPost: '',
+        username: '',
+        password: ''
     }
 
     handleLogin = async e => {
+        // var username = document.getElementById("username").value;
+        // var password = document.getElementById("password").value;
+        var username = this.state.username;
+        var password = this.state.password;
+
         e.preventDefault();
-        var username = document.getElementById("unameL").value;
-        var password = document.getElementById("pwordL").value;
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: {
@@ -45,8 +50,10 @@ class LoginScreen extends Component {
                         labelFor="text-input"
                     >
                         <InputGroup
-                            id="unameL"
                             placeholder="Enter Username..."
+                            id="username"
+                            onChange={e => this.setState({username: e.target.value})}
+                            value={this.state.username}
                         />
                     </FormGroup>
                     <FormGroup
@@ -54,8 +61,11 @@ class LoginScreen extends Component {
                         labelFor="text-input"
                     >
                         <InputGroup
-                            id="pwordL"
+                            id="password"
                             placeholder="Enter Password..."
+                            onChange={e => this.setState({password: e.target.value})}
+                            value={this.state.password}
+                            type="password"
                         />
                     </FormGroup>
                     <ButtonGroup vertical>
@@ -65,7 +75,7 @@ class LoginScreen extends Component {
                             intent="success"
                             icon="log-in"
                             text="Log In"
-                            onClick={() => this.handleLogin()}
+                            onClick={(e) => this.handleLogin(e)}
                         />
                         <br />
                         <Link to="/">

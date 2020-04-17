@@ -6,6 +6,7 @@ import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class Header extends Component {
+
     logOut = () => {
         // TODO implement logging out
         alert("Logged out of account");
