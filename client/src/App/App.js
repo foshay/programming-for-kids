@@ -29,7 +29,7 @@ import NewLesson from '../Menus/TeacherView/NewLesson.js';
 
 class App extends Component {
   state = {
-    loggedIn: true,
+    studentLoggedIn: true,
     teacherLoggedIn: true,
   };
   // need to add a handle login function
@@ -41,7 +41,7 @@ class App extends Component {
   // }
 
   // logInStudent = () => {
-  //   this.setState({loggedIn: true});
+  //   this.setState({studentLoggedIn: true});
   // }
 
   componentDidMount = () => {
@@ -52,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header loggedIn={this.state.loggedIn} />
+        <Header studentLoggedIn={this.state.studentLoggedIn} />
 
         <Router >
           {/* The components below are accessible to users that have not logged in*/}
@@ -75,13 +75,13 @@ class App extends Component {
           />}
           /> */}
           {/* The components below should only be accessible for logged in students*/}
-          <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
+          <ProtectedRoute exact path="/Home" loggedIn={this.state.studentLoggedIn} component={HomeScreen} />
           {/* <Route exact path="/Home" component={HomeScreen} /> */}
-          <ProtectedRoute exact path="/LessonMenu" loggedIn={this.state.loggedIn} component={LessonMenu} />
+          <ProtectedRoute exact path="/LessonMenu" loggedIn={this.state.studentLoggedIn} component={LessonMenu} />
           {/* <Route exact path="/LessonMenu" component={LessonMenu} /> */}
-          <ProtectedRoute exact path="/CardGame" loggedIn={this.state.loggedIn} component={CardGame} />
+          <ProtectedRoute exact path="/CardGame" loggedIn={this.state.studentLoggedIn} component={CardGame} />
           {/* <Route exact path="/CardGame" component={CardGame} /> */}
-          <ProtectedRoute path='/Lesson/:lessonID' loggedIn={this.state.loggedIn} component={LessonScreen} />
+          <ProtectedRoute path='/Lesson/:lessonID' loggedIn={this.state.studentLoggedIn} component={LessonScreen} />
           {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
 
           {/* The components below should only be accessible for logged in teachers*/}

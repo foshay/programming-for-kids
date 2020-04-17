@@ -29,7 +29,7 @@ class ManageAllLessons extends Component {
     // TODO change this to bringing to edit lesson page
     this.props.history.push(`/Lesson/${lessonID}`);
   }
- 
+
   componentDidMount(){
       this.getLessons();
   }
