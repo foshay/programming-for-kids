@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import { Button, ButtonGroup } from "@blueprintjs/core";
-import '../../CSS_files/App.css';
-import '../../CSS_files/Body.css';
 
 import "../../../../node_modules/normalize.css";
 import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";

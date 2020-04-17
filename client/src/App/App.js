@@ -23,6 +23,10 @@ import ManageLesson from '../Menus/TeacherView/ManageLesson.js';
 import NewLesson from '../Menus/TeacherView/NewLesson.js';
 
 import '../CSS_files/App.css';
+import '../CSS_files/Body.css';
+import "../../../node_modules/normalize.css";
+import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class App extends Component {
   state = {
@@ -86,9 +90,9 @@ class App extends Component {
 
           {/* should be a list of all students with their overall grades */}
           {/* should have */}
-          {/* button for delete student */}
-          {/* student's overall grade */}
-          {/* student's grade for each assignment */}
+            {/* button for delete student */}
+            {/* student's overall grade */}
+            {/* student's grade for each assignment */}
           <ProtectedRoute exact path='/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
 
           <ProtectedRoute path='/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
