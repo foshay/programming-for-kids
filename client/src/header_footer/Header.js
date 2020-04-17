@@ -6,20 +6,42 @@ import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class Header extends Component {
-    // TODO add functionality so that user that has not logged in cannot press these buttons
-    render(){
+    logOut = () => {
+        // TODO implement logging out
+        alert("Logged out of account");
+    }
+
+    render() {
+        const student = this.props.studentLoggedIn;
+        const teacher = this.props.teacherLoggedIn;
         const popMenu = (
             <Menu >
-                <MenuItem icon="home" text="Home" href="/Home" />
-                <MenuItem icon="book" text="Lessons" href="/LessonMenu" />
-                <MenuItem icon="ninja" text="Card Game" href="CardGame" />
+                <MenuItem icon="home"
+                    text="Home"
+                    href={teacher ? "/TeacherHome" : "/Home"}
+                />
+                <MenuItem icon="book"
+                    text={teacher ? "Manage Lessons" : "Lessons"}
+                    href={teacher ? "/ManageLessons" : "/LessonMenu"}
+                />
+                <MenuItem
+                    icon={teacher ? "clipboard" : "ninja"}
+                    text={teacher ? "Manage Students" : "Card Game"}
+                    href={teacher ? "/ManageStudents" : "/CardGame"}
+                />
                 <MenuDivider />
                 <MenuItem disabled icon="cog" text="Settings">
                     {/* TODO */}
                     <MenuItem class="bp3-menu-item" text="option coming soon" />
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem intent="danger" icon="log-out" text="Log-Out" href="/" />
+                <MenuItem
+                    intent="danger"
+                    icon="log-out"
+                    text="Log-Out"
+                    onClick={() => this.logOut()}
+                    href="/"
+                />
             </Menu>
         );
 

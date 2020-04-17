@@ -52,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header studentLoggedIn={this.state.studentLoggedIn} />
+        <Header studentLoggedIn={this.state.studentLoggedIn} teacherLoggedIn={this.state.teacherLoggedIn}/>
 
         <Router >
           {/* The components below are accessible to users that have not logged in*/}
