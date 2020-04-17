@@ -45,8 +45,7 @@ class LessonMenu extends Component {
   render() {
     return (
 
-      <div className="BodyContainer">
-        <div className="BodyMenu">
+      <div className="BodyMenu">
           <ButtonGroup large vertical>
             { /* This prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
@@ -65,7 +64,6 @@ class LessonMenu extends Component {
               )
             })}
           </ButtonGroup>
-        </div>
       </div>
     );
   }
