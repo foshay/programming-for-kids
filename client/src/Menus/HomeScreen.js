@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import { Button} from "@blueprintjs/core";
+import { Button, ButtonGroup} from "@blueprintjs/core";
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
 
@@ -9,24 +9,40 @@ import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class HomeScreen extends Component {
-render() {
+  render() {
     return (
-      //<div className="App" position="fixed">
-      <div >
-        
-        <main className="BodyMenu">
-            <div className="bp3-button-group bp3-large bp3-vertical" >
-
-                  {/* <li><Link to="/Home"><Button class="bp3-menu-item bp3-icon-layout-home" icon="home" text="Home"/></Link></li> */}
-                  <ul><Link to="/LessonMenu"><Button type="button" class="bp3-button bp3-icon-layout-book" icon="book" text="Lessons" /></Link></ul>
-                  <ul><Link to="/CardGame"><Button type="button" class="bp3-button bp3-icon-layout-ninja" icon="ninja" text="Card Game" /></Link></ul>
-                  <ul><Button type="button" class="bp3-button bp3-icon-layout-cog" disabled ={true} icon="cog" text="Settings" /></ul>
-                  <ul><Link to="/"><Button type="button" class="bp3-button bp3-icon-layout-log-out" intent="danger" icon="log-out" text="Log-Out" /></Link></ul>
-
-            </div>
-        </main>
-
-        </div>
+      <div className="BodyMenu">
+        <ButtonGroup large vertical>
+          <Link to="/LessonMenu">
+            <Button
+              type="button"
+              icon="book"
+              text="Lessons" />
+          </Link>
+          <Link to="/CardGame">
+            <Button
+              type="button"
+              icon="ninja"
+              text="Card Game"
+            />
+          </Link>
+          <Button
+            type="button"
+            disabled
+            icon="cog"
+            text="Settings"
+          />
+          <Link to="/">
+            <Button type="button"
+              intent="danger"
+              icon="log-out"
+              text="Log-Out" 
+              // TODO implement logout functionality
+              // onClick = {}
+              />
+          </Link>
+        </ButtonGroup>
+      </div>
     );
   }
 }

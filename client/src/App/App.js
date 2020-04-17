@@ -74,15 +74,6 @@ class App extends Component {
             logInTeacher={() => this.logInTeacher}
           />}
           /> */}
-          {/* The components below should only be accessible for logged in students*/}
-          <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
-          {/* <Route exact path="/Home" component={HomeScreen} /> */}
-          <ProtectedRoute exact path="/LessonMenu" loggedIn={this.state.loggedIn} component={LessonMenu} />
-          {/* <Route exact path="/LessonMenu" component={LessonMenu} /> */}
-          <ProtectedRoute exact path="/CardGame" loggedIn={this.state.loggedIn} component={CardGame} />
-          {/* <Route exact path="/CardGame" component={CardGame} /> */}
-          <ProtectedRoute path='/Lesson/:lessonID' loggedIn={this.state.loggedIn} component={LessonScreen} />
-          {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
                     {/* The components below should only be accessible for logged in students*/}
           <ProtectedRoute exact path="/Home" loggedIn={this.state.loggedIn} component={HomeScreen} />
           {/* <Route exact path="/Home" component={HomeScreen} /> */}
