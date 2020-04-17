@@ -29,7 +29,7 @@ import NewLesson from '../Menus/TeacherView/NewLesson.js';
 
 class App extends Component {
   state = {
-    loggedIn: false,
+    loggedIn: true,
     teacherLoggedIn: true,
   };
   // need to add a handle login function
@@ -54,7 +54,7 @@ class App extends Component {
       <div className="App">
         <Header loggedIn={this.state.loggedIn} />
 
-        <Router>
+        <Router className="AppBody">
           {/* The components below are accessible to users that have not logged in*/}
           <Route exact path="/" component={LoginMenu} />
           <Route exact path="/Register" component={RegisterChoice} />
@@ -94,30 +94,26 @@ class App extends Component {
           {/* <Route path='/Lesson/:lessonID' component={LessonScreen} /> */}
 
           {/* The components below should only be accessible for logged in teachers*/}
-          <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} />
+          {/* <ProtectedRoute exact path='/teacherHome' loggedIn={this.state.teacherLoggedIn} component={TeacherHome} /> */}
+          <Route exact path='/teacherHome' component={TeacherHome} />
 
-            {/* /teacherHome/managestudents */}
               {/* should be a list of all students with their overall grades */}
               {/* should have */}
                 {/* button for delete student */}
                 {/* student's overall grade */}
                 {/* student's grade for each assignment */}
-          <ProtectedRoute exact path='/teacherHome/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
+          <ProtectedRoute exact path='/manageStudents' loggedIn={this.state.teacherLoggedIn} component={ManageAllStudents} />
 
-            {/* /teacherHome/managestudents/:studentID */}
-          <ProtectedRoute path='/teacherHome/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
+          <ProtectedRoute path='/manageStudents/:studentID' loggedIn={this.state.teacherLoggedIn} component={ManageStudent} />
 
-            {/* /teacherHome/managelessons */}
                 {/* teacher can click individual lessons */}
                 {/* teacher can make new lesson */}
-          <ProtectedRoute exact path='/teacherHome/manageLessons' loggedIn={this.state.teacherLoggedIn} component={ManageAllLessons} />
+          <ProtectedRoute exact path='/manageLessons' loggedIn={this.state.teacherLoggedIn} component={ManageAllLessons} />
 
-              {/* /teacherHome/managelessons/:lessonID */}
               {/* should be able to edit all parts of lesson, save, or delete */}
-          <ProtectedRoute path='/teacherHome/manageLessons/:lessonID' loggedIn={this.state.teacherLoggedIn} component={ManageLesson} />
+          <ProtectedRoute path='/manageLessons/:lessonID' loggedIn={this.state.teacherLoggedIn} component={ManageLesson} />
 
-              {/* /teacherHome/managelessons/newLesson */}
-          <ProtectedRoute exact path='/teacherHome/manageLessons/newLesson' loggedIn={this.state.teacherLoggedIn} component={NewLesson} />
+          <ProtectedRoute exact path='/newLesson' loggedIn={this.state.teacherLoggedIn} component={NewLesson} />
 
 
         </Router>

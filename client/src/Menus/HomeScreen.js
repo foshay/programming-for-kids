@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { Button} from "@blueprintjs/core";
-import Header from '../header_footer/Header.js'
-import Footer from '../header_footer/Footer.js'
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
 

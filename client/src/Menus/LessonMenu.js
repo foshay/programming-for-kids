@@ -45,8 +45,6 @@ class LessonMenu extends Component {
 
         <Header />
 
-        <h1>Component LessonTemplate</h1>
-
         <main className="BodyMenu">
           <div class="bp3-button-group bp3-large bp3-vertical">
             { /* This prints out a bunch of buttons based on arrays

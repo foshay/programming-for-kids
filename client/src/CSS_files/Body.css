@@ -2,11 +2,19 @@
     background-color: whitesmoke;
     /* position: flex; */
     /* top: 500px; */
-    z-index: -1;
-    position: fixed;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    /* z-index: -1; */
+    /* position: fixed; */
+    /* vertical-align: middle; */
+    padding-left: 20%;
+    padding-right: 20%;
+    /* padding-top: 30%; */
+    transform: translate(0%,100%);
+}
+
+.BodyContainer {
+    /* margin-top: 10px; */
+    /* vertical-align: middle; */
+    position: relative;
 }
 
 .BodyMenu-Lesson{
