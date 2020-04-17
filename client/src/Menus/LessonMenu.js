@@ -1,21 +1,5 @@
 import React, { Component } from 'react';
-import Header from '../header_footer/Header.js'
-import Footer from '../header_footer/Footer.js'
 import { Button, ButtonGroup } from "@blueprintjs/core";
-import '../CSS_files/App.css';
-import '../CSS_files/Body.css';
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
-
-// import {BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
-// import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch, Navbar, Alignment, Menu, MenuDivider, MenuItem, Popover, Position, Classes } from "@blueprintjs/core";
-//import logo from './logo.svg';
-//import { Text, View, StyleSheet } from 'react-native';
-//import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-// import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
-//import LessonTemp from "./LessonTemplate.js"
-// require('../Editor.jsx')
 
 class LessonMenu extends Component {
 
@@ -45,9 +29,9 @@ class LessonMenu extends Component {
   render() {
     return (
 
-      <div className="BodyMenu">
+      <div className="Body">
           <ButtonGroup large vertical>
-            { /* This prints out a bunch of buttons based on arrays
+            { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
             {this.state.lessons.map((value, index) => {
               return (

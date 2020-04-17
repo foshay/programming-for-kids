@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../CSS_files/Body.css';
 import LessonTemp from "./LessonTemplate.js"
 
 class LessonScreen extends Component {

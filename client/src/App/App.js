@@ -31,7 +31,7 @@ import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 class App extends Component {
   state = {
     studentLoggedIn: true,
-    teacherLoggedIn: true,
+    teacherLoggedIn: false,
   };
 
   // need to add a handle login function

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { HTMLTable, } from "@blueprintjs/core";
+import { HTMLTable, Button, } from "@blueprintjs/core";
+import { Link } from 'react-router-dom';
 
 class ManageAllStudents extends Component {
 
@@ -28,6 +29,16 @@ class ManageAllStudents extends Component {
   }
 
   render() {
+        {/* <div className="Body">
+          <Link to ="/TeacherHome">
+            <Button
+              style ={{padding: }}
+              text="Back"
+              icon="cross"
+              intent="warning"
+            />
+          </Link>
+        </div> */}
     return (
       <div className="BodyTable Body">
         <HTMLTable striped interactive bordered>
