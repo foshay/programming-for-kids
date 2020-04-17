@@ -25,7 +25,8 @@ class LoginScreen extends Component {
         const body = await response.text();
         if(body == "Success"){
             alert("Login successful");
-            // this.props.logInStudent();
+            // TODO get JWT token
+            // TODO differentiate between teacher and student? Or in App?
         }else{
             alert("Invalid username or password");
         }
@@ -61,7 +62,6 @@ class LoginScreen extends Component {
                         <Button
                             type="submit"
                             id="loginButton"
-                            className="bp3-button bp3-icon-layout-log-in"
                             intent="success"
                             icon="log-in"
                             text="Log In"
@@ -71,7 +71,6 @@ class LoginScreen extends Component {
                         <Link to="/">
                             <Button
                                 type="button"
-                                className="bp3-button bp3-icon-layout-small-cross"
                                 intent="warning"
                                 icon="small-cross"
                                 text="Back"

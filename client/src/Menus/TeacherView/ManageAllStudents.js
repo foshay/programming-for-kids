@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import { HTMLTable, Icon, Button } from "@blueprintjs/core";
-import '../../CSS_files/App.css';
-import '../../CSS_files/Body.css';
-
-import "../../../../node_modules/normalize.css";
-import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
-import { Link } from 'react-router-dom';
+import { HTMLTable, } from "@blueprintjs/core";
 
 class ManageAllStudents extends Component {
 
   state = {
-    students : [{student_name: "John", overall_grade: "80", student_id: "smithj2"}]
+    students : [{student_name: "Johnny Test", overall_grade: "80", student_id: "smithj2"}]
   };
 
   getStudents = async () => {
@@ -36,8 +29,8 @@ class ManageAllStudents extends Component {
 
   render() {
     return (
-      <div className="BodyTable">
-        <HTMLTable striped interactive>
+      <div className="BodyTable Body">
+        <HTMLTable striped interactive bordered>
           <thead>
             <tr>
               <th>Name</th>
@@ -45,7 +38,7 @@ class ManageAllStudents extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.students.map((value, index) => {
+            {this.state.students.map((_, index) => {
               return (
                 <tr onClick={() => this.goToStudent(this.state.students[index].student_id)} >
                   <td> {this.state.students[index].student_name} </td>
@@ -54,7 +47,6 @@ class ManageAllStudents extends Component {
               )
             })}
           </tbody>
-
         </HTMLTable>
       </div>
     );

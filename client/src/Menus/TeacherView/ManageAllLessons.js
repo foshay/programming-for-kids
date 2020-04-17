@@ -1,62 +1,55 @@
 import React, { Component } from 'react';
-import {Link} from "react-router-dom";
-import { Button} from "@blueprintjs/core";
-import { HTMLTable, Icon } from "@blueprintjs/core";
-import '../../CSS_files/App.css';
-import '../../CSS_files/Body.css';
-
-import "../../../../node_modules/normalize.css";
-import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import { HTMLTable, Button } from "@blueprintjs/core";
 
 class ManageAllLessons extends Component {
   state = {
-    lessons : [{}]
+    lessons: [{}]
   };
 
   getLessons = async () => {
-      return fetch('api/Lesson/all')
+    return fetch('api/Lesson/all')
       .then(response => {
-          return response.json();
+        return response.json();
       })
-      .then(json =>{
-          this.setState({lessons: json.data});
+      .then(json => {
+        this.setState({ lessons: json.data });
       });
   }
 
   goToLesson = (lessonID) => {
     // changes the url when a button is clicked
-    // TODO change this to bringing to edit lesson page
+    // TODO change this to bringing to edit lesson page, rather than /Lesson/${lessonID}
     this.props.history.push(`/Lesson/${lessonID}`);
   }
 
-  componentDidMount(){
-      this.getLessons();
+  componentDidMount() {
+    this.getLessons();
   }
 
   render() {
     return (
-      <div className="BodyTable Body">
-        <HTMLTable striped interactive>
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.lessons.map((value, index) => {
-              return (
-                <tr onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)} >
-                  <td> {this.state.lessons[index].lesson_id} </td>
-                  <td> {this.state.lessons[index].name} </td>
-                </tr>
-              )
-            })}
-          </tbody>
-
-        </HTMLTable>
-      </div>
+        <div className="Body">
+          <HTMLTable striped interactive bordered>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Lesson Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.lessons.map((_, index) => {
+                const id = this.state.lessons[index].lesson_id;
+                const name = this.state.lessons[index].name;
+                return (
+                  <tr onClick={() => this.goToLesson(id)} >
+                    <td> {id} </td>
+                    <td> {name} </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </HTMLTable>
+        </div>
     );
   }
 }

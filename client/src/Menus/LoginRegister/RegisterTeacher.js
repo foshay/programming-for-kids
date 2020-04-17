@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from '@blueprintjs/core';
+import { Button, FormGroup, ControlGroup, InputGroup, ButtonGroup } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
 class RegisterTeacher extends Component {
@@ -8,10 +8,11 @@ class RegisterTeacher extends Component {
     }
 
     handleRegister = async e => {
-        // TODO add code to handle the 'teacher code' otp
         e.preventDefault();
-        var username = document.getElementById("unameR").value;
-        var password = document.getElementById("pwordR").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        // TODO add code to handle the 'teacher code' otp
+        var otp = document.getElementById("otp").value;
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -21,7 +22,6 @@ class RegisterTeacher extends Component {
                 "username": username,
                 "password": password,
             })
-
         });
         const body = await response.text();
 
@@ -32,78 +32,78 @@ class RegisterTeacher extends Component {
         if (body == 'Failure') {
             alert("Username taken");
             console.info("Taken: " + body);
-        }else if(body == "DB Failure"){
+        } else if (body == "DB Failure") {
             alert("Issue creating account");
         } else {
             console.info("Created " + body);
             alert("User created");
         }
 
-
     };
 
     render = () => {
         return (
-            <main className="BodyMenu">
-                <form onSubmit={this.handleRegister}>
-                    <h4>Username:</h4>
-                    <input
-                        type="text"
-                        placeholder=" Enter Username..."
-                        id="unameR"
-                        required>
-                    </input>
-                    <h4>Password:</h4>
-                    <input
-                        type="password"
-                        placeholder=" Enter Password..."
-                        id="pwordR"
-                        required> 
-                    </input>
-                    <h4>Teacher Code:</h4>
-                    <input
-                        type="password"
-                        placeholder="Enter Teacher Code"
-                        id="pwordRTeacher"
-                        required> 
-                    </input>
-                    <ul style={{paddingLeft: 0}}>
-                        <Button
-                            type="submit"
-                            id="registerButton"
-                            class="bp3-button bp3-icon-layout-confirm"
-                            intent="success"
-                            icon="confirm"
-                            text="Register Teacher"
-                            onClick={this.handleRegister}
+            <div className="Body">
+                <ControlGroup vertical>
+                    <FormGroup label="Username:" labelFor="username">
+                        <InputGroup
+                            id="username"
+                            placeholder="Enter Username..."
                         />
-                    </ul>
-                </form>
-                <ul style={{ paddingLeft: 0 }}>
-                    <Link to="/register">
-                        <Button
-                            type="button"
-                            class="bp3-button bp3-icon-layout-small-cross"
-                            intent="warning"
-                            icon="small-cross"
-                            text="Back" />
-                    </Link>
-                </ul>
-                <br/>
-                <br/>
-                <h4>Already Have an Account?</h4>
-                <ul style={{ paddingLeft: 0 }}>
-                    <Link to="/login">
-                        <Button
-                            type="button"
-                            class="bp3-button bp3-icon-layout-small-cross"
-                            intent="primary"
-                            icon="log-in"
-                            text="Log In Instead" />
-                    </Link>
-                </ul>
-            </main>
-
+                    </FormGroup>
+                    <FormGroup label="Password:" labelFor="password">
+                        <InputGroup
+                            id="password"
+                            placeholder="Enter Password..."
+                            type="password"
+                        />
+                    </FormGroup>
+                    <FormGroup label="Confirm Password:" labelFor="passwordConfirm">
+                        <InputGroup
+                            id="password"
+                            placeholder="Confirm Password..."
+                            type="password"
+                        />
+                    </FormGroup>
+                    <FormGroup label="Teacher OTP:" labelFor="otp">
+                        <InputGroup
+                            id="otp"
+                            placeholder="Enter Teacher OTP..."
+                            type="password"
+                        />
+                    </FormGroup>
+                    <ButtonGroup vertical large>
+                        <Link to="/">
+                            <Button
+                                text="Register Teacher"
+                                icon="confirm"
+                                onClick={() => this.handleRegister()}
+                                type="submit"
+                                id="registerButton"
+                                intent="success"
+                            />
+                        </Link>
+                        <br />
+                        <Link to="/register">
+                            <Button
+                                text="Back"
+                                intent="warning"
+                                icon="small-cross"
+                            />
+                        </Link>
+                        <br />
+                        <br />
+                        <FormGroup label="Already Have an Account?" />
+                        <Link to="/login">
+                            <Button
+                                text="Log In Instead"
+                                intent="primary"
+                                icon="log-in"
+                            />
+                        </Link>
+                    </ButtonGroup>
+                </ControlGroup>
+            </div>
         );
     }
 }
