@@ -11,7 +11,7 @@ import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css"
 class ManageStudent extends Component {
 render() {
     return (
-        <div className="BodyMenu">
+        <div className="BodyMenu Body">
           <ButtonGroup vertical>
             <h1> Manage Student </h1>
             <Button> Remove Student </Button>

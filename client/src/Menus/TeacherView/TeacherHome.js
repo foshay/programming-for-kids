@@ -11,7 +11,7 @@ import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css"
 class TeacherHome extends Component {
   render() {
     return (
-      <div className="BodyMenu">
+      <div className="Body">
           <ButtonGroup vertical large >
             <Link to="/ManageStudents">
               <Button

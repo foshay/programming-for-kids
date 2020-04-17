@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
-//import logo from './logo.svg';
-//import { Text, View, StyleSheet } from 'react-native';
-//import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-//import Header from '../header_footer/Header.js'
-//import Footer from '../header_footer/Footer.js'
-//import BlocklyComp from '../BlocklyComp.js'
-//import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
+
 import Header from '../header_footer/Header.js';
 import Footer from '../header_footer/Footer.js';
-import LoginMenu from '../Menus/LoginMenu.js'
-import LoginScreen from '../Menus/LoginScreen.js';
-import RegisterStudent from '../Menus/RegisterStudent.js';
-import RegisterTeacher from '../Menus/RegisterTeacher.js';
+
+import LoginMenu from '../Menus/LoginRegister/LoginMenu.js'
+import LoginScreen from '../Menus/LoginRegister/LoginScreen.js';
+import RegisterChoice from '../Menus/LoginRegister/RegisterChoice.js';
+import RegisterStudent from '../Menus/LoginRegister/RegisterStudent.js';
+import RegisterTeacher from '../Menus/LoginRegister/RegisterTeacher.js';
+
 import HomeScreen from '../Menus/HomeScreen.js'
 import LessonMenu from '../Menus/LessonMenu.js'
 import LessonScreen from '../Lesson_comps/LessonScreen.js'
 import CardGame from '../Menus/CardGameMenu.js'
-//import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
-import '../CSS_files/App.css';
-import RegisterChoice from '../Menus/RegisterChoice.js';
+
 import TeacherHome from '../Menus/TeacherView/TeacherHome.js';
 import ManageAllStudents from '../Menus/TeacherView/ManageAllStudents.js';
 import ManageStudent from '../Menus/TeacherView/ManageStudent.js';
@@ -27,9 +22,11 @@ import ManageAllLessons from '../Menus/TeacherView/ManageAllLessons.js';
 import ManageLesson from '../Menus/TeacherView/ManageLesson.js';
 import NewLesson from '../Menus/TeacherView/NewLesson.js';
 
+import '../CSS_files/App.css';
+
 class App extends Component {
   state = {
-    studentLoggedIn: false,
+    studentLoggedIn: true,
     teacherLoggedIn: false,
   };
   // need to add a handle login function

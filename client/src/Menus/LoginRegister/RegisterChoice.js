@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-// import {BrowserRouter as Router,  Route, Switch, Link} from "react-router-dom";
 
-import { Button } from "@blueprintjs/core";
+import { Button, ButtonGroup } from "@blueprintjs/core";
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
 
@@ -14,8 +13,8 @@ class RegisterChoice extends Component {
 
   render() {
     return (
-      <main className="BodyMenu">
-        <ul style={{ paddingLeft: 0 }}>
+      <div className="Body">
+        <ButtonGroup vertical large>
           <Link to="/register/student">
             <Button
               type="submit"
@@ -26,8 +25,7 @@ class RegisterChoice extends Component {
               intent="primary"
             />
           </Link>
-        </ul>
-        <ul style={{ paddingLeft: 0 }}>
+          <br/>
           <Link to="/register/teacher">
             <Button
               type="submit"
@@ -38,8 +36,7 @@ class RegisterChoice extends Component {
               intent="primary"
             />
           </Link>
-        </ul>
-        <ul style={{ paddingLeft: 0 }}>
+          <br/>
           <Link to="/">
             <Button
               type="button"
@@ -49,8 +46,8 @@ class RegisterChoice extends Component {
               text="Back"
             />
           </Link>
-        </ul>
-      </main>
+        </ButtonGroup>
+      </div>
     );
   }
 }

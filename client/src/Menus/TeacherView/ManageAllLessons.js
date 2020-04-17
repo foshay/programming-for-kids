@@ -36,7 +36,7 @@ class ManageAllLessons extends Component {
 
   render() {
     return (
-      <div className="BodyTable">
+      <div className="BodyTable Body">
         <HTMLTable striped interactive>
           <thead>
             <tr>

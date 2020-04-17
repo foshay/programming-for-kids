@@ -11,8 +11,7 @@ import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 class HomeScreen extends Component {
   render() {
     return (
-      <div className="BodyContainer">
-        <div className="BodyMenu">
+        <div className="Body">
           <ButtonGroup large vertical>
             <Link to="/LessonMenu">
               <Button
@@ -48,7 +47,6 @@ class HomeScreen extends Component {
           </ButtonGroup>
         </div>
 
-      </div>
     );
   }
 }

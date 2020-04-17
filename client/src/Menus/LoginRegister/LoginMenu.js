@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import { Button } from "@blueprintjs/core";
-import '../CSS_files/App.css';
-import '../CSS_files/Body.css';
+import { Button, ButtonGroup } from "@blueprintjs/core";
+import '../../CSS_files/App.css';
+import '../../CSS_files/Body.css';
 
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "../../../../node_modules/normalize.css";
+import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 class LoginMenu extends Component {
 
   render() {
     return (
-      <main className="BodyMenu">
-        <ul style={{ paddingLeft: 0 }}>
+      <div className="Body">
+        <ButtonGroup vertical large>
           <Link to="/login">
             <Button
               type="submit"
@@ -24,8 +24,7 @@ class LoginMenu extends Component {
               intent="success"
             />
           </Link>
-        </ul>
-        <ul style={{ paddingLeft: 0 }}>
+          <br/>
           <Link to="/register">
             <Button
               type="submit"
@@ -36,8 +35,8 @@ class LoginMenu extends Component {
               intent="primary"
             />
           </Link>
-        </ul>
-      </main>
+        </ButtonGroup>
+      </div>
     );
   }
 }
