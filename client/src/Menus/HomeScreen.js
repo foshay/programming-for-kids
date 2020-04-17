@@ -15,28 +15,33 @@ class HomeScreen extends Component {
         <ButtonGroup large vertical>
           <Link to="/LessonMenu">
             <Button
+              text="Lessons" 
               type="button"
               icon="book"
-              text="Lessons" />
-          </Link>
-          <Link to="/CardGame">
-            <Button
-              type="button"
-              icon="ninja"
-              text="Card Game"
+              intent="primary" 
             />
           </Link>
+          <br/>
+          <Link to="/CardGame">
+            <Button
+              text="Card Game"
+              type="button"
+              icon="ninja"
+            />
+          </Link>
+          <br/>
           <Button
-            type="button"
-            disabled
-            icon="cog"
             text="Settings"
+            type="button"
+            icon="cog"
+            disabled
           />
+          <br/>
           <Link to="/">
             <Button type="button"
-              intent="danger"
-              icon="log-out"
               text="Log-Out" 
+              icon="log-out"
+              intent="danger"
               // TODO implement logout functionality
               // onClick = {}
               />
