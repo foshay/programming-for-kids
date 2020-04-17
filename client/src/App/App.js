@@ -29,8 +29,8 @@ import NewLesson from '../Menus/TeacherView/NewLesson.js';
 
 class App extends Component {
   state = {
-    studentLoggedIn: true,
-    teacherLoggedIn: true,
+    studentLoggedIn: false,
+    teacherLoggedIn: false,
   };
   // need to add a handle login function
   // this needs to get whether the user successfully logged in
