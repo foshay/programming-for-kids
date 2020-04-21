@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import { Button} from "@blueprintjs/core";
+import { Button, ButtonGroup, Text, EditableText, Card} from "@blueprintjs/core";
+import BlocklyComp from '../../Blockly_comps/BlocklyComp';
+import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
+import EditField from '../../SmallComponents/EditField';
 
 class ManageLesson extends Component {
   state={
@@ -8,17 +11,51 @@ class ManageLesson extends Component {
     question:'',
     hint:''
   }
+
 render() {
     return (
-      <div className="Body">
-        <h1>Back Button</h1>
+      <div className="Edit-Lesson">
         {/* <h1>{"Lesson id (temp): " + this.props.match.params.lessonID}</h1> */}
-        <h1>Lesson Name</h1>
-        <h1>Question</h1>
-        <h1>Hint</h1>
-        <h1>Blockly</h1>
-        <h1>Cancel Button</h1>
-        <h1>Save Button</h1>
+        <ButtonGroup large>
+          <Link to="/">
+            <Button
+              type="button"
+              intent="warning"
+              icon="small-cross"
+              text="Back"
+            />
+          </Link>
+          <Link to="/">
+            <Button
+              type="button"
+              intent="success"
+              icon="small-cross"
+              text="Save"
+            />
+          </Link>
+        </ButtonGroup>
+        <EditField
+          title="Lesson Name"
+          placeholder="Click to edit..."
+          value={this.state.name}
+          onChange={(e) => this.setState({name: e.value})}
+        />
+        <br/>
+        <EditField
+          title="Question"
+          placeholder="Click to edit..."
+          value={this.state.question}
+          onChange={(e) => this.setState({question: e.value})}
+        />
+        <br/>
+        <EditField
+          title="Hint"
+          placeholder="Click to edit..."
+          value={this.state.hint}
+          onChange={(e) => this.setState({hint: e.value})}
+        />
+        <br/>
+        <BlocklyCompEdit lessonID={this.props.match.params.lessonID} />
       </div>
     );
   }

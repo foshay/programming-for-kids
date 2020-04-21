@@ -31,3 +31,15 @@
     padding-bottom: 10vh;
     /* margin:auto; */
 }
+
+.Edit-Lesson{
+    position: flex;
+    z-index: -1;
+    padding-top: 10vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+.Text-Edit-Title{
+    font-size: large;
+}
