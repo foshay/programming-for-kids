@@ -68,7 +68,7 @@ class LoginScreen extends Component {
                             type="password"
                         />
                     </FormGroup>
-                    <ButtonGroup vertical>
+                    <ButtonGroup vertical large>
                         <Button
                             type="submit"
                             id="loginButton"
@@ -80,10 +80,9 @@ class LoginScreen extends Component {
                         <br />
                         <Link to="/">
                             <Button
-                                type="button"
+                                text="Back"
                                 intent="warning"
                                 icon="small-cross"
-                                text="Back"
                             />
                         </Link>
                     </ButtonGroup>
