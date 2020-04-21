@@ -25,7 +25,6 @@ class LessonScreen extends Component {
     }
 
     componentDidMount(){
-        console.log("props.history = " + this.props.match.params.lessonID);
         this.getLesson();
     }
 

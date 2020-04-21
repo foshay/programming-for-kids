@@ -19,7 +19,7 @@ class BlocklyComp extends Component {
       post: '',
       responseToPost: '',
       // by default, the toolbox should be shown
-      toolboxHidden: true,
+      toolboxShown: true,
     };
     props = {
       lessonID: '',
@@ -71,12 +71,12 @@ class BlocklyComp extends Component {
     };
   
     toggleToolbox = () => {
-      this.setState({toolboxHidden: !this.state.toolboxHidden});
+      this.setState({toolboxShown: !this.state.toolboxShown});
       var array = document.getElementsByClassName("blocklyToolboxDiv blocklyNonSelectable");
       // getElementsByClassName returns an array, so we must loop through it
       for (let item of array) {
         // this hides/shows the toolbox
-        item.style["display"] = this.state.toolboxHidden ? "none": "block";
+        item.style["display"] = this.state.toolboxShown ? "none": "block";
       }
     }
 
@@ -86,9 +86,9 @@ class BlocklyComp extends Component {
         <Button 
         type="button"
         class="bp3-button bp3-icon-menu-closed"
-        icon={this.state.toolboxHidden ? "menu-closed" : "menu-open"}
+        icon={this.state.toolboxShown ? "menu-closed" : "menu-open"}
         onClick={this.toggleToolbox}
-        text={this.state.toolboxHidden ? "Hide Toolbox" : "Show Toolbox"}
+        text={this.state.toolboxShown ? "Hide Toolbox" : "Show Toolbox"}
         />
 
         <div style={{ height: '600px', width: `100%` }} id="blockly"/>
