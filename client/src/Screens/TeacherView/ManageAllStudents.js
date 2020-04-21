@@ -40,7 +40,7 @@ class ManageAllStudents extends Component {
           </Link>
         </div> */}
     return (
-      <div className="BodyTable Body">
+      <div className="Body">
         <HTMLTable striped interactive bordered>
           <thead>
             <tr>
