@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HTMLTable, Button } from "@blueprintjs/core";
+import { HTMLTable, Button, Card } from "@blueprintjs/core";
 
 class ManageAllLessons extends Component {
   state = {
@@ -27,7 +27,8 @@ class ManageAllLessons extends Component {
 
   render() {
     return (
-        <div className="Body">
+      <div className="Body">
+        <Card>
           <HTMLTable striped interactive bordered>
             <thead>
               <tr>
@@ -48,7 +49,8 @@ class ManageAllLessons extends Component {
               })}
             </tbody>
           </HTMLTable>
-        </div>
+        </Card>
+      </div>
     );
   }
 }
