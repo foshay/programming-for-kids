@@ -1,6 +1,7 @@
 .Header {
     background-color: #282c34;
-    position: fixed;
+    /* position: fixed; */
+    position: absolute;
     top: 0;
     min-height: 5vh;
     width:100%;
@@ -13,7 +14,6 @@
     left: 0;
     text-align: center;
     color: white;
-
 }
 
 .Header-Hamburger {

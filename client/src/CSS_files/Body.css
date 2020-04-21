@@ -21,10 +21,12 @@
 
 .BodyMenu-Lesson{
     position: absolute;
-    /* top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%); */
+    /* setting the z index so that
+    none of the components display above header
+    or footer */
+    z-index: -1;
     width:100%;
     padding-top: 10vh;
     padding-bottom: 10vh;
+    /* margin:auto; */
 }
