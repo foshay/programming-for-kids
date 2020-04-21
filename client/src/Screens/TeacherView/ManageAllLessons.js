@@ -18,8 +18,7 @@ class ManageAllLessons extends Component {
 
   goToLesson = (lessonID) => {
     // changes the url when a button is clicked
-    // TODO change this to bringing to edit lesson page, rather than /Lesson/${lessonID}
-    this.props.history.push(`/Lesson/${lessonID}`);
+    this.props.history.push(`/ManageLessons/${lessonID}`);
   }
 
   componentDidMount() {
