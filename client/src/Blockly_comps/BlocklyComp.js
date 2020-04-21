@@ -49,6 +49,7 @@ class BlocklyComp extends Component {
     handleSubmit = async e => {
       e.preventDefault();
       var ucode = document.getElementById('code').value;
+      var newxml = document.getElementById('newxml').value;
       //var lesson = "1";
       //var formData = new FormData();
       //formData.append('code', code);
@@ -100,6 +101,11 @@ class BlocklyComp extends Component {
             disabled
             id="code"
           />
+          <textarea
+            type="text"
+            disabled
+            id="newxml"
+            />
           <button type="submit" class="bp3-button bp3-icon-tick" icon="tick" id="gradeButton" intent="success" onClick={this.handleSubmit}>Grade code</button>
         </form>
         <p>{this.state.responseToPost}</p>

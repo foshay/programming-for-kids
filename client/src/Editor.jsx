@@ -6,7 +6,7 @@ import Blockly from 'blockly';
 import ReactBlocklyComponent from 'react-blockly/dist-modules';
 import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
-
+require('blockly/python');
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +15,9 @@ class Editor extends React.Component {
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
       // add deletable="false" to <block field of xml to make not deletable.
       // add editable="false" to make not editable
-      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">Describe this function...</comment></block></xml>',
+      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>',
+      code: '',
+      newxml: '',
     };
     
   }
@@ -46,19 +48,18 @@ componentDidMount = (workspace) => {
     });
     */
     //We can use this for saving user's progress
-    workspace.addChangeListener(Blockly.Events.disableOrphans);
-    const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    console.info(newXml);
+    //workspace.addChangeListener(Blockly.Events.disableOrphans);
+    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    document.getElementById('newxml').value = this.state.initialXml;
 
     //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
     //document.getElementById('generated-xml').innerText = newXml;
     
     //this prints out the blocks to actual python code to the page.
-    //TODO send the const code to backend for grading
-    require('blockly/python');
+    //require('blockly/python');
     //python = new Generator(name = "Python", INDENT = "4");
-    const code = Blockly.Python.workspaceToCode(workspace);
-    document.getElementById('code').value = code;
+    this.state.code = Blockly.Python.workspaceToCode(workspace);
+    document.getElementById('code').value = this.state.code;
   }
 
   render = () => (
