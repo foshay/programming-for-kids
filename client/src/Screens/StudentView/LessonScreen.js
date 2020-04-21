@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import BlocklyComp from '../Blockly_comps/BlocklyComp.js'
+import BlocklyComp from '../../Blockly_comps/BlocklyComp.js'
 
-class LessonTemp extends Component {
+class LessonScreen extends Component {
     state = {
         question: "[Loading]",
         hint: "[Loading]",
@@ -9,7 +9,7 @@ class LessonTemp extends Component {
     }
 
     getLesson = async () => {
-        const string = this.props.lessonID;
+        const string = this.props.match.params.lessonID;
         console.log("String: " + string);
         return fetch(string)
         .then(response =>{
@@ -25,17 +25,17 @@ class LessonTemp extends Component {
     }
 
     componentDidMount(){
-        console.log("props.history = " + this.props.lessonID);
+        console.log("props.history = " + this.props.match.params.lessonID);
         this.getLesson();
     }
 
     render(){
         return(
-            <div>
+            <div className="BodyMenu-Lesson">
                 <h3>Goal: {this.state.question}</h3>
                 <h3>Hint: {this.state.hint}</h3>
                 <BlocklyComp
-                    lessonID={this.props.lessonID}
+                    lessonID={this.props.match.params.lessonID}
                 />
                 <h3>Answer: {this.state.answer}</h3>
             </div>
@@ -43,4 +43,4 @@ class LessonTemp extends Component {
     }
 }
 
-export default LessonTemp
+export default LessonScreen

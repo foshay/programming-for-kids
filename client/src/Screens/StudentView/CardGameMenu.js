@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Header from '../header_footer/Header.js'
-import Footer from '../header_footer/Footer.js'
 
 class CardGameMenu extends Component {
 

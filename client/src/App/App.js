@@ -4,23 +4,23 @@ import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 import Header from '../header_footer/Header.js';
 import Footer from '../header_footer/Footer.js';
 
-import LoginMenu from '../Menus/LoginRegister/LoginMenu.js'
-import LoginScreen from '../Menus/LoginRegister/LoginScreen.js';
-import RegisterChoice from '../Menus/LoginRegister/RegisterChoice.js';
-import RegisterStudent from '../Menus/LoginRegister/RegisterStudent.js';
-import RegisterTeacher from '../Menus/LoginRegister/RegisterTeacher.js';
+import LoginMenu from '../Screens/LoginRegister/LoginMenu.js'
+import LoginScreen from '../Screens/LoginRegister/LoginScreen.js';
+import RegisterChoice from '../Screens/LoginRegister/RegisterChoice.js';
+import RegisterStudent from '../Screens/LoginRegister/RegisterStudent.js';
+import RegisterTeacher from '../Screens/LoginRegister/RegisterTeacher.js';
 
-import HomeScreen from '../Menus/HomeScreen.js'
-import LessonMenu from '../Menus/LessonMenu.js'
-import LessonScreen from '../Lesson_comps/LessonScreen.js'
-import CardGame from '../Menus/CardGameMenu.js'
+import HomeScreen from '../Screens/StudentView/HomeScreen.js'
+import LessonMenu from '../Screens/StudentView/LessonMenu.js'
+import CardGame from '../Screens/StudentView/CardGameMenu.js'
+import LessonScreen from '../Screens/StudentView/LessonScreen.js'
 
-import TeacherHome from '../Menus/TeacherView/TeacherHome.js';
-import ManageAllStudents from '../Menus/TeacherView/ManageAllStudents.js';
-import ManageStudent from '../Menus/TeacherView/ManageStudent.js';
-import ManageAllLessons from '../Menus/TeacherView/ManageAllLessons.js';
-import ManageLesson from '../Menus/TeacherView/ManageLesson.js';
-import NewLesson from '../Menus/TeacherView/NewLesson.js';
+import TeacherHome from '../Screens/TeacherView/TeacherHome.js';
+import ManageAllStudents from '../Screens/TeacherView/ManageAllStudents.js';
+import ManageStudent from '../Screens/TeacherView/ManageStudent.js';
+import ManageAllLessons from '../Screens/TeacherView/ManageAllLessons.js';
+import ManageLesson from '../Screens/TeacherView/ManageLesson.js';
+import NewLesson from '../Screens/TeacherView/NewLesson.js';
 
 import '../CSS_files/App.css';
 import '../CSS_files/Body.css';
@@ -31,7 +31,7 @@ import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 class App extends Component {
   state = {
     studentLoggedIn: true,
-    teacherLoggedIn: true,
+    teacherLoggedIn: false,
   };
 
   // need to add a handle login function
