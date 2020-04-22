@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import '../CSS_files/App.css';
-
 import ReactDOM from 'react-dom';
 import Editor from '../Editor.jsx';
-
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
-import { Button } from '@blueprintjs/core';
-
-require('../Editor.jsx')
-
+import { Button, Icon } from '@blueprintjs/core';
+import ToggleToolbox from './ToggleToolbox.js';
 
 
 class BlocklyComp extends Component {
@@ -70,44 +62,31 @@ class BlocklyComp extends Component {
       this.setState({ responseToPost: body });
     };
   
-    toggleToolbox = () => {
-      this.setState({toolboxShown: !this.state.toolboxShown});
-      var array = document.getElementsByClassName("blocklyToolboxDiv blocklyNonSelectable");
-      // getElementsByClassName returns an array, so we must loop through it
-      for (let item of array) {
-        // this hides/shows the toolbox
-        item.style["display"] = this.state.toolboxShown ? "none": "block";
-      }
-    }
 
   render() {
     return (
-      <div className="App">
-        <Button 
-        type="button"
-        class="bp3-button bp3-icon-menu-closed"
-        icon={this.state.toolboxShown ? "menu-closed" : "menu-open"}
-        onClick={this.toggleToolbox}
-        text={this.state.toolboxShown ? "Hide Toolbox" : "Show Toolbox"}
+      <div> 
+        <ToggleToolbox/>
+        <div style={{ height: '600px', width: `100%` }} id="blockly" />
+        <p>{this.state.response}</p>
+        <textarea
+          type="text"
+          disabled
+          id="code"
         />
-
-        <div style={{ height: '600px', width: `100%` }} id="blockly"/>
-
-        <p>{this.state.response}</p> 
-       
-        <form onSubmit={this.handleSubmit}>
-          <textarea
-            type="text"
-            disabled
-            id="code"
-          />
-          <textarea
-            type="text"
-            disabled
-            id="newxml"
-            />
-          <button type="submit" class="bp3-button bp3-icon-tick" icon="tick" id="gradeButton" intent="success" onClick={this.handleSubmit}>Grade code</button>
-        </form>
+        <textarea
+          type="text"
+          disabled
+          id="newxml"
+        />
+        <Button
+          text="Grade code"
+          large
+          icon="tick"
+          id="gradeButton"
+          intent="success"
+          onClick={(e) => this.handleSubmit(e)}
+        />
         <p>{this.state.responseToPost}</p>
       </div>
     )
