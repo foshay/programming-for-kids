@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import Editor from '../Editor.jsx';
-import { Button, Icon } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 
 class ToggleToolbox extends Component {
     state={

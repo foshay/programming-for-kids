@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+// blueprint imports
+import { Button } from '@blueprintjs/core';
+
+// Our components
+import ToggleToolbox from './ToggleToolbox.js';
+
+// Blockly imports
 import Blockly from 'blockly';
 import ReactBlocklyComponent from 'react-blockly/dist-modules';
 import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
 require('blockly/python');
-
-import { Button } from '@blueprintjs/core';
-import ToggleToolbox from './ToggleToolbox.js';
 
 class Editor extends React.Component {
   constructor(props) {
@@ -154,12 +158,12 @@ class BlocklyComp extends Component {
         <div style={{ height: '600px', width: `100%` }} id="blockly" />
         <p>{this.state.response}</p>
         <textarea
-          type="hidden"
+          style={{display: "none"}}
           disabled
           id="code"
         />
         <textarea
-          type="hidden"
+          style={{display: "none"}}
           disabled
           id="newxml"
         />

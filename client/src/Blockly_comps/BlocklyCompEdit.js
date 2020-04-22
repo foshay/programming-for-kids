@@ -1,12 +1,94 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Editor from '../Editor.jsx';
 
-import { Button, Text } from '@blueprintjs/core';
+import { Button, } from '@blueprintjs/core';
 
-// import '../CSS_files/App.css';
-// require('../Editor.jsx')
+// Blockly imports
+import Blockly from 'blockly';
+import ReactBlocklyComponent from 'react-blockly/dist-modules';
+import ConfigFiles from 'react-blockly/src/initContent/content';
+import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
+import ToggleToolbox from './ToggleToolbox';
+require('blockly/python');
 
+class Editor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
+      //can use this.props.lessonID to select xml for the lesson based on lesson selected.
+      // add deletable="false" to <block field of xml to make not deletable.
+      // add editable="false" to make not editable
+      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>',
+      code: '',
+      newxml: '',
+    };
+    
+  }
+
+//this is optional for adding custom categories of blocks
+
+componentDidMount = (workspace) => {
+    window.setTimeout(() => {
+      
+      this.setState({
+        toolboxCategories: this.state.toolboxCategories.concat([
+          {
+            name: 'AI category',
+            blocks: [
+              { type: 'text' },
+              ],
+          },
+        ]),
+      });
+    }, 2000);
+  }
+
+  workspaceDidChange = (workspace) => {
+      //this part you can do something when the workspace changes (when they place or move a block)
+    /*
+      workspace.registerButtonCallback('sendToGrade', () => {
+      alert('Sent to grading script');
+    });
+    */
+    //We can use this for saving user's progress
+    //workspace.addChangeListener(Blockly.Events.disableOrphans);
+    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    document.getElementById('newxml').value = this.state.initialXml;
+
+    //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
+    //document.getElementById('generated-xml').innerText = newXml;
+    
+    //this prints out the blocks to actual python code to the page.
+    //require('blockly/python');
+    //python = new Generator(name = "Python", INDENT = "4");
+    this.state.code = Blockly.Python.workspaceToCode(workspace);
+    document.getElementById('code').value = this.state.code;
+  }
+
+  render = () => (
+    <ReactBlocklyComponent.BlocklyEditor
+        // The block categories to be available.
+      toolboxCategories={this.state.toolboxCategories}
+      //this is obvious what it does
+      workspaceConfiguration={{
+        grid: {
+          spacing: 20,
+          length: 3,
+          colour: '#0000FF',
+          snap: true,
+        },
+      }}
+      //we can possibly change the initial xml on a per lesson basis... or not
+      initialXml={this.state.initialXml}
+      //the div wrapper that will be generated for blockly
+      wrapperDivClassName="fill-height"
+      //what method to call when the workspace changes
+      workspaceDidChange={this.workspaceDidChange}
+    />
+    
+  )
+}
 
 
 class BlocklyCompEdit extends Component {
@@ -65,43 +147,33 @@ class BlocklyCompEdit extends Component {
       
       this.setState({ responseToPost: body });
     };
-  
-    toggleToolbox = () => {
-      this.setState({toolboxShown: !this.state.toolboxShown});
-      var array = document.getElementsByClassName("blocklyToolboxDiv blocklyNonSelectable");
-      // getElementsByClassName returns an array, so we must loop through it
-      for (let item of array) {
-        // this hides/shows the toolbox
-        item.style["display"] = this.state.toolboxShown ? "none": "block";
-      }
-    }
 
   render() {
     return (
       <div>
-        <Button 
-        type="button"
-        class="bp3-button bp3-icon-menu-closed"
-        icon={this.state.toolboxShown ? "menu-closed" : "menu-open"}
-        onClick={this.toggleToolbox}
-        text={this.state.toolboxShown ? "Hide Toolbox" : "Show Toolbox"}
-        />
-
+        <ToggleToolbox/>
         <div style={{ height: '600px', width: `100%` }} id="blockly"/>
-
         <p>{this.state.response}</p> 
         <form onSubmit={this.handleSubmit}>
           <textarea
+            style={{display: "none"}}
             type="text"
             disabled
             id="code"
           />
           <textarea
-            type="text"
+            style={{display: "none"}}
             disabled
             id="newxml"
             />
-          <button type="submit" class="bp3-button bp3-icon-tick" icon="tick" id="gradeButton" intent="success" onClick={this.handleSubmit}>Grade code</button>
+          {/* <Button
+            text="Grade code"
+            large
+            icon="tick"
+            id="gradeButton"
+            intent="success"
+            onClick={(e) => this.handleSubmit(e)}
+          /> */}
         </form>
         <p>{this.state.responseToPost}</p>
       </div>
