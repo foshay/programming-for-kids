@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import { Button, ButtonGroup, Text, EditableText, Card} from "@blueprintjs/core";
-import BlocklyComp from '../../Blockly_comps/BlocklyComp';
+
+import { Button, ButtonGroup, } from "@blueprintjs/core";
+
 import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
 import EditField from '../../SmallComponents/EditField';
 
@@ -15,10 +16,11 @@ class ManageLesson extends Component {
 render() {
     return (
       <div className="Edit-Lesson">
-        {/* <h1>{"Lesson id (temp): " + this.props.match.params.lessonID}</h1> */}
-        <ButtonGroup large>
-          <Link to="/">
+        <ButtonGroup large style={{paddingBottom: "1vh"}}>
+          <Link to="/ManageLessons">
             <Button
+              className={"Top-Left-Back"}
+              style={{marginRight: "1vh"}}
               type="button"
               intent="warning"
               icon="small-cross"
