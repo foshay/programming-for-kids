@@ -28,10 +28,13 @@ import "../../../node_modules/normalize.css";
 import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary";
+
 class App extends Component {
   state = {
-    studentLoggedIn: true,
-    teacherLoggedIn: true,
+    studentLoggedIn: false,
+    teacherLoggedIn: false,
   };
 
   // need to add a handle login function
@@ -47,8 +50,33 @@ class App extends Component {
   // }
 
   componentDidMount = () => {
-    // TODO figure out if this is where to check JWT token
-  }
+    var token = localStorage.getItem('nccjwt');
+    console.log("State: " + this.state.studentLoggedIn);
+    console.log("Token: " + token);
+    if(!token){
+        this.setState({studentLoggedIn: false, teacherLoggedIn: false});
+        //TODO: send back to login page
+    }
+    else{
+        jwt.verify(token, secret, (err, decoded) =>{
+                if(err){
+                    console.log("Error: " + err);
+                }
+                //Teacher is logging in
+                else if(decoded.teacher == true){
+                    console.log("Teacher logged in");
+                    this.setState({teacherLoggedIn: true});
+                }
+                else{
+                    console.log("Student logged in");
+                    //Student is logging in
+                    this.setState({studentLoggedIn: true});
+                    this.state.studentLoggedIn = true;
+                    console.log("In else: " + this.state.studentLoggedIn);
+                }
+        });
+    }
+}
 
 
   render() {
@@ -63,8 +91,8 @@ class App extends Component {
           <Route exact path="/Register/Student" component={RegisterStudent} />
           <Route exact path="/Register/Teacher" component={RegisterTeacher} />
           <Route exact path="/login" component={LoginScreen} />
-          {/* <Route exact path="/Login" 
-            render = {(props) => <LoginScreen 
+          {/* <Route exact path="/Login"
+            render = {(props) => <LoginScreen
               // the two functions below run in a successful login
               logInStudent={this.logInStudent}
               logInTeacher={this.logInTeacher}
