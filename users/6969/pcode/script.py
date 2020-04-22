@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 def grade():
  results = usercode()
- if (results == 20):
+ if (results == 10):
   print("True")
  else:
   print("False")
-# Describe this function...
+# The base function block used for grading
 def usercode():
-  return ''
+  pass
 if __name__ == "__main__":
   grade()
