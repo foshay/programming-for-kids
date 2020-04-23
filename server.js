@@ -52,6 +52,7 @@ app.post('/api/register', (req, res,next) => {
     let first_name = body.first_name;
     let last_name = body.last_name;
     let user_type = body.user_type;
+    let otp = body.otp;
 
     //Hash Password
     bcrypt.genSalt(10, (err, salt) => {
@@ -66,7 +67,7 @@ app.post('/api/register', (req, res,next) => {
                         res.send("DB Failure");
                     } else {
                         console.log("User creation succecssful: " + username);
-                        res.send(text);
+                        res.send("Success");
                     }
                 });
             }
@@ -109,12 +110,14 @@ app.post('/api/login', (req, res, next) => {
         //If the query is successful, compare the hash and return result
         if(!err && row != undefined){
             let password_hash = row.password;
+            let is_teacher = row.is_teacher;
             bcrypt.compare(password, password_hash, (err, result) => {
                 if(result === true){
                     //Sign a token with username as payload
                     // TODO add functionality for having a teacher logged in
                     // TODO change secret
-                    var token = jwt.sign({username: username, teacher: true}, secret, {
+                    console.log("Is teacher?: " + is_teacher);
+                    var token = jwt.sign({username: username, teacher: is_teacher}, secret, {
                         expiresIn: 86400    //Expires in 24 hours
                     });
                     console.log("True token: " + token);
@@ -252,6 +255,8 @@ app.get('/User/:userid', (req, res) => {
 
 // TODO make an api call to get all Users for the 
 // manageStudents table
+// app.get('/api/Students', (req, res) =>
+// );
 
 // TODO make an api call to get a User's grades
 // on all lessons
