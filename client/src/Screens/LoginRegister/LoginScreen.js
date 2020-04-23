@@ -27,15 +27,18 @@ class LoginScreen extends Component {
             })
 
         });
-        const body = await response.text();
-        if(body == "Success"){
+        //console.log(response.json());
+        var body = await response.json();
+        var message = await body.message;
+        console.log("Console message: " + message);
+        if(message == "Success"){
             alert("Login successful");
-            // TODO get JWT token
-            // TODO differentiate between teacher and student? Or in App?
+            var token = await body.token;
+            localStorage.setItem('nccjwt', token);
         }else{
             alert("Invalid username or password");
         }
-        this.setState({ responseToPost: body });
+        this.setState({ responseToPost: message });
         //body is the response from the server after receiving the login information
         //we can use this for authenticating users (cookie or something)
         console.info(this.state.responseToPost);

@@ -5,6 +5,8 @@ const rimraf = require('rimraf')
 const bcrypt  = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 5000;
+const secret = "this is temporary";
+const jwt = require('jsonwebtoken');
 
 //Open and load database into object
 let db = new sqlite.Database('./client/src/database.db', (err) =>{
@@ -41,8 +43,13 @@ function runCmd(cmd, callback) {
         }
     });
 }
+//Verify token of a request
+function checkToken(req,res,next){
+
+}
+
 //Register a user. If username already exists, return "Failure"
-app.post('/api/register', (req, res) => {
+app.post('/api/register', (req, res,next) => {
     let body = req.body;
     let username = body.username;
     let password = body.password;
@@ -55,6 +62,7 @@ app.post('/api/register', (req, res) => {
             //Create user via script, then insert them into the database
             runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
                 if(text !== "Failure"){
+                    //Add user to the database
                     db.run(sql, params, (err) => {
                         if(err){
                             console.log(err);
@@ -74,35 +82,43 @@ app.post('/api/register', (req, res) => {
 });
 
 //Login checking via hash. TODO: give session cookie
-app.post('/api/login', (req, res) => {
+app.post('/api/login', (req, res, next) => {
     let body = req.body;
     let username = body.username;
     let password = body.password;
     let sql = 'SELECT * FROM User WHERE username = ?';
 
     db.get(sql, [username], (err,row) => {
-        //console.log("Before hash");
-    //    console.log(err);
         console.log(row);
         //If the query is successful, compare the hash and return result
         if(!err && row != undefined){
             let hash = row.password;
             bcrypt.compare(password, hash, (err, result) => {
-                if(result == true){
-                    res.send("Success");
+                if(result === true){
+                    //Sign a token with username as payload
+                    var token = jwt.sign({username: username, teacher: false}, secret, {
+                        expiresIn: 86400    //Expires in 24 hours
+                    });
+                    console.log("True token: " + token);
+                    res.json({
+                        "message": "Success",
+                        "token": token
+                    });
                 }else{
-                    console.log(err);
-                    res.send("Failure");
+                    //console.log("Login fail" + err);
+                    res.json({
+                        "message": "Failure"
+                    });
                 }
             });
         }else{
-            res.send("Failure");
+            res.json({"message": "Failure"});
         }
     });
 });
 //---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 
-app.get('/api/connect', (req, res) => {
+app.get('/api/connect', (req, res, next) => {
     res.send({ express: 'Connected to the grading server' });
 });
 
