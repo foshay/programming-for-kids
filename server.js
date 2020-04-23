@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const sqlite = require('sqlite3');
+const sqlite = require('sqlite3').verbose();
 const rimraf = require('rimraf')
 const bcrypt  = require('bcrypt');
 const app = express();
@@ -17,7 +17,6 @@ let db = new sqlite.Database('./client/src/database.db', (err) =>{
         console.log("Connected to database");
     }
 });
-require('./database.js')(app, db);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,16 +35,12 @@ function runCmd(cmd, callback) {
                 return callback("\`\`\`" + stderr + "\n" + stdout + "\`\`\`");
             }
         }
-        //console.log(stdout);
+        // console.log(stdout);
         if (callback) {
             //console.log("Callback stdout");
             return callback(stdout);
         }
     });
-}
-//Verify token of a request
-function checkToken(req,res,next){
-
 }
 
 //Register a user. If username already exists, return "Failure"
@@ -81,7 +76,7 @@ app.post('/api/register', (req, res,next) => {
     });
 });
 
-//Login checking via hash. TODO: give session cookie
+//Login checking via hash.
 app.post('/api/login', (req, res, next) => {
     let body = req.body;
     let username = body.username;
@@ -116,8 +111,8 @@ app.post('/api/login', (req, res, next) => {
         }
     });
 });
-//---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 
+//---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 app.get('/api/connect', (req, res, next) => {
     res.send({ express: 'Connected to the grading server' });
 });
@@ -138,10 +133,7 @@ app.post('/api/grade', (req, res) => {
 
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
-
-var sqlite = require('sqlite3').verbose();
-const DBSOURCE = "./client/src/database.db";
+// const DBSOURCE = "./client/src/database.db";
 
 module.exports = (app, db) =>{
 
@@ -154,18 +146,20 @@ module.exports = (app, db) =>{
         db.all(sql, params, (err, rows) =>{
             if (err){
                 res.status(400).json({
-                    "error" : err.message,
-                    "message" : "Failure"});
+                    "error": err.message,
+                    "message": "Failure"
+                });
                 return;
             }
             res.json({
                 message: "Success",
-                data: rows});
+                data: rows
+            });
         });
     });
 
     //GET single Lesson
-    app.get('/Lesson/:id', (req, res) => {
+    app.get('/api/Lesson/:id', (req, res) => {
         let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
         let lessonNum = [req.params.id];
 
@@ -183,34 +177,34 @@ module.exports = (app, db) =>{
         });
     });
 
-    // Make a new lesson
-    app.post('/NewLesson', (req, res) => {
-        // let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
-        let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
-        // TODO add lesson number
-        // TODO add group by lesson_number ascending
+    // // Make a new lesson
+    // app.post('/NewLesson', (req, res) => {
+    //     // let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
+    //     let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
+    //     // TODO add lesson number
+    //     // TODO add group by lesson_number ascending
 
-        let lessonID = 100;
-        let lessonName = [req.params.name];
-        let lessonQuestion = [req.params.question];
-        let lessonHint = [req.params.hint];
+    //     let lessonID = 100;
+    //     let lessonName = [req.params.name];
+    //     let lessonQuestion = [req.params.question];
+    //     let lessonHint = [req.params.hint];
 
-        let values = [lessonID, lessonName, lessonQuestion, lessonHint]
+    //     let values = [lessonID, lessonName, lessonQuestion, lessonHint]
 
-        //get query to database for lesson with :id
-        db.get(sql, values, (err, row) => {
-            if (err){
-                res.status(400).json({
-                    "error" : err.message,
-                    "message" : "Failure"});
-                return;
-            }
-            res.json({
-                message: "Success",
-                data: row
-            });
-        });
-    });
+    //     //get query to database for lesson with :id
+    //     db.get(sql, values, (err, row) => {
+    //         if (err){
+    //             res.status(400).json({
+    //                 "error" : err.message,
+    //                 "message" : "Failure"});
+    //             return;
+    //         }
+    //         res.json({
+    //             message: "Success",
+    //             data: row
+    //         });
+    //     });
+    // });
 
 /****************** User Requests *****************/
 
@@ -234,3 +228,5 @@ module.exports = (app, db) =>{
 //        db.close();
 //    });
 };
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
