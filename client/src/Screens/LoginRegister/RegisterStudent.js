@@ -6,13 +6,17 @@ class RegisterStudent extends Component {
     state = {
         responseToPost: '',
         username: '',
-        password: ''
+        password: '',
+        first_name: '',
+        last_name: '',
     }
 
     handleRegister = async e => {
         e.preventDefault();
         var username = this.state.username;
         var password = this.state.password;
+        var first_name = this.state.first_name;
+        var last_name = this.state.last_name;
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -21,15 +25,14 @@ class RegisterStudent extends Component {
             body: JSON.stringify({
                 "username": username,
                 "password": password,
+                "first_name": first_name,
+                "last_name": last_name,
             })
         });
 
         const body = await response.text();
 
-        //this.setState({ responseToPost: body });
-        //body is the response from the server after receiving the registration information
-        //we can use this for authenticating users (cookie or something)
-
+        // TODO change generic Failure message
         if (body == 'Failure') {
             alert("Username taken");
             console.info("Taken: " + body);
@@ -49,6 +52,8 @@ class RegisterStudent extends Component {
                     handleRegister={(e)=> this.handleRegister(e)}
                     setUsername={(username)=> this.setState({username: username})}
                     setPassword={(password)=> this.setState({password: password})}
+                    setFirstName={(first_name)=> this.setState({first_name: first_name})}
+                    setLastName={(last_name)=> this.setState({last_name: last_name})}
                 />
             </div>
         );

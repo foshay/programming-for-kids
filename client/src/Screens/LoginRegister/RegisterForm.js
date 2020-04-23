@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, ControlGroup, InputGroup, ButtonGroup } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
+import OtpInput from 'react-otp-input'
 
 class RegisterForm extends Component {
     state = {
         username: '',
         password: '',
+        first_name: '',
+        last_name: '',
         passwordConfirm: '',
-        passwordMatch: '',
         otp: ''
     }
 
@@ -15,23 +17,22 @@ class RegisterForm extends Component {
         if (this.props.requireOTP) {
             return (
                 <FormGroup label="Teacher OTP:" labelFor="otp">
-                    <InputGroup
+                    <OtpInput
                         id="otp"
-                        onChange={e => this.setState({ otp: e.target.value })}
+                        onChange={(value) => {
+                            // var value = e.target.value;
+                            this.setState({ otp: value });
+                            this.props.setOTP(value)
+                        } }
                         value={this.state.otp}
-                        placeholder="Enter Teacher OTP..."
-                        type="password"
+                        numInputs={6}
+                        separator={<span>-</span>}
+                        inputStyle={"OTP-container"}
                     />
                 </FormGroup>
             );
         }
         else { return (<div/>); }
-    }
-    
-    inputChanged = (username, password, otp) => {
-        this.props.setUsername(username);
-        this.props.setPassword(password);
-        if (this.props.requireOTP) {this.props.setOTP(otp);}
     }
 
     render = () => {
@@ -42,19 +43,47 @@ class RegisterForm extends Component {
                         <InputGroup
                             id="username"
                             onChange={e => {
-                                this.setState({ username: e.target.value });
-                                this.inputChanged(e.target.value, this.state.password, this.state.otp);
+                                var value = e.target.value;
+                                this.setState({ username: value });
+                                this.props.setUsername(value);
                             }}
                             value={this.state.username}
                             placeholder="Enter Username..."
                         />
                     </FormGroup>
+                    <FormGroup label="First Name:" labelFor="first_name">
+                        <InputGroup
+                            id="first_name"
+                            onChange={e => {
+                                var value = e.target.value;
+                                this.setState({ first_name: value });
+                                this.props.setFirstName(value);
+                            }}
+                            value={this.state.first_name}
+                            placeholder="Enter First Name..."
+                        />
+                    </FormGroup>
+                    <FormGroup label="Last Name:" labelFor="last_name">
+                        <InputGroup
+                            id="last_name"
+                            onChange={e => {
+                                var value = e.target.value;
+                                this.setState({ last_name: value });
+                                this.props.setLastName(value);
+                            }}
+                            value={this.state.last_name}
+                            placeholder="Enter Last Name..."
+                        />
+                    </FormGroup>
                     <FormGroup label="Password:" labelFor="password">
                         <InputGroup
                             id="password"
-                            onChange={e => {
-                                this.setState({ password: e.target.value });
-                                this.inputChanged(this.state.username, e.target.value, this.state.otp);
+                            onChange={(e) => {
+                                var value = e.target.value;
+                                this.setState({ password: value });
+                                if (this.state.passwordConfirm == value) {
+                                    this.props.setPassword(value);
+                                }
                             }}
                             value={this.state.password}
                             placeholder="Enter Password..."
@@ -64,7 +93,7 @@ class RegisterForm extends Component {
                     <FormGroup
                         label="Confirm Password:"
                         labelFor="passwordConfirm"
-                        helperText={this.state.passwordMatch ? "" : "Password Must Match"}
+                        helperText={(this.state.password === this.state.passwordConfirm) ? "" : "Password Must Match"}
                     >
                         <InputGroup
                             placeholder="Confirm Password..."
@@ -73,9 +102,9 @@ class RegisterForm extends Component {
                                 e => {
                                     var value = e.target.value;
                                     this.setState({ passwordConfirm: value });
-                                    ((value === this.state.password) && value) ?
-                                    this.setState({passwordMatch: true}) :
-                                    this.setState({passwordMatch: false})
+                                    (value === this.state.password) ?
+                                        this.props.setPassword(value) :
+                                        this.props.setPassword('')
                                 }
                             }
                             value={this.state.passwordConfirm}
@@ -89,12 +118,11 @@ class RegisterForm extends Component {
                             text={this.props.registerText}
                             onClick={
                                 (e) => {
-                                    this.state.passwordMatch ?
+                                    (this.state.password === this.state.passwordConfirm) ?
                                         this.props.handleRegister(e) :
                                         alert("Password must match confirmed password.");
                                 }
                             }
-                            // type="submit"
                             id="registerButton"
                             intent="success"
                         />
