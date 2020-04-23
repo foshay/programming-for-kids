@@ -1,24 +1,50 @@
 import React, { Component } from 'react';
 import { Button, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary";
 
 class Header extends Component {
+    state ={
+        studentLoggedIn: false,
+        teacherLoggedIn: false,
+    }
 
     logOut = () => {
         // TODO implement logging out
-        alert("Logged out of account");
+        // alert("Logged out of account");
+        localStorage.setItem('nccjwt', '');
     }
 
-    logIn = () => {
-
+    checkTokenMenu = () => {
+        var token = localStorage.getItem('nccjwt');
+        if (!token) {
+            this.setState({ studentLoggedIn: false, teacherLoggedIn: false });
+        }
+        else {
+            jwt.verify(token, secret, (err, decoded) => {
+                if (err) {
+                    console.log("Error: " + err);
+                    return false;
+                }
+                //Teacher is logging in
+                else if (decoded.teacher == true) {
+                    console.log("Teacher logged in");
+                    this.setState({ teacherLoggedIn: true });
+                }
+                else {
+                    console.log("Student logged in");
+                    //Student is logging in
+                    this.setState({ studentLoggedIn: true });
+                    // console.log("In else: " + this.state.studentLoggedIn);
+                }
+            });
+        }
     }
 
     render() {
-        const student = this.props.studentLoggedIn;
-        const teacher = this.props.teacherLoggedIn;
+        const student = this.state.studentLoggedIn;
+        const teacher = this.state.teacherLoggedIn;
         const loggedOut = !(teacher||student);
         const popMenu = (
             <Menu >
@@ -59,7 +85,7 @@ class Header extends Component {
                 <h2 className="Header-Title">Native Code Creator</h2>
                 <div className="Header-Hamburger">
                     <Popover content={popMenu} position={Position.LEFT_TOP} >
-                        <Button icon="menu" />
+                        <Button onClick={()=>{ this.checkTokenMenu()}}icon="menu" />
                     </Popover>
                 </div>
             </div>
