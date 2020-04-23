@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { HTMLTable, Button, Card, } from "@blueprintjs/core";
-import { Link } from 'react-router-dom';
+import { HTMLTable, Card, } from "@blueprintjs/core";
 
-            // {/* button for delete student */}
-            // {/* student's overall grade */}
-            // {/* student's grade for each assignment */}
 class ManageAllStudents extends Component {
 
   state = {
@@ -24,6 +20,7 @@ class ManageAllStudents extends Component {
 
   goToStudent = (studentID) => {
     // changes the url when a button is clicked
+    // TODO change this to a Link or Redirect rather than push
     this.props.history.push(`/ManageStudents/${studentID}`);
   }
 
@@ -32,16 +29,6 @@ class ManageAllStudents extends Component {
   }
 
   render() {
-        {/* <div className="Body">
-          <Link to ="/TeacherHome">
-            <Button
-              style ={{padding: }}
-              text="Back"
-              icon="cross"
-              intent="warning"
-            />
-          </Link>
-        </div> */}
     return (
       <div className="Body">
         <Card>
@@ -53,11 +40,12 @@ class ManageAllStudents extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.students.map((_, index) => {
+              {this.state.students.map((value, index) => {
                 return (
-                  <tr onClick={() => this.goToStudent(this.state.students[index].student_id)} >
-                    <td> {this.state.students[index].student_name} </td>
-                    <td> {this.state.students[index].overall_grade + "%"} </td>
+                  <tr onClick={() => this.goToStudent(value.student_id)} >
+                    {/* TODO add first name and last name */}
+                    <td> {value.student_name} </td>
+                    <td> {value.overall_grade + "%"} </td>
                   </tr>
                 )
               })}

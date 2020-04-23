@@ -65,7 +65,7 @@ class Header extends Component {
                 />
                 <MenuDivider />
                 <MenuItem disabled icon="cog" text="Settings">
-                    {/* TODO */}
+                    {/* TODO add Settings*/}
                     <MenuItem text="option coming soon" />
                 </MenuItem>
                 <MenuDivider />

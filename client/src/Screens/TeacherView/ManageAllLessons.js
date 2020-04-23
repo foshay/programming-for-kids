@@ -32,7 +32,7 @@ class ManageAllLessons extends Component {
           <HTMLTable striped interactive bordered>
             <thead>
               <tr>
-                <th></th>
+                <th/>
                 <th>Lesson Name</th>
               </tr>
             </thead>

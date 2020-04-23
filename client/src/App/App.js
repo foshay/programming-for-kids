@@ -52,12 +52,13 @@ class App extends Component {
           console.log("Error: " + err);
           return false;
         }
-        //Teacher is logging in
+        // Teacher is logged in
         else if (decoded.teacher == true) {
           if (userType == "teacher"){
             return true;
           }
         }
+        // Student is logged in
         else {
           if (userType == "student"){
             return true;
