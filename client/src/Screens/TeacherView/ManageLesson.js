@@ -13,6 +13,28 @@ class ManageLesson extends Component {
     hint:''
   }
 
+  componentDidMount() {
+    this.getLessonInfo();
+  }
+
+  getLessonInfo = async () => {
+      const lesson_id = this.props.match.params.lessonID;
+      if (lesson_id != 'NewLesson'){
+        return fetch('/api/lesson/' + lesson_id)
+          .then(response => {
+            return response.json();
+          })
+          .then(json => {
+            this.setState({
+              name: json.data.name,
+              question: json.data.question,
+              hint: json.data.hint,
+              answer: json.data.answer
+            });
+          });
+      }
+  }
+
   handleSave = async e => {
     e.preventDefault();
     var name = this.state.name;
@@ -20,12 +42,11 @@ class ManageLesson extends Component {
     var hint = this.state.hint;
     // check that none are empty
     if ((name == '') || (question = '') || (hint = '')){
-      alert("Must fill in all fields")
+      alert("Must fill in all fields. Content Not Saved.");
       return;
     }
 
-
-    const response = await fetch('/NewLesson', {
+    const response = await fetch('/EditLesson', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,22 +55,13 @@ class ManageLesson extends Component {
         "name": name,
         "question": question,
         "hint": hint,
+        // TODO add xml
       })
     });
+
     const body = await response.text();
     console.info("Created " + body);
     alert("Lesson Created");
-    // alert("Lesson Created" + body.data.name);
-
-    // if (body == 'Failure') {
-    //   alert("Username taken");
-    //   console.info("Taken: " + body);
-    // } else if (body == "DB Failure") {
-    //   alert("Issue creating account");
-    // } else {
-    //   console.info("Created " + body);
-    //   alert("User created");
-    // }
   };
 
   render() {

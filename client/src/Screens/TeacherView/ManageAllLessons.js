@@ -41,7 +41,7 @@ class ManageAllLessons extends Component {
                 // const id = this.state.lessons[index].lesson_id;
                 // const name = this.state.lessons[index].name;
                 return (
-                  <tr onClick={() => this.goToLesson(value.id)} >
+                  <tr onClick={() => this.goToLesson(value.lesson_id)} >
                     <td> {value.lesson_id} </td>
                     <td> {value.name} </td>
                   </tr>

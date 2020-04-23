@@ -114,8 +114,6 @@ app.post('/api/login', (req, res, next) => {
             bcrypt.compare(password, password_hash, (err, result) => {
                 if(result === true){
                     //Sign a token with username as payload
-                    // TODO add functionality for having a teacher logged in
-                    // TODO change secret
                     console.log("Is teacher?: " + is_teacher);
                     var token = jwt.sign({username: username, teacher: is_teacher}, secret, {
                         expiresIn: 86400    //Expires in 24 hours
@@ -205,7 +203,7 @@ app.get('/api/Lesson/:id', (req, res) => {
 });
 
 // Make a new lesson
-app.post('/NewLesson', (req, res) => {
+app.post('/api/NewLesson', (req, res) => {
     let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
     // TODO add lesson number
     // TODO add group by lesson_number ascending
@@ -255,8 +253,6 @@ app.get('/User/:userid', (req, res) => {
     });
 });
 
-// TODO make an api call to get all Users for the 
-// manageStudents table
 app.get('/api/Student/all', (req, res) => {
     let sql = 'SELECT * FROM User WHERE is_teacher = 0';
     let params = [];
@@ -274,7 +270,6 @@ app.get('/api/Student/all', (req, res) => {
             data: rows
         });
     });
-
 });
 
 // TODO make an api call to get a User's grades

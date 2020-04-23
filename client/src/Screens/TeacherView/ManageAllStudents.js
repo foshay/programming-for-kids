@@ -54,7 +54,6 @@ class ManageAllStudents extends Component {
               {this.state.students.map((value, index) => {
                 return (
                   <tr onClick={() => this.goToStudent(value.user_id)} >
-                    {/* TODO add first name and last name */}
                     <td> {value.first_name} </td>
                     <td> {value.last_name} </td>
                     <td> {value.username} </td>
