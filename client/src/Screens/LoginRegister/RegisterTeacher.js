@@ -15,6 +15,9 @@ class RegisterTeacher extends Component {
         e.preventDefault();
         var username = this.state.username;
         var password = this.state.password;
+        var first_name = this.state.first_name;
+        var last_name = this.state.last_name;
+        var otp = this.state.otp;
         // TODO add code to handle the 'teacher code' otp
         var otp = this.state.otp;
         const response = await fetch('/api/register', {
@@ -25,6 +28,10 @@ class RegisterTeacher extends Component {
             body: JSON.stringify({
                 "username": username,
                 "password": password,
+                "first_name": first_name,
+                "last_name": last_name,
+                "user_type": "teacher",
+                "otp": otp,
             })
         });
         const body = await response.text();

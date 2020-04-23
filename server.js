@@ -49,30 +49,50 @@ app.post('/api/register', (req, res,next) => {
     let body = req.body;
     let username = body.username;
     let password = body.password;
+    let first_name = body.first_name;
+    let last_name = body.last_name;
+    let user_type = body.user_type;
 
     //Hash Password
     bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-            let sql = 'INSERT INTO User(first_name, last_name, username, password) VALUES (?,?,?,?)';
-            let params = ['Johnny', 'Test', username, hash];
-            //Create user via script, then insert them into the database
-            runCmd("./backend/create_user.sh " + req.body.username, function(text,err) {
-                if(text !== "Failure"){
-                    //Add user to the database
-                    db.run(sql, params, (err) => {
-                        if(err){
-                            console.log(err);
-                            rimraf("./users/" + username);
-                            res.send("DB Failure");
-                        }else{
-                            console.log("User creation succecssful: " + username);
-                            res.send(text);
-                        }
-                    });
-                }else{
-                    res.send(text);
-                }
-            });
+        bcrypt.hash(password, salt, (err, password_hash) => {
+            let sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+            if (user_type === "teacher"){
+                // TODO check otp
+                let params = [first_name, last_name, username, password_hash, true];
+                db.run(sql, params, (err) => {
+                    if (err) {
+                        console.log(err);
+                        res.send("DB Failure");
+                    } else {
+                        console.log("User creation succecssful: " + username);
+                        res.send(text);
+                    }
+                });
+            }
+            else if (user_type === "student"){
+                // TODO set the grades for all existing lessons to 0
+                let params = [first_name, last_name, username, password_hash, false];
+                //Create user via script, then insert them into the database
+                runCmd("./backend/create_user.sh " + username, function (text, err) {
+                    if (text !== "Failure") {
+                        //Add user to the database
+                        db.run(sql, params, (err) => {
+                            if (err) {
+                                console.log(err);
+                                // remove the new user's directory
+                                rimraf("./users/" + username);
+                                res.send("DB Failure");
+                            } else {
+                                console.log("User creation succecssful: " + username);
+                                res.send(text);
+                            }
+                        });
+                    } else {
+                        res.send(text);
+                    }
+                });
+            }
         });
     });
 });
@@ -88,11 +108,13 @@ app.post('/api/login', (req, res, next) => {
         console.log(row);
         //If the query is successful, compare the hash and return result
         if(!err && row != undefined){
-            let hash = row.password;
-            bcrypt.compare(password, hash, (err, result) => {
+            let password_hash = row.password;
+            bcrypt.compare(password, password_hash, (err, result) => {
                 if(result === true){
                     //Sign a token with username as payload
-                    var token = jwt.sign({username: username, teacher: false}, secret, {
+                    // TODO add functionality for having a teacher logged in
+                    // TODO change secret
+                    var token = jwt.sign({username: username, teacher: true}, secret, {
                         expiresIn: 86400    //Expires in 24 hours
                     });
                     console.log("True token: " + token);
@@ -179,34 +201,34 @@ app.get('/api/Lesson/:id', (req, res) => {
     });
 });
 
-// // Make a new lesson
-// app.post('/NewLesson', (req, res) => {
-//     // let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
-//     let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
-//     // TODO add lesson number
-//     // TODO add group by lesson_number ascending
+// Make a new lesson
+app.post('/NewLesson', (req, res) => {
+    let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
+    // TODO add lesson number
+    // TODO add group by lesson_number ascending
+    // TODO set grade for all students to 0
 
-//     let lessonID = 100;
-//     let lessonName = [req.params.name];
-//     let lessonQuestion = [req.params.question];
-//     let lessonHint = [req.params.hint];
+    let lessonID = 100;
+    let lessonName = [req.params.name];
+    let lessonQuestion = [req.params.question];
+    let lessonHint = [req.params.hint];
 
-//     let values = [lessonID, lessonName, lessonQuestion, lessonHint]
+    let values = [lessonID, lessonName, lessonQuestion, lessonHint]
 
-//     //get query to database for lesson with :id
-//     db.get(sql, values, (err, row) => {
-//         if (err){
-//             res.status(400).json({
-//                 "error" : err.message,
-//                 "message" : "Failure"});
-//             return;
-//         }
-//         res.json({
-//             message: "Success",
-//             data: row
-//         });
-//     });
-// });
+    //get query to database for lesson with :id
+    db.get(sql, values, (err, row) => {
+        if (err){
+            res.status(400).json({
+                "error" : err.message,
+                "message" : "Failure"});
+            return;
+        }
+        res.json({
+            message: "Success",
+            data: row
+        });
+    });
+});
 
 /****************** User Requests *****************/
 
@@ -227,6 +249,13 @@ app.get('/User/:userid', (req, res) => {
         });
     });
 });
+
+// TODO make an api call to get all Users for the 
+// manageStudents table
+
+// TODO make an api call to get a User's grades
+// on all lessons
+
 //Only time we need to close database is on SIGINT
 //    process.on('SIGINT', () =>{
 //        db.close();
