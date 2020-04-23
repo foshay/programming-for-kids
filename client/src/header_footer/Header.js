@@ -11,7 +11,6 @@ class Header extends Component {
     }
 
     logOut = () => {
-        // TODO implement logging out
         // alert("Logged out of account");
         localStorage.setItem('nccjwt', '');
     }
@@ -71,11 +70,11 @@ class Header extends Component {
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
+                    text={loggedOut ? "Log In" : "Log Out"}
                     intent={loggedOut ? "success" : "danger"}
                     icon={loggedOut ? "log-in" : "log-out"}
-                    text={loggedOut ? "Log In" : "Log Out"}
-                    onClick={() => loggedOut ? this.logIn() : this.logOut()}
                     href={loggedOut ? "/login" : "/"}
+                    onClick={() => loggedOut ? this.logIn() : this.logOut()}
                 />
             </Menu>
         );

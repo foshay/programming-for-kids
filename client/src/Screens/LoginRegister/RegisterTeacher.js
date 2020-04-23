@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RegisterForm from './RegisterForm';
-import OtpInput from 'react-otp-input'
 
 class RegisterTeacher extends Component {
     state = {

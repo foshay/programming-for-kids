@@ -20,7 +20,6 @@ class RegisterForm extends Component {
                     <OtpInput
                         id="otp"
                         onChange={(value) => {
-                            // var value = e.target.value;
                             this.setState({ otp: value });
                             this.props.setOTP(value)
                         } }
