@@ -37,13 +37,13 @@ class ManageAllLessons extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.lessons.map((_, index) => {
-                const id = this.state.lessons[index].lesson_id;
-                const name = this.state.lessons[index].name;
+              {this.state.lessons.map((value, index) => {
+                // const id = this.state.lessons[index].lesson_id;
+                // const name = this.state.lessons[index].name;
                 return (
-                  <tr onClick={() => this.goToLesson(id)} >
-                    <td> {id} </td>
-                    <td> {name} </td>
+                  <tr onClick={() => this.goToLesson(value.id)} >
+                    <td> {value.lesson_id} </td>
+                    <td> {value.name} </td>
                   </tr>
                 )
               })}

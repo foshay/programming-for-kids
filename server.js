@@ -237,8 +237,10 @@ app.post('/NewLesson', (req, res) => {
 
 app.get('/User/:userid', (req, res) => {
     let sql = 'SELECT * FROM User WHERE user_id = ?';
+    // let userid = 
+    // TODO remove userid and replace with username, should make username unique
 
-    db.get(sql, req.params.userid, (err, row) => {
+    db.get(sql, req.userid, (err, row) => {
         if (err) {
             res.status(400).json({
                 "error": err.message,
@@ -255,8 +257,25 @@ app.get('/User/:userid', (req, res) => {
 
 // TODO make an api call to get all Users for the 
 // manageStudents table
-// app.get('/api/Students', (req, res) =>
-// );
+app.get('/api/Student/all', (req, res) => {
+    let sql = 'SELECT * FROM User WHERE is_teacher = 0';
+    let params = [];
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message,
+                "message": "Failure"
+            })
+            return;
+        }
+        res.json({
+            message: "Success",
+            data: rows
+        });
+    });
+
+});
 
 // TODO make an api call to get a User's grades
 // on all lessons

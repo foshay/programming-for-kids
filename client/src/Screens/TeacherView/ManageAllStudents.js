@@ -4,18 +4,17 @@ import { HTMLTable, Card, } from "@blueprintjs/core";
 class ManageAllStudents extends Component {
 
   state = {
-    students : [{student_name: "Johnny Test", overall_grade: "80", student_id: "smithj2"}]
+    students : [{}]
   };
 
   getStudents = async () => {
-    // TODO make api call to get student info
-      // return fetch('api/Students/all')
-      // .then(response => {
-      //     return response.json();
-      // })
-      // .then(json =>{
-      //     this.setState({students: json.data});
-      // });
+    return fetch('api/Student/all')
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        this.setState({ students: json.data });
+      });
   }
 
   goToStudent = (studentID) => {
@@ -35,17 +34,32 @@ class ManageAllStudents extends Component {
           <HTMLTable striped interactive bordered>
             <thead>
               <tr>
-                <th>Name</th>
+                <th>First</th>
+                <th>Last</th>
+                <th>User Name</th>
                 <th>Overall Grade</th>
               </tr>
             </thead>
             <tbody>
+              {/* {this.state.students.map((_, index) => {
+                const id = this.state.lessons[index].lesson_id;
+                const name = this.state.lessons[index].name;
+                return (
+                  <tr onClick={() => this.goToLesson(id)} >
+                    <td> {id} </td>
+                    <td> {name} </td>
+                  </tr>
+                )
+              })} */}
               {this.state.students.map((value, index) => {
                 return (
-                  <tr onClick={() => this.goToStudent(value.student_id)} >
+                  <tr onClick={() => this.goToStudent(value.user_id)} >
                     {/* TODO add first name and last name */}
-                    <td> {value.student_name} </td>
-                    <td> {value.overall_grade + "%"} </td>
+                    <td> {value.first_name} </td>
+                    <td> {value.last_name} </td>
+                    <td> {value.username} </td>
+                    {/* TODO add overall grade */}
+                    <td> {100 + "%"} </td>
                   </tr>
                 )
               })}
