@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup } from "@blueprintjs/core";
+import { Link } from 'react-router-dom';
 
 class LessonMenu extends Component {
 
@@ -20,11 +21,6 @@ class LessonMenu extends Component {
       });
   }
 
-  goToLesson = (lessonID) => {
-    // changes the url when a button is clicked
-    this.props.history.push(`/Lesson/${lessonID}`);
-  }
-
   componentDidMount(){
       this.getLessons();
   }
@@ -35,15 +31,15 @@ class LessonMenu extends Component {
           <ButtonGroup large vertical>
             { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
-            {this.state.lessons.map((_, index) => {
+            {this.state.lessons.map((value, _) => {
               return (
                 <div >
-                  <Button
-                    // example text: Lesson 1: Proof of Concept 1
-                    text={"Lesson " + this.state.lessons[index].lesson_id + ": " + this.state.lessons[index].name}
-                    icon="code-block"
-                    onClick={() => this.goToLesson(this.state.lessons[index].lesson_id)}
-                  />
+                  <Link to={"/Lesson/" + value.lesson_id}>
+                    <Button
+                      // example text: Lesson 1: Proof of Concept 1
+                      text={"Lesson " + value.lesson_id + ": " + value.name}
+                    />
+                  </Link>
                   <br />
                   <br />
                 </div>
