@@ -11,7 +11,7 @@ class LessonScreen extends Component {
     getLesson = async () => {
         const string = this.props.match.params.lessonID;
         console.log("String: " + string);
-        return fetch(string)
+        return fetch('/api/lesson/' + string)
         .then(response =>{
             return response.json();
         })
