@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { HTMLTable, Button, Card, } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
 
+            // {/* button for delete student */}
+            // {/* student's overall grade */}
+            // {/* student's grade for each assignment */}
 class ManageAllStudents extends Component {
 
   state = {
