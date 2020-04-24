@@ -8,10 +8,11 @@ import EditField from '../../SmallComponents/EditField';
 
 class ManageLesson extends Component {
   state={
-    name:'',
-    question:'',
-    hint:'',
-    answer:'',
+    // TODO change this to take in array of props
+    name: '',
+    question: '',
+    hint: '',
+    answer: '',
   }
 
   componentDidMount() {
@@ -19,19 +20,22 @@ class ManageLesson extends Component {
   }
 
   getLessonInfo = async () => {
-    const lesson_id = this.props.match.params.lessonID;
-    return fetch('/api/lesson/' + lesson_id)
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        this.setState({
-          name: json.data.name,
-          question: json.data.question,
-          hint: json.data.hint,
-          answer: json.data.answer
-        });
-      });
+      const lesson_id = this.props.match.params.lessonID;
+      // only load in info if this is an existing lesson
+      if (lesson_id != 'NewLesson'){
+        return fetch('/api/lesson/' + lesson_id)
+          .then(response => {
+            return response.json();
+          })
+          .then(json => {
+            this.setState({
+              name: json.data.name,
+              question: json.data.question,
+              hint: json.data.hint,
+              answer: json.data.answer
+            });
+          });
+      }
   }
 
   handleSave = async e => {
@@ -43,31 +47,13 @@ class ManageLesson extends Component {
     var lesson_id = this.props.match.params.lessonID;
 
     // check that none are empty
-    if ((name == '') || (question = '') || (hint = '') || (answer = '')) {
+    if ((name === '') || (question === '') || (hint === '') || (answer === '')) {
       alert("Must fill in all fields. Content Not Saved.");
       return;
     }
 
-    if (lesson_id != 'NewLesson') {
-      const response = await fetch('/api/EditLesson/' + lesson_id, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "name": name,
-          "question": question,
-          "hint": hint,
-          "answer": answer,
-          // TODO add xml
-          // TODO add grading script?
-        })
-      });
-      const body = await response.text();
-      console.info("Updated " + body);
-      alert("Lesson Updated");
-    }
-    else {
+    // If we are creating a new lesson
+    if (lesson_id === 'NewLesson') {
       const response = await fetch('/api/NewLesson', {
         method: 'POST',
         headers: {
@@ -85,6 +71,26 @@ class ManageLesson extends Component {
       const body = await response.text();
       console.info("Created " + body);
       alert("Lesson Created");
+    }
+    // If we are editing an existing lesson
+    else {
+      const response = await fetch('/api/EditLesson/' + lesson_id, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "name": name,
+          "question": question,
+          "hint": hint,
+          "answer": answer,
+          // TODO add xml
+          // TODO add grading script?
+        })
+      });
+      const body = await response.text();
+      console.info("Updated " + body);
+      alert("Lesson Updated");
     }
   };
 
@@ -112,28 +118,28 @@ class ManageLesson extends Component {
           title="Lesson Name"
           placeholder="Click to edit..."
           value={this.state.name}
-          onChange={(e) => this.setState({ name: e.value })}
+          onChange={(value) => { this.setState({ name: value }); }}
         />
         <br />
         <EditField
           title="Question"
           placeholder="Click to edit..."
           value={this.state.question}
-          onChange={(e) => this.setState({ question: e.value })}
+          onChange={(value) => this.setState({ question: value })}
         />
         <br />
         <EditField
           title="Hint"
           placeholder="Click to edit..."
           value={this.state.hint}
-          onChange={(e) => this.setState({ hint: e.value })}
+          onChange={(value) => this.setState({ hint: value })}
         />
         <br />
         <EditField
           title="Answer"
           placeholder="Click to edit..."
           value={this.state.answer}
-          onChange={(e) => this.setState({ answer: e.value })}
+          onChange={(value) => this.setState({ answer: value })}
         />
         <br />
         <BlocklyCompEdit lessonID={this.props.match.params.lessonID} />
