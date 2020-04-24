@@ -10,7 +10,8 @@ class ManageLesson extends Component {
   state={
     name:'',
     question:'',
-    hint:''
+    hint:'',
+    answer:'',
   }
 
   componentDidMount() {
@@ -18,21 +19,19 @@ class ManageLesson extends Component {
   }
 
   getLessonInfo = async () => {
-      const lesson_id = this.props.match.params.lessonID;
-      if (lesson_id != 'NewLesson'){
-        return fetch('/api/lesson/' + lesson_id)
-          .then(response => {
-            return response.json();
-          })
-          .then(json => {
-            this.setState({
-              name: json.data.name,
-              question: json.data.question,
-              hint: json.data.hint,
-              answer: json.data.answer
-            });
-          });
-      }
+    const lesson_id = this.props.match.params.lessonID;
+    return fetch('/api/lesson/' + lesson_id)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        this.setState({
+          name: json.data.name,
+          question: json.data.question,
+          hint: json.data.hint,
+          answer: json.data.answer
+        });
+      });
   }
 
   handleSave = async e => {
@@ -40,28 +39,53 @@ class ManageLesson extends Component {
     var name = this.state.name;
     var question = this.state.question;
     var hint = this.state.hint;
+    var answer = this.state.answer;
+    var lesson_id = this.props.match.params.lessonID;
+
     // check that none are empty
-    if ((name == '') || (question = '') || (hint = '')){
+    if ((name == '') || (question = '') || (hint = '') || (answer = '')) {
       alert("Must fill in all fields. Content Not Saved.");
       return;
     }
 
-    const response = await fetch('/EditLesson', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "name": name,
-        "question": question,
-        "hint": hint,
-        // TODO add xml
-      })
-    });
-
-    const body = await response.text();
-    console.info("Created " + body);
-    alert("Lesson Created");
+    if (lesson_id != 'NewLesson') {
+      const response = await fetch('/api/EditLesson/' + lesson_id, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "name": name,
+          "question": question,
+          "hint": hint,
+          "answer": answer,
+          // TODO add xml
+          // TODO add grading script?
+        })
+      });
+      const body = await response.text();
+      console.info("Updated " + body);
+      alert("Lesson Updated");
+    }
+    else {
+      const response = await fetch('/api/NewLesson', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "name": name,
+          "question": question,
+          "hint": hint,
+          "answer": answer,
+          // TODO add xml
+          // TODO add grading script?
+        })
+      });
+      const body = await response.text();
+      console.info("Created " + body);
+      alert("Lesson Created");
+    }
   };
 
   render() {
@@ -103,6 +127,13 @@ class ManageLesson extends Component {
           placeholder="Click to edit..."
           value={this.state.hint}
           onChange={(e) => this.setState({ hint: e.value })}
+        />
+        <br />
+        <EditField
+          title="Answer"
+          placeholder="Click to edit..."
+          value={this.state.answer}
+          onChange={(e) => this.setState({ answer: e.value })}
         />
         <br />
         <BlocklyCompEdit lessonID={this.props.match.params.lessonID} />
