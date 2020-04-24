@@ -80,7 +80,7 @@ class RegisterForm extends Component {
                             onChange={(e) => {
                                 var value = e.target.value;
                                 this.setState({ password: value });
-                                if (this.state.passwordConfirm == value) {
+                                if (this.state.passwordConfirm === value) {
                                     this.props.setPassword(value);
                                 }
                             }}

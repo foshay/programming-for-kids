@@ -51,9 +51,9 @@ class ManageAllStudents extends Component {
                   </tr>
                 )
               })} */}
-              {this.state.students.map((value, index) => {
+              {this.state.students.map((value, key) => {
                 return (
-                  <tr onClick={() => this.goToStudent(value.user_id)} >
+                  <tr onClick={() => this.goToStudent(value.user_id)} key={key}>
                     <td> {value.first_name} </td>
                     <td> {value.last_name} </td>
                     <td> {value.username} </td>

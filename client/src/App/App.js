@@ -53,14 +53,14 @@ class App extends Component {
           return false;
         }
         // Teacher is logged in
-        else if (decoded.teacher == true) {
-          if (userType == "teacher"){
+        else if (Boolean(decoded.teacher) === true) {
+          if (userType === "teacher"){
             return true;
           }
         }
         // Student is logged in
         else {
-          if (userType == "student"){
+          if (userType === "student"){
             return true;
           }
         }

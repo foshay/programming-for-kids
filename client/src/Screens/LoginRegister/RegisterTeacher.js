@@ -18,8 +18,11 @@ class RegisterTeacher extends Component {
         var first_name = this.state.first_name;
         var last_name = this.state.last_name;
         var otp = this.state.otp;
+        if (username === '' | password === '' | first_name === '' | last_name === '' | otp === '') {
+            alert("Must fill in all fields to register");
+            return;
+        }
         // TODO add code to handle the 'teacher code' otp
-        var otp = this.state.otp;
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -36,10 +39,10 @@ class RegisterTeacher extends Component {
         });
         const body = await response.text();
 
-        if (body == 'Failure') {
+        if (body === 'Failure') {
             alert("Username taken");
             console.info("Taken: " + body);
-        } else if (body == "DB Failure") {
+        } else if (body === "DB Failure") {
             alert("Issue creating account");
         } else {
             console.info("Created " + body);

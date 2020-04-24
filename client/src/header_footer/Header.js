@@ -27,7 +27,7 @@ class Header extends Component {
                     return false;
                 }
                 //Teacher is logging in
-                else if (decoded.teacher == true) {
+                else if (Boolean(decoded.teacher) === true) {
                     console.log("Teacher logged in");
                     this.setState({ teacherLoggedIn: true });
                 }

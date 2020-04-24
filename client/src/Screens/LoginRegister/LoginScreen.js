@@ -31,7 +31,7 @@ class LoginScreen extends Component {
         var body = await response.json();
         var message = await body.message;
         console.log("Console message: " + message);
-        if(message == "Success"){
+        if(message === "Success"){
             alert("Login successful");
             var token = await body.token;
             localStorage.setItem('nccjwt', token);

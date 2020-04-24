@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RegisterForm from './RegisterForm';
-import { user } from 'blockly';
 
 class RegisterStudent extends Component {
     state = {
@@ -34,10 +33,10 @@ class RegisterStudent extends Component {
         const body = await response.text();
 
         // TODO change generic Failure message
-        if (body == 'Failure') {
+        if (body === 'Failure') {
             alert("Username taken");
             console.info("Taken: " + body);
-        } else if (body == "DB Failure") {
+        } else if (body === "DB Failure") {
             alert("Issue creating account");
         } else {
             console.info("Created " + body);

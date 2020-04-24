@@ -22,7 +22,7 @@ class ManageLesson extends Component {
   getLessonInfo = async () => {
       const lesson_id = this.props.match.params.lessonID;
       // only load in info if this is an existing lesson
-      if (lesson_id != 'NewLesson'){
+      if (lesson_id !== 'NewLesson'){
         return fetch('/api/lesson/' + lesson_id)
           .then(response => {
             return response.json();
