@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { HTMLTable, Card } from "@blueprintjs/core";
+import { HTMLTable, Card, Button } from "@blueprintjs/core";
+import { Link } from 'react-router-dom';
 
 class ManageAllLessons extends Component {
   state = {
@@ -28,6 +29,14 @@ class ManageAllLessons extends Component {
   render() {
     return (
       <div className="Body">
+        <Link to="/ManageLessons/NewLesson">
+          <Button
+            text="Create New Lesson"
+            icon="build"
+            intent="success"
+          />
+        </Link>
+        <br/>
         <Card>
           <HTMLTable striped interactive bordered>
             <thead>
@@ -36,15 +45,13 @@ class ManageAllLessons extends Component {
                 <th>Lesson Name</th>
               </tr>
             </thead>
-            <tbody>
-              {this.state.lessons.map((value, index) => {
-                // const id = this.state.lessons[index].lesson_id;
-                // const name = this.state.lessons[index].name;
+            <tbody key="table-body">
+              {this.state.lessons.map((value, key) => {
                 return (
-                  <tr onClick={() => this.goToLesson(value.lesson_id)} >
-                    <td> {value.lesson_id} </td>
-                    <td> {value.name} </td>
-                  </tr>
+                    <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
+                      <td > {value.lesson_id} </td>
+                      <td > {value.name} </td>
+                    </tr>
                 )
               })}
             </tbody>
