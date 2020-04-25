@@ -163,7 +163,7 @@ app.post('/api/grade', (req, res) => {
 // module.exports = (app, db) =>{
 
 /************** Lesson Requests ****************/
-//GET all Lessons
+// GET all Lessons
 app.get('/api/Lesson/all', (req, res) => {
     let sql = 'SELECT * FROM Lesson  ';
     let params = [];
@@ -182,12 +182,12 @@ app.get('/api/Lesson/all', (req, res) => {
     });
 });
 
-//GET single Lesson
+// GET single Lesson
 app.get('/api/Lesson/:id', (req, res) => {
     let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
     let lessonNum = [req.params.id];
 
-    //get query to database for lesson with :id
+    // get query to database for lesson with :id
     db.get(sql, lessonNum, (err, row) => {
         if (err) {
             res.status(400).json({
@@ -227,6 +227,33 @@ app.post('/api/NewLesson', (req, res,next) => {
             res.send("DB Failure");
         } else {
             console.log("Lesson creation succecssful: " + name);
+            res.send("Success");
+        }
+    });
+});
+
+// Update an existing lesson
+app.put('/api/UpdateLesson', (req, res,next) => {
+    // TODO add lesson number
+    let body = req.body;
+    let lesson_id = body.lesson_id;
+    let question = body.question;
+    let answer = body.answer;
+    let name = body.name;
+    let hint = body.hint;
+    // TODO add xml
+    let xml = null;
+
+    let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
+
+    let params = [question, answer, name, hint, xml, lesson_id];
+    console.log(params);
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            console.log("Lesson update succecssful: " + name);
             res.send("Success");
         }
     });

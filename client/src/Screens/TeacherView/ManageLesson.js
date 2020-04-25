@@ -80,23 +80,23 @@ class ManageLesson extends Component {
     }
     // If we are editing an existing lesson
     else {
-      const response = await fetch('/api/EditLesson/' + lesson_id, {
-        method: 'POST',
+      const response = await fetch('/api/UpdateLesson/', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "name": name,
-          "question": question,
-          "hint": hint,
-          "answer": answer,
           "lesson_id": lesson_id,
+          "question": question,
+          "answer": answer,
+          "name": name,
+          "hint": hint,
           // TODO add xml
           // TODO add grading script?
         })
       });
       const body = await response.text();
-      if (body.message === "Success"){
+      if (body === "Success"){
         console.info("Updated " + name);
         alert("Lesson Updated");
       }
