@@ -60,17 +60,23 @@ class ManageLesson extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "name": name,
           "question": question,
-          "hint": hint,
           "answer": answer,
+          "name": name,
+          "hint": hint,
           // TODO add xml
           // TODO add grading script?
         })
       });
       const body = await response.text();
-      console.info("Created " + body);
-      alert("Lesson Created");
+      if (body === "Success"){
+        console.info("Created " + name);
+        alert("Lesson Created");
+      }
+      else {
+        console.info("Error: " + body);
+        alert("Database Error");
+      }
     }
     // If we are editing an existing lesson
     else {
@@ -84,13 +90,20 @@ class ManageLesson extends Component {
           "question": question,
           "hint": hint,
           "answer": answer,
+          "lesson_id": lesson_id,
           // TODO add xml
           // TODO add grading script?
         })
       });
       const body = await response.text();
-      console.info("Updated " + body);
-      alert("Lesson Updated");
+      if (body.message === "Success"){
+        console.info("Updated " + name);
+        alert("Lesson Updated");
+      }
+      else {
+        console.info("Error: " + body);
+        alert("Database Error");
+      }
     }
   };
 

@@ -204,31 +204,31 @@ app.get('/api/Lesson/:id', (req, res) => {
 });
 
 // Make a new lesson
-app.post('/api/NewLesson', (req, res) => {
-    let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint) VALUES (?,?,?,?,?)';
+app.post('/api/NewLesson', (req, res,next) => {
     // TODO add lesson number
     // TODO add group by lesson_number ascending
-    // TODO set grade for all students to 0
+    // TODO set grade for this lesson for all students to 0
+    let body = req.body;
+    // TODO generate unique lesson ID
+    let lesson_id = 100;
+    let question = body.question;
+    let answer = body.answer;
+    let name = body.name;
+    let hint = body.hint;
+    // TODO add xml
+    let xml = null;
 
-    let lessonID = 100;
-    let lessonName = [req.params.name];
-    let lessonQuestion = [req.params.question];
-    let lessonHint = [req.params.hint];
-
-    let values = [lessonID, lessonName, lessonQuestion, lessonHint]
-
-    //get query to database for lesson with :id
-    db.get(sql, values, (err, row) => {
-        if (err){
-            res.status(400).json({
-                "error" : err.message,
-                "message" : "Failure"});
-            return;
+    let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?)';
+    let params = [lesson_id, question, answer, name, hint, xml];
+    console.log(params);
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            console.log("Lesson creation succecssful: " + name);
+            res.send("Success");
         }
-        res.json({
-            message: "Success",
-            data: row
-        });
     });
 });
 
