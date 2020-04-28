@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 
-import Header from '../Header_Footer/Header.js';
+import Header from '../header_footer/Header.js';
 
 // Login and Register Screens
 import LoginMenu from '../Screens/LoginRegister/LoginMenu.js'
