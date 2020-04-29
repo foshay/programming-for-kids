@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS Lesson;
 DROP TABLE IF EXISTS User;
 
 CREATE TABLE Lesson(
-  lesson_id INT PRIMARY KEY NOT NULL,
+  lesson_id INTEGER PRIMARY KEY AUTOINCREMENT,
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
   name TEXT NOT NULL,
@@ -66,8 +66,7 @@ CREATE TABLE User(
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   username TEXT NOT NULL,
-  password TEXT NOT NULL,
-  session_id INT
+  password TEXT NOT NULL
 );
 
 INSERT INTO User(user_id, first_name, last_name, username, password)
