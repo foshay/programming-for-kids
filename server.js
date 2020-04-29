@@ -206,7 +206,6 @@ app.get('/api/Lesson/:id', (req, res) => {
 
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
-    // TODO add group by lesson_number ascending
     // TODO set grade for this lesson for all students to 0
     let body = req.body;
     let lesson_id = uuidv4();
@@ -217,16 +216,27 @@ app.post('/api/NewLesson', (req, res,next) => {
     // TODO add xml
     let xml = null;
 
-    let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?)';
-    let params = [lesson_id, question, answer, name, hint, xml];
-    console.log(params);
-    db.run(sql, params, (err) => {
+    let sql = 'SELECT MAX (lesson_number) FROM Lesson';
+    db.get(sql, [], (err, row) => {
         if (err) {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log("Lesson creation succecssful: " + name);
-            res.send("Success");
+            console.log(row);
+            lesson_number = row["MAX (lesson_number)"] + 1;
+            console.log(lesson_number);
+            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
+            let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
+            console.log(params);
+            db.run(sql, params, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.send("DB Failure");
+                } else {
+                    console.log("Lesson creation succecssful: " + name);
+                    res.send("Success");
+                }
+            });
         }
     });
 });
