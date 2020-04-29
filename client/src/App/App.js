@@ -1,51 +1,145 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route} from "react-router-dom";
-//import logo from './logo.svg';
-//import { Text, View, StyleSheet } from 'react-native';
-//import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-//import Header from '../header_footer/Header.js'
-//import Footer from '../header_footer/Footer.js'
-//import BlocklyComp from '../BlocklyComp.js'
-//import { AnchorButton, Button, Code, H5, Intent, Switch as bpSwitch,Navbar, Alignment } from "@blueprintjs/core";
+import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
+
 import Header from '../header_footer/Header.js';
-import Footer from '../header_footer/Footer.js';
-import LoginMenu from '../Menus/LoginMenu.js'
-import LoginScreen from '../Menus/LoginScreen.js';
-import RegisterScreen from '../Menus/RegisterScreen.js';
-import HomeScreen from '../Menus/HomeScreen.js'
-import LessonMenu from '../Menus/LessonMenu.js'
-import LessonScreen from '../Lesson_comps/LessonScreen.js'
-import CardGame from '../Menus/CardGameMenu.js'
-//import LessonTemplate from '../Lesson_comps/LessonTemplate.js'
+
+// Login and Register Screens
+import LoginMenu from '../Screens/LoginRegister/LoginMenu.js'
+import LoginScreen from '../Screens/LoginRegister/LoginScreen.js';
+import RegisterChoice from '../Screens/LoginRegister/RegisterChoice.js';
+import RegisterStudent from '../Screens/LoginRegister/RegisterStudent.js';
+import RegisterTeacher from '../Screens/LoginRegister/RegisterTeacher.js';
+
+// Student Screens
+import HomeScreen from '../Screens/StudentView/HomeScreen.js'
+import LessonMenu from '../Screens/StudentView/LessonMenu.js'
+import CardGame from '../Screens/StudentView/CardGameMenu.js'
+import LessonScreen from '../Screens/StudentView/LessonScreen.js'
+
+// Teacher Screens
+import TeacherHome from '../Screens/TeacherView/TeacherHome.js';
+import ManageAllStudents from '../Screens/TeacherView/ManageAllStudents.js';
+import ManageStudent from '../Screens/TeacherView/ManageStudent.js';
+import ManageAllLessons from '../Screens/TeacherView/ManageAllLessons.js';
+import ManageLesson from '../Screens/TeacherView/ManageLesson.js';
+import NewLesson from '../Screens/TeacherView/NewLesson.js';
+
+// CSS files
 import '../CSS_files/App.css';
-//require('./Editor.jsx')
+import '../CSS_files/Body.css';
+import "../CSS_files/header_footer.css"
+import "normalize.css";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+// import Home from '../Screens/Home.js';
+
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary";
 
 class App extends Component {
-render() {
+  state = {
+    studentLoggedIn: false,
+    teacherLoggedIn: false,
+  };
+
+  checkTokenRoute = () => {
+    console.log("checking token");
+    var token = localStorage.getItem('nccjwt');
+    if (!token) {
+      console.log("CT: No Token");
+      return "none";
+    }
+    else {
+      jwt.verify(token, secret, (err, decoded) => {
+        if (err) {
+          console.log("Error: " + err);
+          return "none";
+        }
+        // Teacher is logged in
+        else if (Boolean(decoded.teacher) === true) {
+          console.log("ctr Teacher");
+          return "teacher";
+        }
+        // Student is logged in
+        else {
+          console.log("ctr Student");
+          return "student";
+        }
+      });
+    }
+  }
+
+
+  render() {
     return (
       <div className="App">
-        <Header/>
-        
-          <Router>
-              <Route exact path="/" component={LoginMenu} />
-              <Route exact path="/register" component={RegisterScreen} />
-              <Route exact path="/login" component={LoginScreen} />
-              <Route exact path="/Home" component={HomeScreen} />
-              <Route exact path="/LessonMenu" component={LessonMenu} />
-              <Route exact path="/CardGame" component={CardGame} />
-              <Route path='/Lesson/:lessonID' component={LessonScreen} />
-              {/* <Route path={`${LessonScreen}/:id`}  /> */}
+        <Header studentLoggedIn={this.state.studentLoggedIn} teacherLoggedIn={this.state.teacherLoggedIn}/>
 
-              {/* <Link to="/Home"><button>Home</button></Link>
-              
-              <Link to="/LessonMenu"><button>Lessons</button></Link>
-              <Link to="/"><button>Log in</button></Link> */}
-          </Router>
+        <Router >
+          {/* The components below are accessible to users that have not logged in*/}
+          <Route exact path="/" component={LoginMenu} />
+          <Route exact path="/Register" component={RegisterChoice} />
+          <Route exact path="/Register/Student" component={RegisterStudent} />
+          <Route exact path="/Register/Teacher" component={RegisterTeacher} />
+          <Route exact path="/login" component={LoginScreen} />
 
-        <Footer/>
-        </div>
+          {/* The components below should only be accessible for logged in students */}
+          <ProtectedRoute exact path="/Home"
+            loggedIn={() => this.checkTokenRoute === "student"} component={HomeScreen} />
+          <ProtectedRoute exact path="/LessonMenu"
+            loggedIn={() => this.checkTokenRoute === "student"} component={LessonMenu} />
+          <ProtectedRoute exact path="/CardGame"
+            loggedIn={() =>this.checkTokenRoute === "student"} component={CardGame} />
+          <ProtectedRoute path='/Lesson/:lessonID'
+            loggedIn={() => this.checkTokenRoute === "student"} component={LessonScreen} />
+
+          {/* The components below should only be accessible for logged in teachers*/}
+          <ProtectedRoute exact path='/teacherHome'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={TeacherHome} />
+          <ProtectedRoute exact path='/manageStudents'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllStudents} />
+          <ProtectedRoute path='/manageStudents/:studentID'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageStudent} />
+          <ProtectedRoute exact path='/manageLessons'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllLessons} />
+          <ProtectedRoute path='/manageLessons/:lessonID'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageLesson} />
+          <ProtectedRoute exact path='/newLesson'
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={NewLesson} />
+
+        </Router>
+      </div>
     );
   }
 }
+
+// This component was made with code from a tutorial
+// https://codedaily.io/tutorials/49/Create-a-ProtectedRoute-for-Logged-In-Users-with-Route-Redirect-and-a-Render-Prop-in-React-Router
+const ProtectedRoute = ({ component: Comp, loggedIn, path, ...params }) => {
+  return (
+    <Route
+      path={path}
+      {...params}
+      render={(props) => {
+        return loggedIn ? (
+          <Comp {...props} />
+        ) : (
+            // When the user tries to go to a page that they should not be able
+            // to see unless logged in, they are redirected to "/"
+            <Redirect
+              to={{
+                pathname: "/",
+                state: {
+                  prevLocation: path,
+                  error: "You need to login first!",
+                },
+              }}
+            />
+          );
+      }}
+    />
+  );
+};
+
 
 export default App;

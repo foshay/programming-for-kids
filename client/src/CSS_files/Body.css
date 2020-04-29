@@ -1,20 +1,65 @@
-.BodyMenu {
-    background-color: whitesmoke;
-    /* position: flex; */
-    /* top: 500px; */
-    z-index: -1;
-    position: fixed;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+.Body {
+    padding-top: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .BackTopLeft {
+    padding-top: 130px;
+    display: flex;
+    justify-content: left;
+} */
+
+.BodyTable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    right: 0;
 }
 
 .BodyMenu-Lesson{
     position: absolute;
-    /* top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%); */
+    /* setting the z index so that
+    none of the components display above header
+    or footer */
+    z-index: -1;
     width:100%;
     padding-top: 10vh;
     padding-bottom: 10vh;
+    margin: 1vh;
+}
+
+.Edit-Lesson{
+    position: flex;
+    z-index: -1;
+    padding-top: 10vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+.Text-Edit-Title{
+    font-size: large;
+}
+
+.Toolbox-Toggle-Button{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    border-radius: 50%;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 10px;
+    margin: 1vh;
+}
+
+.injectionDiv{
+    z-index: 2;
+}
+
+.OTP-container{
+    margin: 1vh;
 }

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-// blueprint imports
-import { Button } from '@blueprintjs/core';
-
-// Our components
-import ToggleToolbox from './ToggleToolbox.js';
+import { Button, } from '@blueprintjs/core';
 
 // Blockly imports
 import Blockly from 'blockly';
 import ReactBlocklyComponent from 'react-blockly/dist-modules';
 import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
+import ToggleToolbox from './ToggleToolbox';
 require('blockly/python');
 
 class Editor extends React.Component {
@@ -93,7 +90,8 @@ componentDidMount = (workspace) => {
   )
 }
 
-class BlocklyComp extends Component {
+
+class BlocklyCompEdit extends Component {
     state = {
       response: '',
       post: '',
@@ -149,32 +147,34 @@ class BlocklyComp extends Component {
       
       this.setState({ responseToPost: body });
     };
-  
 
   render() {
     return (
-      <div> 
+      <div>
         <ToggleToolbox/>
-        <div style={{ height: '600px', width: `100%` }} id="blockly" />
-        <p>{this.state.response}</p>
-        <textarea
-          style={{display: "none"}}
-          disabled
-          id="code"
-        />
-        <textarea
-          style={{display: "none"}}
-          disabled
-          id="newxml"
-        />
-        <Button
-          text="Grade code"
-          large
-          icon="tick"
-          id="gradeButton"
-          intent="success"
-          onClick={(e) => this.handleSubmit(e)}
-        />
+        <div style={{ height: '600px', width: `100%` }} id="blockly"/>
+        <p>{this.state.response}</p> 
+        <form onSubmit={this.handleSubmit}>
+          <textarea
+            style={{display: "none"}}
+            type="text"
+            disabled
+            id="code"
+          />
+          <textarea
+            style={{display: "none"}}
+            disabled
+            id="newxml"
+            />
+          {/* <Button
+            text="Grade code"
+            large
+            icon="tick"
+            id="gradeButton"
+            intent="success"
+            onClick={(e) => this.handleSubmit(e)}
+          /> */}
+        </form>
         <p>{this.state.responseToPost}</p>
       </div>
     )
@@ -182,4 +182,4 @@ class BlocklyComp extends Component {
 }
 
 
-export default BlocklyComp
+export default BlocklyCompEdit

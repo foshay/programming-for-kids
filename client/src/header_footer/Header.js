@@ -1,66 +1,93 @@
 import React, { Component } from 'react';
 import { Button, Menu, MenuDivider, MenuItem, Popover, Position } from "@blueprintjs/core";
 
-//import HomeScreen from "../Menus/HomeScreen.js"
-//import LessonMenu from "../Menus/LessonMenu.js"
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary";
 
 class Header extends Component {
-    render(){
+    state ={
+        studentLoggedIn: false,
+        teacherLoggedIn: false,
+    }
+
+    logOut = () => {
+        // alert("Logged out of account");
+        localStorage.setItem('nccjwt', '');
+    }
+
+    checkTokenMenu = () => {
+        var token = localStorage.getItem('nccjwt');
+        if (!token) {
+            this.setState({ studentLoggedIn: false, teacherLoggedIn: false });
+        }
+        else {
+            jwt.verify(token, secret, (err, decoded) => {
+                if (err) {
+                    console.log("Error: " + err);
+                    return false;
+                }
+                //Teacher is logging in
+                else if (Boolean(decoded.teacher) === true) {
+                    console.log("Teacher logged in");
+                    this.setState({ teacherLoggedIn: true });
+                }
+                else {
+                    console.log("Student logged in");
+                    //Student is logging in
+                    this.setState({ studentLoggedIn: true });
+                    // console.log("In else: " + this.state.studentLoggedIn);
+                }
+            });
+        }
+    }
+
+    render() {
+        const student = this.state.studentLoggedIn;
+        const teacher = this.state.teacherLoggedIn;
+        const loggedOut = !(teacher||student);
         const popMenu = (
             <Menu >
-                <h6>
-                    <ul class="bp3-menu bp3-elevation-1">
-                        <li><MenuItem
-                            class="bp3-menu-item bp3-icon-layout-home"
-                            icon="home" text="Home" href="/Home" />
-                        </li>
-                        <li><MenuItem
-                            class="bp3-menu-item bp3-icon-layout-book"
-                            icon="book" text="Lessons" href="/LessonMenu" />
-                        </li>
-                        <li><MenuItem
-                            class="bp3-menu-item bp3-icon-layout-ninja"
-                            icon="ninja" text="Card Game" href="CardGame" />
-                        </li>
-                        <MenuDivider />
-                        <li><MenuItem
-                            class="bp3-menu-item bp3-icon-layout-cog"
-                            disabled={true} icon="cog" text="Settings">
-                            {/* TODO */}
-                            <li><MenuItem class="bp3-menu-item" text="option coming soon"/></li>
-                        </MenuItem></li>
-                        <MenuDivider />
-                        <li><MenuItem
-                            class="bp3-menu-item bp3-icon-layout-log-out"
-                            intent="danger" icon="log-out" text="Log-Out" href="/" />
-                        </li>
-                    </ul>
-                </h6>
+                <MenuItem icon="home"
+                    text="Home"
+                    href={teacher ? "/TeacherHome" : "/Home"}
+                    disabled={loggedOut}
+                />
+                <MenuItem icon="book"
+                    text={teacher ? "Manage Lessons" : "Lessons"}
+                    href={teacher ? "/ManageLessons" : "/LessonMenu"}
+                    disabled={loggedOut}
+                />
+                <MenuItem
+                    icon={teacher ? "clipboard" : "ninja"}
+                    text={teacher ? "Manage Students" : "Card Game"}
+                    href={teacher ? "/ManageStudents" : "/CardGame"}
+                    disabled={loggedOut}
+                />
+                <MenuDivider />
+                <MenuItem disabled icon="cog" text="Settings">
+                    {/* TODO add Settings*/}
+                    <MenuItem text="option coming soon" />
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem
+                    text={loggedOut ? "Log In" : "Log Out"}
+                    intent={loggedOut ? "success" : "danger"}
+                    icon={loggedOut ? "log-in" : "log-out"}
+                    href={loggedOut ? "/login" : "/"}
+                    onClick={() => loggedOut ? this.logIn() : this.logOut()}
+                />
             </Menu>
         );
 
         return(
-            <div className = "Header">
-                <h2 className = "Header-Title">Native Code Creator</h2>
-                {/* <Navbar>
-                    <Navbar.Group align={Alignment.LEFT}>
-                        <Navbar.Heading>Teach kids code</Navbar.Heading>
-                        <Navbar.Divider />
-                        <Link to="/Home"><Button className="bp3-minimal" icon="home" text="Home" /></Link>
-                        <Link to="/LessonMenu"><Button className="bp3-minimal" icon="book" text="Lessons" /></Link>
-                        <Link to="/"><Button className="bp3-minimal" icon="log-out" text="Log-Out" /></Link>
-                    </Navbar.Group>
-                </Navbar> */}
-                <div className = "Header-Hamburger">
+            <div className="Header">
+                <h2 className="Header-Title">Native Code Creator</h2>
+                <div className="Header-Hamburger">
                     <Popover content={popMenu} position={Position.LEFT_TOP} >
-                        <Button icon="menu" />
+                        <Button onClick={()=>{ this.checkTokenMenu()}}icon="menu" />
                     </Popover>
                 </div>
-
-        </div>
+            </div>
         )
     }
 }

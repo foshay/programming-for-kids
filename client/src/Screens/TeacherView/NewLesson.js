@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { Button} from "@blueprintjs/core";
-import Header from '../header_footer/Header.js'
-import Footer from '../header_footer/Footer.js'
-import '../CSS_files/App.css';
-import '../CSS_files/Body.css';
+import '../../CSS_files/App.css';
+import '../../CSS_files/Body.css';
 
-import "../../../node_modules/normalize.css";
-import "../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "../../../../node_modules/normalize.css";
+import "../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-class HomeScreen extends Component {
+class NewLesson extends Component {
 render() {
     return (
       //<div className="App" position="fixed">
@@ -33,4 +31,4 @@ render() {
   }
 }
 
-export default HomeScreen;
+export default NewLesson;
