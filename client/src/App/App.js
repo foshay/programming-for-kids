@@ -31,6 +31,7 @@ import "../CSS_files/header_footer.css"
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+// import Home from '../Screens/Home.js';
 
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary";
@@ -41,28 +42,28 @@ class App extends Component {
     teacherLoggedIn: false,
   };
 
-  checkTokenRoute = (userType) => {
+  checkTokenRoute = () => {
+    console.log("checking token");
     var token = localStorage.getItem('nccjwt');
     if (!token) {
       console.log("CT: No Token");
+      return "none";
     }
     else {
       jwt.verify(token, secret, (err, decoded) => {
         if (err) {
           console.log("Error: " + err);
-          return false;
+          return "none";
         }
         // Teacher is logged in
         else if (Boolean(decoded.teacher) === true) {
-          if (userType === "teacher"){
-            return true;
-          }
+          console.log("ctr Teacher");
+          return "teacher";
         }
         // Student is logged in
         else {
-          if (userType === "student"){
-            return true;
-          }
+          console.log("ctr Student");
+          return "student";
         }
       });
     }
@@ -84,27 +85,27 @@ class App extends Component {
 
           {/* The components below should only be accessible for logged in students */}
           <ProtectedRoute exact path="/Home"
-            loggedIn={() => this.checkTokenRoute("student")} component={HomeScreen} />
+            loggedIn={() => this.checkTokenRoute === "student"} component={HomeScreen} />
           <ProtectedRoute exact path="/LessonMenu"
-            loggedIn={() => this.checkTokenRoute("student")} component={LessonMenu} />
+            loggedIn={() => this.checkTokenRoute === "student"} component={LessonMenu} />
           <ProtectedRoute exact path="/CardGame"
-            loggedIn={() => this.checkTokenRoute("student")} component={CardGame} />
+            loggedIn={() =>this.checkTokenRoute === "student"} component={CardGame} />
           <ProtectedRoute path='/Lesson/:lessonID'
-            loggedIn={() => this.checkTokenRoute("student")} component={LessonScreen} />
+            loggedIn={() => this.checkTokenRoute === "student"} component={LessonScreen} />
 
           {/* The components below should only be accessible for logged in teachers*/}
           <ProtectedRoute exact path='/teacherHome'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={TeacherHome} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={TeacherHome} />
           <ProtectedRoute exact path='/manageStudents'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={ManageAllStudents} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllStudents} />
           <ProtectedRoute path='/manageStudents/:studentID'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={ManageStudent} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageStudent} />
           <ProtectedRoute exact path='/manageLessons'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={ManageAllLessons} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllLessons} />
           <ProtectedRoute path='/manageLessons/:lessonID'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={ManageLesson} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageLesson} />
           <ProtectedRoute exact path='/newLesson'
-            loggedIn={() => this.checkTokenRoute("teacher")} component={NewLesson} />
+            loggedIn={() => this.checkTokenRoute === "teacher"} component={NewLesson} />
 
         </Router>
       </div>
@@ -115,7 +116,6 @@ class App extends Component {
 // This component was made with code from a tutorial
 // https://codedaily.io/tutorials/49/Create-a-ProtectedRoute-for-Logged-In-Users-with-Route-Redirect-and-a-Render-Prop-in-React-Router
 const ProtectedRoute = ({ component: Comp, loggedIn, path, ...params }) => {
-  // loggedIn ? console.log("PR: logged in") : console.log("PR: not logged in");
   return (
     <Route
       path={path}
