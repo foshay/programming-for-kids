@@ -49,7 +49,7 @@ class ManageAllLessons extends Component {
               {this.state.lessons.map((value, key) => {
                 return (
                     <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
-                      <td > {value.lesson_id} </td>
+                      <td > {value.lesson_number} </td>
                       <td > {value.name} </td>
                     </tr>
                 )

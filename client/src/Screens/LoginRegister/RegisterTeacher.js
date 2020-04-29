@@ -18,7 +18,8 @@ class RegisterTeacher extends Component {
         var first_name = this.state.first_name;
         var last_name = this.state.last_name;
         var otp = this.state.otp;
-        if (username === '' | password === '' | first_name === '' | last_name === '' | otp === '') {
+        // if (username === '' | password === '' | first_name === '' | last_name === '' | otp === '') {
+        if (username === '' | password === '' | first_name === '' | last_name === '') {
             alert("Must fill in all fields to register");
             return;
         }
@@ -55,7 +56,7 @@ class RegisterTeacher extends Component {
             <div className="Body">
                 <RegisterForm
                     registerText="Register Teacher"
-                    requireOTP
+                    //requireOTP
                     handleRegister={(e)=> this.handleRegister(e)}
                     setUsername={(username)=> this.setState({username: username})}
                     setPassword={(password)=> this.setState({password: password})}

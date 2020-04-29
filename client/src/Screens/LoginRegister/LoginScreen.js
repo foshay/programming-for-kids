@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class LoginScreen extends Component {
     state = {
         responseToPost: '',
         username: '',
-        password: ''
+        password: '',
+        loggedIn: false,
     }
 
     handleLogin = async e => {
@@ -25,74 +26,82 @@ class LoginScreen extends Component {
                 "username": username,
                 "password": password,
             })
-
         });
-        //console.log(response.json());
+
         var body = await response.json();
         var message = await body.message;
-        console.log("Console message: " + message);
-        if(message === "Success"){
-            alert("Login successful");
-            var token = await body.token;
-            localStorage.setItem('nccjwt', token);
-        }else{
-            alert("Invalid username or password");
-        }
         this.setState({ responseToPost: message });
         //body is the response from the server after receiving the login information
         //we can use this for authenticating users (cookie or something)
         console.info(this.state.responseToPost);
+        console.log("Console message: " + message);
+        if(message === "Success"){
+            var token = await body.token;
+            localStorage.setItem('nccjwt', token);
+            this.setState({loggedIn: true});
+        }else{
+            alert("Invalid username or password");
+        }
     };
 
     render = () => {
-        return (
-            <div className="Body">
-                <ControlGroup vertical>
-                    <FormGroup
-                        label="Username"
-                        labelFor="text-input"
-                    >
-                        <InputGroup
-                            placeholder="Enter Username..."
-                            id="username"
-                            onChange={e => this.setState({username: e.target.value})}
-                            value={this.state.username}
-                        />
-                    </FormGroup>
-                    <FormGroup
-                        label="Password"
-                        labelFor="text-input"
-                    >
-                        <InputGroup
-                            id="password"
-                            placeholder="Enter Password..."
-                            onChange={e => this.setState({password: e.target.value})}
-                            value={this.state.password}
-                            type="password"
-                        />
-                    </FormGroup>
-                    <ButtonGroup vertical large>
-                        <Button
-                            type="submit"
-                            id="loginButton"
-                            intent="success"
-                            icon="log-in"
-                            text="Log In"
-                            onClick={(e) => this.handleLogin(e)}
-                        />
-                        <br />
-                        <Link to="/">
-                            <Button
-                                text="Back"
-                                intent="warning"
-                                icon="small-cross"
+        // if (this.state.loggedIn){
+        //     return(
+        //         <Redirect to="/"
+        //             token={this.state.token}
+        //         />
+        //     )
+        // }
+        // else {
+            return (
+                <div className="Body">
+                    <ControlGroup vertical>
+                        <FormGroup
+                            label="Username"
+                            labelFor="text-input"
+                        >
+                            <InputGroup
+                                placeholder="Enter Username..."
+                                id="username"
+                                onChange={e => this.setState({ username: e.target.value })}
+                                value={this.state.username}
                             />
-                        </Link>
-                    </ButtonGroup>
-                </ControlGroup>
-            </div>
-        );
+                        </FormGroup>
+                        <FormGroup
+                            label="Password"
+                            labelFor="text-input"
+                        >
+                            <InputGroup
+                                id="password"
+                                placeholder="Enter Password..."
+                                onChange={e => this.setState({ password: e.target.value })}
+                                value={this.state.password}
+                                type="password"
+                            />
+                        </FormGroup>
+                        <ButtonGroup vertical large>
+                            <Button
+                                type="submit"
+                                id="loginButton"
+                                intent="success"
+                                icon="log-in"
+                                text="Log In"
+                                onClick={(e) => this.handleLogin(e)}
+                            />
+                            <br />
+                            <Link to="/">
+                                <Button
+                                    text="Back"
+                                    intent="warning"
+                                    icon="small-cross"
+                                />
+                            </Link>
+                        </ButtonGroup>
+                    </ControlGroup>
+                </div>
+            );
+        }
     }
-}
+// }
 
 export default LoginScreen;

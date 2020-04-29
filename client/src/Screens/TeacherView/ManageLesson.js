@@ -108,6 +108,7 @@ class ManageLesson extends Component {
   };
 
   render() {
+    // TODO add a delete lesson button (with confirmation popup/alert)
     return (
       <div className="Edit-Lesson">
         <ButtonGroup large style={{ paddingBottom: "1vh" }}>

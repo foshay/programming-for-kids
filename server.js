@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite = require('sqlite3').verbose();
@@ -165,7 +166,7 @@ app.post('/api/grade', (req, res) => {
 /************** Lesson Requests ****************/
 // GET all Lessons
 app.get('/api/Lesson/all', (req, res) => {
-    let sql = 'SELECT * FROM Lesson  ';
+    let sql = 'SELECT * FROM Lesson GROUP BY lesson_number';
     let params = [];
     db.all(sql, params, (err, rows) => {
         if (err) {
@@ -185,10 +186,10 @@ app.get('/api/Lesson/all', (req, res) => {
 // GET single Lesson
 app.get('/api/Lesson/:id', (req, res) => {
     let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
-    let lessonNum = [req.params.id];
+    let lesson_id = [req.params.id];
 
     // get query to database for lesson with :id
-    db.get(sql, lessonNum, (err, row) => {
+    db.get(sql, lesson_id, (err, row) => {
         if (err) {
             res.status(400).json({
                 "error": err.message,
@@ -205,12 +206,9 @@ app.get('/api/Lesson/:id', (req, res) => {
 
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
-    // TODO add lesson number
-    // TODO add group by lesson_number ascending
     // TODO set grade for this lesson for all students to 0
     let body = req.body;
-    // TODO generate unique lesson ID
-    let lesson_id = 100;
+    let lesson_id = uuidv4();
     let question = body.question;
     let answer = body.answer;
     let name = body.name;
@@ -218,23 +216,33 @@ app.post('/api/NewLesson', (req, res,next) => {
     // TODO add xml
     let xml = null;
 
-    let sql = 'INSERT INTO Lesson(lesson_id, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?)';
-    let params = [lesson_id, question, answer, name, hint, xml];
-    console.log(params);
-    db.run(sql, params, (err) => {
+    let sql = 'SELECT MAX (lesson_number) FROM Lesson';
+    db.get(sql, [], (err, row) => {
         if (err) {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log("Lesson creation succecssful: " + name);
-            res.send("Success");
+            console.log(row);
+            lesson_number = row["MAX (lesson_number)"] + 1;
+            console.log(lesson_number);
+            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
+            let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
+            console.log(params);
+            db.run(sql, params, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.send("DB Failure");
+                } else {
+                    console.log("Lesson creation succecssful: " + name);
+                    res.send("Success");
+                }
+            });
         }
     });
 });
 
 // Update an existing lesson
 app.put('/api/UpdateLesson', (req, res,next) => {
-    // TODO add lesson number
     let body = req.body;
     let lesson_id = body.lesson_id;
     let question = body.question;
@@ -302,6 +310,11 @@ app.get('/api/Student/all', (req, res) => {
 
 // TODO make an api call to get a User's grades
 // on all lessons
+
+// TODO add api call for reordering lessons
+//  params would be lesson_id and new lesson_number
+// UPDATE Lesson SET lesson_number = lesson_number +1 WHERE lesson_number > ?, (value = old_lesson_num)
+// UPDATE Lesson SET lesson_number = ? WHERE lesson_id = ?, (value = new_lesson_num, lesson_id)
 
 //Only time we need to close database is on SIGINT
 //    process.on('SIGINT', () =>{
