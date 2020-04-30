@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+def grade():
+ results = usercode()
+ if (results == 10):
+  print("True")
+ else:
+  print("False")
