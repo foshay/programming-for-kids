@@ -149,11 +149,11 @@ app.post('/api/grade', (req, res) => {
     var response;
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("printf \"" + req.body.code + "\" > ./users/" + "6969" + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+"6969"+"/pcode/" + req.body.lesson + " " + "6969" + " && rm ./users/"+"6969"+"/pcode/" + req.body.lesson, function (text, error) {
+    runCmd("printf \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user + " && rm ./users/"+req.body.user+"/pcode/" + req.body.lesson, function (text, error) {
         console.log(text);
 
         res.send(
-            `I received your POST request. This is what you sent me: ` + text,
+            `Results of grading your code: ` + text,
         );
     });
 
