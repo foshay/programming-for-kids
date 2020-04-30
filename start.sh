@@ -1,0 +1,1 @@
+npx npm-run-all --parallel client server
