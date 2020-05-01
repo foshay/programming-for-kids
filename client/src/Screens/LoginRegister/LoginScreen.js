@@ -36,6 +36,7 @@ class LoginScreen extends Component {
         console.info(this.state.responseToPost);
         console.log("Console message: " + message);
         if(message === "Success"){
+            alert("Login Successful, click on the hambuger menu.\n");
             var token = await body.token;
             localStorage.setItem('nccjwt', token);
             this.setState({loggedIn: true});
