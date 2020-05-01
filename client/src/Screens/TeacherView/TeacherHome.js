@@ -31,7 +31,7 @@ class TeacherHome extends Component {
               />
             </Link>
             <br />
-            <Link to="/NewLesson">
+            <Link to="/ManageLessons/NewLesson">
               <Button
                 text="New Lesson"
                 className="MenuItem"
