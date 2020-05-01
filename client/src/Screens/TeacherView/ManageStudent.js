@@ -78,7 +78,8 @@ class ManageStudent extends Component {
             />
             <br />
           </ButtonGroup>
-          <h1>Grades Table (not yet implemented)</h1>
+          <h1>Grades Table </h1> 
+          <h3>(not yet implemented)</h3>
         </div>
         // we want to see the grade for each lesson
         // we also want to access the saved xml for each lesson
