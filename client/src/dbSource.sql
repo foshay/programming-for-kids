@@ -36,59 +36,11 @@ VALUES('19efdb93-94d4-4fec-b74e-ac38b32366ea',
         'Use the text category',
         NULL);
 
--- INSERT INTO Lesson(lesson_id,question, answer, name, hint)
--- VALUES(4,
---         'Create an integer, float, char, and string, assign values to them,
---             and print them out with their type',
---         'var a = 10\n
---             var b = 10.05
---             var c = "C"
---             var d = "words" ',
---         'Variables',
---         'Use the type() function');
-
--- INSERT INTO Lesson(lesson_id,question, answer, name, hint)
--- VALUES(5,
---         'Declare 3 integers. Add the first two together and save the result.\n
---             Then subtract the third from that result. \n
---             Then multiply that result by the first number.\n
---             Then divide the result by the second number.\n
---             Print the final result.\n',
---         'var a = 2\n
---             var b = 5\n
---             var c = 8\n
---             var result = a + b\n
---             result = result - c\n
---             result = result * a\n
---             result = result / 2\n
---             print result\n',
---         'Basic Operators',
---         'Remember these operators: (+,-,*,/)');
-
----------------------------------------------------------------------
 CREATE TABLE User(
   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   username TEXT NOT NULL,
   password TEXT NOT NULL,
-  is_teacher BIT,
+  is_teacher BIT
 );
-
-INSERT INTO User(user_id, first_name, last_name, username, password, is_teacher)
-VALUES(1,
-        'Jane',
-        'Doe',
-        'Teacher1',
-        '$2b$10$9hiwF2xfI8Y8GBKhTKTcs.tr9.3zy/DjjhqsqZeIBJoEXNorGDxUK',
-        1);
-
-INSERT INTO User(user_id, first_name, last_name, username, password, is_teacher)
-VALUES(2,
-        'Johnny',
-        'Test',
-        'JohnnyTest',
-        '$2b$10$edG89TNDma3Dvb/O2sBxn.A5Tl.5FCnAXf6OjosVY9/Z7Zvyau81u',
-        0);
-
-
