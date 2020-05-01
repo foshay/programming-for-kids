@@ -3,33 +3,38 @@ DROP TABLE IF EXISTS Lesson;
 DROP TABLE IF EXISTS User;
 
 CREATE TABLE Lesson(
-  lesson_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lesson_id TEXT PRIMARY KEY,
+  lesson_number INTEGER UNIQUE NOT NULL,
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
   name TEXT NOT NULL,
   hint TEXT,
   xml TEXT
 );
-INSERT INTO Lesson(lesson_id,question, answer, name, hint)
-VALUES(1,
+INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml)
+VALUES('ab6da87d-eb81-4151-9715-1b0c24b6a2fe',
+        1,
         'Return 20',
         '20',
         'Proof of Concept 1',
-        'To declare a variable, do "var [variable name]"');
-
-INSERT INTO Lesson(lesson_id,question, answer, name, hint)
-VALUES(2,
+        'To declare a variable, do "var [variable name]"',
+        NULL);
+INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml)
+VALUES('53499506-bd09-47e5-86e7-bcc83e04e9c1',
+        2,
         'Return 10',
         '10',
         'Proof of Concept 2',
-        'To declare a variable, do "var [variable name]"');
-
-INSERT INTO Lesson(lesson_id,question, answer, name, hint)
-VALUES(3,
+        'To declare a variable, do "var [variable name]"',
+        NULL);
+INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml)
+VALUES('19efdb93-94d4-4fec-b74e-ac38b32366ea',
+        3,
         'Create a program that will print out the text "Hello World!"',
-        'Use the print function',
-        'Hello world!',
-        'Use the text category');
+        '''Hello World!''',
+        'Hello World!',
+        'Use the text category',
+        NULL);
 
 -- INSERT INTO Lesson(lesson_id,question, answer, name, hint)
 -- VALUES(4,
@@ -66,11 +71,24 @@ CREATE TABLE User(
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   username TEXT NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  is_teacher BIT,
 );
 
-INSERT INTO User(user_id, first_name, last_name, username, password)
-VALUES(1, 'John', 'Smith', 'smithj', 'password');
+INSERT INTO User(user_id, first_name, last_name, username, password, is_teacher)
+VALUES(1,
+        'Jane',
+        'Doe',
+        'Teacher1',
+        '$2b$10$9hiwF2xfI8Y8GBKhTKTcs.tr9.3zy/DjjhqsqZeIBJoEXNorGDxUK',
+        1);
 
-INSERT INTO User(user_id, first_name, last_name, username, password)
-VALUES(2, 'Jane', 'Doe', 'doej', '12345678');
+INSERT INTO User(user_id, first_name, last_name, username, password, is_teacher)
+VALUES(2,
+        'Johnny',
+        'Test',
+        'JohnnyTest',
+        '$2b$10$edG89TNDma3Dvb/O2sBxn.A5Tl.5FCnAXf6OjosVY9/Z7Zvyau81u',
+        0);
+
+
