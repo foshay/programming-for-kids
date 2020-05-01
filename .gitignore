@@ -13,9 +13,9 @@ build
 # production
 /build
 /client/build
-users/*
 #temp for user generated code
 lesson_*.py
+
 # misc
 .DS_Store
 .env.local
