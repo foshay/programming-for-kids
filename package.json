@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "client": "cd client && npm start",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm server\" \"npm client\""
+    "server": "nodemon server.js localhost 5000",
+    "dev": "npm-run-all --parallel client server"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.23.1",
@@ -12,6 +12,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.3",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-native": "^0.62.2",
@@ -23,6 +24,6 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "npm-run-all": "^4.1.5"
   }
 }

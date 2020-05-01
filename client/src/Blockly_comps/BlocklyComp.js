@@ -14,6 +14,7 @@ import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
 require('blockly/python');
 
+
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -128,26 +129,48 @@ class BlocklyComp extends Component {
     
     handleSubmit = async e => {
       e.preventDefault();
-      var ucode = document.getElementById('code').value;
+      const jwt = require('jsonwebtoken');
+      const secret = "this is temporary";
+      var user = '';
+      console.log("checking token");
+      var token = localStorage.getItem('nccjwt');
+      if (!token) {
+        console.log("CT: No Token");
+        return "none";
+      }
+      else {
+        var ucode = document.getElementById('code').value;
+        jwt.verify(token, secret, (err, decoded) => {
+          if (err) {
+            console.log("Error: " + err);
+            return "none";
+          }
+          else {
+            user = decoded.username;
+          }
+        });
+        const response = await fetch('/api/grade', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "lesson": this.props.lessonID,
+            "code": ucode,
+            "user": user,
+          })
+        });
+        const body = await response.text();
+        
+        this.setState({ responseToPost: body });
+      }
+      
       var newxml = document.getElementById('newxml').value;
       //var lesson = "1";
       //var formData = new FormData();
       //formData.append('code', code);
       //formData.append('lesson', lesson);
-      const response = await fetch('/api/grade', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "lesson": this.props.lessonID,
-          "code": ucode,
-        })
-        
-      });
-      const body = await response.text();
       
-      this.setState({ responseToPost: body });
     };
   
 
