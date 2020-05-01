@@ -224,10 +224,9 @@ app.post('/api/NewLesson', (req, res,next) => {
         } else {
             console.log(row);
             lesson_number = row["MAX (lesson_number)"] + 1;
-            console.log(lesson_number);
+            // console.log(lesson_number);
             sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
             let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
-            console.log(params);
             db.run(sql, params, (err) => {
                 if (err) {
                     console.log(err);
@@ -255,7 +254,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
     let params = [question, answer, name, hint, xml, lesson_id];
-    console.log(params);
+    // console.log(params);
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
@@ -271,10 +270,11 @@ app.put('/api/UpdateLesson', (req, res,next) => {
 
 app.get('/User/:userid', (req, res) => {
     let sql = 'SELECT * FROM User WHERE user_id = ?';
-    // let userid = 
+    let user_id = [req.params.userid];
     // TODO remove userid and replace with username, should make username unique
+    let params = user_id;
 
-    db.get(sql, req.userid, (err, row) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({
                 "error": err.message,

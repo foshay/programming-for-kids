@@ -6,6 +6,13 @@
     align-items: center;
 }
 
+.Body2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* .BackTopLeft {
     padding-top: 130px;
     display: flex;
