@@ -13,7 +13,7 @@ build
 # production
 /build
 /client/build
-/users/*
+users/*
 *.db
 # misc
 .DS_Store
