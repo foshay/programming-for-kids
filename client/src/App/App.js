@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 
 import Header from '../header_footer/Header.js';
+import Loading from '../SmallComponents/Loading.js';
 
 // Login and Register Screens
 import LoginMenu from '../Screens/LoginRegister/LoginMenu.js'
@@ -22,7 +23,6 @@ import ManageAllStudents from '../Screens/TeacherView/ManageAllStudents.js';
 import ManageStudent from '../Screens/TeacherView/ManageStudent.js';
 import ManageAllLessons from '../Screens/TeacherView/ManageAllLessons.js';
 import ManageLesson from '../Screens/TeacherView/ManageLesson.js';
-import NewLesson from '../Screens/TeacherView/NewLesson.js';
 
 // CSS files
 import '../CSS_files/App.css';
@@ -31,61 +31,75 @@ import "../CSS_files/header_footer.css"
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-// import Home from '../Screens/Home.js';
 
+// import { trackPromise } from 'react-promise-tracker';
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary";
 
 class App extends Component {
   state = {
-    studentLoggedIn: false,
-    teacherLoggedIn: false,
+    loggedIn: "",
   };
+
+  componentDidMount = () => {
+    this.checkTokenRoute();
+  }
 
   checkTokenRoute = () => {
     console.log("checking token");
     var token = localStorage.getItem('nccjwt');
     if (!token) {
-      console.log("CT: No Token");
+      console.log("ctr: No Token");
+      this.setState({loggedIn: "none"});
       return "none";
     }
     else {
       jwt.verify(token, secret, (err, decoded) => {
-        if (err) {
-          console.log("Error: " + err);
-          return "none";
-        }
+        var loggedIn = "none";
+        if (err) { loggedIn = "none"; }
         // Teacher is logged in
-        else if (Boolean(decoded.teacher) === true) {
-          console.log("ctr Teacher");
-          return "teacher";
-        }
+        else if (Boolean(decoded.teacher)) { loggedIn = "teacher"; }
         // Student is logged in
-        else {
-          console.log("ctr Student");
-          return "student";
-        }
+        else { loggedIn = "student"; }
+        // console.log("ctr: " + loggedIn);
+        this.setState({loggedIn: loggedIn});
+        return loggedIn;
       });
     }
   }
 
+    homeComponent = () => {
+      if (this.state.loggedIn === ""){
+        return (Loading);
+      }
+      if (this.state.loggedIn === "student") {
+        console.log("/ Student logged in");
+        return (HomeScreen);
+      }
+      else if (this.state.loggedIn === "teacher") {
+        console.log("/ Teacher logged in");
+        return (TeacherHome);
+      }
+      else {
+        console.log("/ Not logged in");
+        return (LoginMenu);
+      }
+  }
 
   render() {
     return (
       <div className="App">
-        <Header studentLoggedIn={this.state.studentLoggedIn} teacherLoggedIn={this.state.teacherLoggedIn}/>
-
+        <Header studentLoggedIn={this.state.loggedIn === "student"}
+          teacherLoggedIn={this.state.loggedIn === "teacher"} />
         <Router >
           {/* The components below are accessible to users that have not logged in*/}
-          <Route exact path="/" component={LoginMenu} />
+          <Route exact path="/" component={this.homeComponent()} />
           <Route exact path="/Register" component={RegisterChoice} />
           <Route exact path="/Register/Student" component={RegisterStudent} />
           <Route exact path="/Register/Teacher" component={RegisterTeacher} />
           <Route exact path="/login" component={LoginScreen} />
 
           {/* The components below should only be accessible for logged in students */}
-          <ProtectedRoute exact path="/Home"
-            loggedIn={() => this.checkTokenRoute === "student"} component={HomeScreen} />
           <ProtectedRoute exact path="/LessonMenu"
             loggedIn={() => this.checkTokenRoute === "student"} component={LessonMenu} />
           <ProtectedRoute exact path="/CardGame"
@@ -94,8 +108,6 @@ class App extends Component {
             loggedIn={() => this.checkTokenRoute === "student"} component={LessonScreen} />
 
           {/* The components below should only be accessible for logged in teachers*/}
-          <ProtectedRoute exact path='/teacherHome'
-            loggedIn={() => this.checkTokenRoute === "teacher"} component={TeacherHome} />
           <ProtectedRoute exact path='/manageStudents'
             loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllStudents} />
           <ProtectedRoute path='/manageStudents/:studentID'
@@ -104,9 +116,6 @@ class App extends Component {
             loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageAllLessons} />
           <ProtectedRoute path='/manageLessons/:lessonID'
             loggedIn={() => this.checkTokenRoute === "teacher"} component={ManageLesson} />
-          <ProtectedRoute exact path='/newLesson'
-            loggedIn={() => this.checkTokenRoute === "teacher"} component={NewLesson} />
-
         </Router>
       </div>
     );
