@@ -57,11 +57,11 @@ app.post('/api/register', (req, res,next) => {
     let sql = '';
 
     // TODO first have a sql command to check if user already exists
-    sql = 'SELECT FROM User WHERE username = ?'
-    db.get(sql, [username], (err,row) => {
-        console.log(row);
-        console.log(err);
-    });
+    // sql = 'SELECT * FROM User WHERE username = ?'
+    // db.get(sql, [username], (err,row) => {
+    //     console.log(row);
+    //     console.log(err);
+    // });
 
     //Hash Password
     bcrypt.genSalt(10, (err, salt) => {
