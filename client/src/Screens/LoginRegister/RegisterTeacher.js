@@ -47,8 +47,8 @@ class RegisterTeacher extends Component {
         .then(json => {
             const message = json.message;
             console.info(message);
-            if (message === 'Failure') {
-                alert("Username taken");
+            if (message === "Username exists") {
+                alert("Username taken, choose a different username");
                 console.info("Taken: " + username);
             } else if (message === "DB Failure") {
                 alert("Issue creating account");
