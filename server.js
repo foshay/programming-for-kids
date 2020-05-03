@@ -54,14 +54,20 @@ app.post('/api/register', (req, res,next) => {
     let last_name = body.last_name;
     let user_type = body.user_type;
     let otp = body.otp;
+    let sql = '';
 
     // TODO first have a sql command to check if user already exists
+    sql = 'SELECT FROM User WHERE username = ?'
+    db.get(sql, [username], (err,row) => {
+        console.log(row);
+        console.log(err);
+    });
 
     //Hash Password
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, password_hash) => {
             // TODO add sql to ensure username is unique
-            let sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
             if (user_type === "teacher"){
                 // TODO check otp
                 let params = [first_name, last_name, username, password_hash, true];
@@ -94,6 +100,7 @@ app.post('/api/register', (req, res,next) => {
                                 rimraf("./users/" + username);
                                 res.json({
                                     "message": "DB failure",
+                                    "error": err,
                                 });
                             } else {
                                 console.log("User creation succecssful: " + username);
