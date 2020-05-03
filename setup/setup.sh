@@ -5,7 +5,10 @@ export NVM_DIR="$HOME/.nvm"
 nvm install node
 npm install npm@latest -g
 cd "$(dirname "$0")"
+sudo apt-get install sqlite3
+./resetUsers.sh
 cd ../
 npm install
 cd ./client
 npm install
+
