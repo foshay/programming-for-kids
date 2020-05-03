@@ -2,31 +2,44 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
 import { trackPromise } from 'react-promise-tracker';
+import { Loading } from '../../SmallComponents/Loading';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 class LessonMenu extends Component {
   state = {
-    lessons : [{}]
+    lessons : [{}],
+    isLoading: true,
   };
 
   getLessons = async () => {
-    trackPromise(
-      fetch('api/Lesson/all')
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
+    fetch('api/Lesson/all')
+      .then(response => {
+        this.setState({ isLoading: false });
+        return response.json();
+      })
+      .then(json => {
+        if (json.message === "Success") {
           this.setState({ lessons: json.data });
-        })
-    );
+        }
+      })
   }
 
   componentDidMount(){
       this.getLessons();
   }
 
+  loading = () => {
+    return(
+      this.state.isLoading ?
+        <BounceLoader /> :
+        <div />
+    )
+  }
+
   render() {
     return (
       <div className="Body">
+          {this.loading()}
           <ButtonGroup large vertical>
             { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}

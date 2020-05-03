@@ -198,8 +198,8 @@ app.get('/api/Lesson/all', (req, res) => {
     db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(400).json({
-                "error": err.message,
-                "message": "Failure"
+                "message": "Failure",
+                "error": err.message
             });
             return;
         }
