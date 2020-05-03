@@ -55,6 +55,8 @@ app.post('/api/register', (req, res,next) => {
     let user_type = body.user_type;
     let otp = body.otp;
 
+    // TODO first have a sql command to check if user already exists
+
     //Hash Password
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, password_hash) => {
@@ -66,15 +68,20 @@ app.post('/api/register', (req, res,next) => {
                 db.run(sql, params, (err) => {
                     if (err) {
                         console.log(err);
-                        res.send("DB Failure");
+                        res.json({
+                            "message": "DB Failure",
+                        });
                     } else {
                         console.log("User creation succecssful: " + username);
-                        res.send("Success");
+                        res.json({
+                            "message": "Success",
+                        });
                     }
                 });
             }
             else if (user_type === "student"){
                 // TODO set the grades for all existing lessons to 0
+                // TODO make username unique (currently is not working)
                 let params = [first_name, last_name, username, password_hash, false];
                 // Create user via script, then insert them into the database
                 runCmd("./backend/create_user.sh " + username, function (text, err) {
@@ -85,20 +92,27 @@ app.post('/api/register', (req, res,next) => {
                                 console.log(err);
                                 // Remove the new user's directory
                                 rimraf("./users/" + username);
-                                res.send("DB Failure");
+                                res.json({
+                                    "message": "DB failure",
+                                });
                             } else {
                                 console.log("User creation succecssful: " + username);
-                                res.send(text);
+                                res.json({
+                                    "message": "Success",
+                                });
                             }
                         });
                     } else {
-                        res.send(text);
+                        res.json({
+                            "message": text,
+                        });
                     }
                 });
             }
         });
     });
 });
+
 
 //Login checking via hash.
 app.post('/api/login', (req, res, next) => {

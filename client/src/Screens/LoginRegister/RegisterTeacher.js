@@ -24,7 +24,7 @@ class RegisterTeacher extends Component {
             return;
         }
         // TODO add code to handle the 'teacher code' otp
-        const response = await fetch('/api/register', {
+        fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,18 +37,24 @@ class RegisterTeacher extends Component {
                 "user_type": "teacher",
                 "otp": otp,
             })
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(json => {
+            const message = json.message;
+            console.info(message);
+            if (message === 'Failure') {
+                alert("Username taken");
+                console.info("Taken: " + username);
+            } else if (message === "DB Failure") {
+                alert("Issue creating account");
+            } else if (message === "Success") {
+                console.info("Created " + username);
+                alert("User created");
+                this.setState({ created: true });
+            }
         });
-        const body = await response.text();
-
-        if (body === 'Failure') {
-            alert("Username taken");
-            console.info("Taken: " + body);
-        } else if (body === "DB Failure") {
-            alert("Issue creating account");
-        } else {
-            console.info("Created " + body);
-            alert("User created");
-        }
     };
 
     render = () => {
