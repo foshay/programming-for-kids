@@ -3,28 +3,8 @@ import ReactDOM from 'react-dom';
 import './CSS_files/index.css';
 import App from './App/App.js';
 import * as serviceWorker from './serviceWorker';
-// import {usePromiseTracker} from "react-promise-tracker";
 
-// const LoadingIndicator = (props) => {
-//     const { promiseInProgress } = usePromiseTracker();
-//     return (
-//         <div>
-//             {
-//                 (promiseInProgress === true) ?
-//                     <h1>Loading in progress...</h1>
-//                     :
-//                     null
-//             }
-//         </div>
-//     );
-// };
-
-ReactDOM.render(
-    <div>
-        <App />
-        {/* <LoadingIndicator /> */}
-    </div>
-    , document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
