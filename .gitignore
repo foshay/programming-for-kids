@@ -14,6 +14,7 @@ build
 /build
 /client/build
 users/*
+*.db
 # misc
 .DS_Store
 .env.local
