@@ -7,12 +7,10 @@ class LoginScreen extends Component {
         responseToPost: '',
         username: '',
         password: '',
-        loggedIn: false,
+        loggedIn: '',
     }
 
     handleLogin = async e => {
-        // var username = document.getElementById("username").value;
-        // var password = document.getElementById("password").value;
         var username = this.state.username;
         var password = this.state.password;
 
@@ -36,7 +34,6 @@ class LoginScreen extends Component {
         console.info(this.state.responseToPost);
         console.log("Console message: " + message);
         if(message === "Success"){
-            alert("Login Successful, click on the hambuger menu.\n");
             var token = await body.token;
             localStorage.setItem('nccjwt', token);
             this.setState({loggedIn: true});
@@ -46,14 +43,10 @@ class LoginScreen extends Component {
     };
 
     render = () => {
-        // if (this.state.loggedIn){
-        //     return(
-        //         <Redirect to="/"
-        //             token={this.state.token}
-        //         />
-        //     )
-        // }
-        // else {
+        if (this.state.loggedIn){
+            return ( <Redirect to="/"/>)
+        }
+        else {
             return (
                 <div className="Body">
                     <ControlGroup vertical>
@@ -103,6 +96,6 @@ class LoginScreen extends Component {
             );
         }
     }
-// }
+}
 
 export default LoginScreen;
