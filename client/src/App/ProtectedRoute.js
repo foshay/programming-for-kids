@@ -4,10 +4,6 @@ import Loading from '../SmallComponents/Loading';
 const jwt = require('jsonwebtoken');
 
 class ProtectedRoute extends Component {
-    state = {
-        loggedIn: '',
-    }
-
     componentDidMount = () => {
         this.checkTokenRoute();
     }
@@ -16,29 +12,29 @@ class ProtectedRoute extends Component {
         var secret = this.props.secret;
         console.log("checking token");
         var token = localStorage.getItem('nccjwt');
+        var loggedIn = '';
         if (!token) {
             console.log("ctr: No Token");
-            this.setState({loggedIn: "none"});
+            loggedIn = "none";
         }
         else {
             jwt.verify(token, secret, (err, decoded) => {
-                var loggedIn;
                 if (err) { loggedIn = "none"; }
                 // Teacher is logged in
                 else if (Boolean(decoded.teacher)) { loggedIn = "teacher"; }
                 // Student is logged in
                 else { loggedIn = "student"; }
                 console.log("ctr: " + loggedIn);
-                this.setState({loggedIn: loggedIn});
             });
         }
+        return loggedIn;
     }
 
     render() {
         var Comp = this.props.component;
         var requiredUser = this.props.requiredUser;
         var path = this.props.path;
-        var user = this.state.loggedIn;
+        var user = this.checkTokenRoute();
         var exact = this.props.exact;
 
         console.log("PR req " + requiredUser);
