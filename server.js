@@ -56,51 +56,30 @@ app.post('/api/register', (req, res,next) => {
     let otp = body.otp;
     let sql = '';
 
-    // TODO first have a sql command to check if user already exists
-    // sql = 'SELECT * FROM User WHERE username = ?'
-    // db.get(sql, [username], (err,row) => {
-    //     console.log(row);
-    //     console.log(err);
-    // });
-
-    //Hash Password
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, password_hash) => {
-            // TODO add sql to ensure username is unique
-            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
-            if (user_type === "teacher"){
-                // TODO check otp
-                let params = [first_name, last_name, username, password_hash, true];
-                db.run(sql, params, (err) => {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            "message": "DB Failure",
-                        });
-                    } else {
-                        console.log("User creation succecssful: " + username);
-                        res.json({
-                            "message": "Success",
-                        });
-                    }
-                });
-            }
-            else if (user_type === "student"){
-                // TODO set the grades for all existing lessons to 0
-                // TODO make username unique (currently is not working)
-                let params = [first_name, last_name, username, password_hash, false];
-                // Create user via script, then insert them into the database
-                runCmd("./backend/create_user.sh " + username, function (text, err) {
-                    if (text !== "Failure") {
-                        // Add user to the database
+    sql = 'SELECT * FROM User WHERE username = ?'
+    db.get(sql, [username], (err,row) => {
+        if (row){
+            console.log("user already exists: ");
+            console.log(row);
+            res.json({
+                message: "Username exists"
+            });
+            return;
+        }
+        else {
+            //Hash Password
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(password, salt, (err, password_hash) => {
+                    // TODO add sql to ensure username is unique
+                    sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+                    if (user_type === "teacher") {
+                        // TODO check otp
+                        let params = [first_name, last_name, username, password_hash, true];
                         db.run(sql, params, (err) => {
                             if (err) {
                                 console.log(err);
-                                // Remove the new user's directory
-                                rimraf("./users/" + username);
                                 res.json({
-                                    "message": "DB failure",
-                                    "error": err,
+                                    "message": "DB Failure",
                                 });
                             } else {
                                 console.log("User creation succecssful: " + username);
@@ -109,14 +88,41 @@ app.post('/api/register', (req, res,next) => {
                                 });
                             }
                         });
-                    } else {
-                        res.json({
-                            "message": text,
+                    }
+                    else if (user_type === "student") {
+                        // TODO set the grades for all existing lessons to 0
+                        // TODO make username unique (currently is not working)
+                        let params = [first_name, last_name, username, password_hash, false];
+                        // Create user via script, then insert them into the database
+                        runCmd("./backend/create_user.sh " + username, function (text, err) {
+                            if (text !== "Failure") {
+                                // Add user to the database
+                                db.run(sql, params, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                        // Remove the new user's directory
+                                        rimraf("./users/" + username);
+                                        res.json({
+                                            "message": "DB failure",
+                                            "error": err,
+                                        });
+                                    } else {
+                                        console.log("User creation succecssful: " + username);
+                                        res.json({
+                                            "message": "Success",
+                                        });
+                                    }
+                                });
+                            } else {
+                                res.json({
+                                    "message": text,
+                                });
+                            }
                         });
                     }
                 });
-            }
-        });
+            });
+        }
     });
 });
 
