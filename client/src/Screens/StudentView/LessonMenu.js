@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import { trackPromise } from 'react-promise-tracker';
 
 class LessonMenu extends Component {
-
   state = {
     lessons : [{}]
   };
 
   getLessons = async () => {
-      return fetch('api/Lesson/all')
-      .then(response => {
+    trackPromise(
+      fetch('api/Lesson/all')
+        .then(response => {
           return response.json();
-      })
-      .then(json =>{
-          this.setState({lessons: json.data});
-      });
+        })
+        .then(json => {
+          this.setState({ lessons: json.data });
+        })
+    );
   }
 
   componentDidMount(){
