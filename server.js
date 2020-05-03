@@ -266,6 +266,25 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     });
 });
 
+// Remove an existing lesson
+app.put('/api/RemoveLesson', (req, res,next) => {
+    let body = req.body;
+    let lesson_id = body.lesson_id;
+
+    let sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+    let params = [lesson_id];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            console.log("Lesson removal succecssful: " + lesson_id);
+            res.send("Success");
+        }
+    });
+});
+
 /****************** User Requests *****************/
 
 app.get('/User/:userid', (req, res) => {

@@ -11,12 +11,9 @@ class LessonMenu extends Component {
   getLessons = async () => {
       return fetch('api/Lesson/all')
       .then(response => {
-          // console.log(response);
-          // console.log(response.message);
           return response.json();
       })
       .then(json =>{
-        // console.log("json: " + json);
           this.setState({lessons: json.data});
       });
   }

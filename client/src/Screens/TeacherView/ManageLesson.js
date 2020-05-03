@@ -52,8 +52,8 @@ class ManageLesson extends Component {
       return;
     }
 
-    // If we are creating a new lesson
     if (lesson_id === 'NewLesson') {
+      // If we are creating a new lesson
       const response = await fetch('/api/NewLesson', {
         method: 'POST',
         headers: {
@@ -72,14 +72,16 @@ class ManageLesson extends Component {
       if (body === "Success"){
         console.info("Created " + name);
         alert("Lesson Created");
+        // TODO add redirect back to manageLessons, 
+        //  similar to LoginScreen Redirect
       }
       else {
         console.info("Error: " + body);
         alert("Database Error");
       }
     }
-    // If we are editing an existing lesson
     else {
+      // If we are editing an existing lesson
       const response = await fetch('/api/UpdateLesson/', {
         method: 'PUT',
         headers: {
@@ -99,6 +101,7 @@ class ManageLesson extends Component {
       if (body === "Success"){
         console.info("Updated " + name);
         alert("Lesson Updated");
+        // TODO add redirect back to manageLessons
       }
       else {
         console.info("Error: " + body);
@@ -106,6 +109,31 @@ class ManageLesson extends Component {
       }
     }
   };
+
+  onRemove = async e => {
+  // onRemove = () => {
+    var lesson_id = this.props.match.params.lessonID;
+    // TODO add alert with confirmation
+    // TODO possibly add OTP for confirmation
+    // TODO remove all grades from this lesson?
+      // may not be the best idea in case of accidental deletion
+      // however, otp confirmation should make accidental deletion difficult
+    const response = await fetch('/api/RemoveLesson', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        lesson_id: lesson_id,
+      })
+    });
+    const body = await response.text();
+    if (body === "Success") {
+      console.info("Removed " + lesson_id);
+      alert("Lesson Removed");
+      // TODO add redirect back to manageLessons
+    }
+  }
 
   render() {
     // TODO add a delete lesson button (with confirmation popup/alert)
@@ -126,6 +154,12 @@ class ManageLesson extends Component {
             intent="success"
             icon="small-cross"
             onClick={(e) => this.handleSave(e)}
+          />
+          <Button
+            text="Delete"
+            intent="warning"
+            icon="small-cross"
+            onClick={(e) => this.handleRemove(e)}
           />
         </ButtonGroup>
         <EditField

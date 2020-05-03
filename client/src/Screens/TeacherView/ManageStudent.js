@@ -8,11 +8,12 @@ class ManageStudent extends Component {
   onRemoveStudent = (e) => {
     // TODO add confirmation popup
     // maybe add OTP to confirm?
-        var user_id = this.props.match.params.studentID;
 
         alert("This feature is not yet implemented");
 
         e.preventDefault();
+        // var user_id = this.props.match.params.studentID;
+
         // const response = await fetch('/api/RemoveStudent', {
         //     method: 'POST',
         //     headers: {
