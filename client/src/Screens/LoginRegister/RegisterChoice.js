@@ -12,7 +12,6 @@ class RegisterChoice extends Component {
             <Button
               type="submit"
               id="registerStudentButton"
-              class="bp3-button bp3-icon-layout-log-in bp3-large"
               icon="confirm"
               text="New Student"
               intent="primary"
@@ -23,7 +22,6 @@ class RegisterChoice extends Component {
             <Button
               type="submit"
               id="registerTeacherButton"
-              class="bp3-button bp3-icon-layout-confirm bp3-large"
               icon="confirm"
               text="New Teacher"
               intent="primary"
@@ -33,7 +31,6 @@ class RegisterChoice extends Component {
           <Link to="/">
             <Button
               type="button"
-              class="bp3-button bp3-icon-layout-small-cross"
               intent="warning"
               icon="small-cross"
               text="Back"

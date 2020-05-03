@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+
 import RegisterForm from './RegisterForm';
 
 class RegisterTeacher extends Component {
@@ -9,6 +11,7 @@ class RegisterTeacher extends Component {
         first_name: '',
         last_name: '',
         otp: '',
+        created: false,
     }
 
     handleRegister = async e => {
@@ -58,20 +61,25 @@ class RegisterTeacher extends Component {
     };
 
     render = () => {
-        return (
-            <div className="Body">
-                <RegisterForm
-                    registerText="Register Teacher"
-                    //requireOTP
-                    handleRegister={(e)=> this.handleRegister(e)}
-                    setUsername={(username)=> this.setState({username: username})}
-                    setPassword={(password)=> this.setState({password: password})}
-                    setFirstName={(first_name)=> this.setState({first_name: first_name})}
-                    setLastName={(last_name)=> this.setState({last_name: last_name})}
-                    setOTP={(last_name)=> this.setState({last_name: last_name})}
-                />
-            </div>
-        );
+        if (this.state.created){
+            return ( <Redirect to="/login"/>);
+        }
+        else {
+            return (
+                <div className="Body">
+                    <RegisterForm
+                        registerText="Register Teacher"
+                        //requireOTP
+                        handleRegister={(e) => this.handleRegister(e)}
+                        setUsername={(username) => this.setState({ username: username })}
+                        setPassword={(password) => this.setState({ password: password })}
+                        setFirstName={(first_name) => this.setState({ first_name: first_name })}
+                        setLastName={(last_name) => this.setState({ last_name: last_name })}
+                        setOTP={(last_name) => this.setState({ last_name: last_name })}
+                    />
+                </div>
+            );
+        }
     }
 }
 
