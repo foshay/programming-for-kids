@@ -5,6 +5,7 @@ import { Button, ButtonGroup, } from "@blueprintjs/core";
 
 import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
 import EditField from '../../SmallComponents/EditField';
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class ManageLesson extends Component {
   state={
@@ -13,6 +14,7 @@ class ManageLesson extends Component {
     question: '',
     hint: '',
     answer: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -25,6 +27,7 @@ class ManageLesson extends Component {
       if (lesson_id !== 'NewLesson'){
         return fetch('/api/lesson/' + lesson_id)
           .then(response => {
+            this.setState({isLoading: false});
             return response.json();
           })
           .then(json => {
@@ -35,6 +38,9 @@ class ManageLesson extends Component {
               answer: json.data.answer
             });
           });
+      }
+      else{
+        this.setState({isLoading: false});
       }
   }
 
@@ -137,6 +143,9 @@ class ManageLesson extends Component {
 
   render() {
     // TODO add a delete lesson button (with confirmation popup/alert)
+    if (this.state.isLoading){
+      return (<LoadingSymbol/>);
+    }
     return (
       <div className="Edit-Lesson">
         <ButtonGroup large style={{ paddingBottom: "1vh" }}>
