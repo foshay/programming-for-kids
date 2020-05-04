@@ -36,18 +36,16 @@ class LessonScreen extends Component {
         if (this.state.isLoading){
             return (<LoadingSymbol/>);
         }
-        else {
-            return (
-                <div className="BodyMenu-Lesson">
-                    <h3>Goal: {this.state.question}</h3>
-                    <h3>Hint: {this.state.hint}</h3>
-                    <BlocklyComp
-                        lessonID={this.props.match.params.lessonID}
-                    />
-                    <h3>Answer: {this.state.answer}</h3>
-                </div>
-            )
-        }
+        return (
+            <div className="BodyMenu-Lesson">
+                <h3>Goal: {this.state.question}</h3>
+                <h3>Hint: {this.state.hint}</h3>
+                <BlocklyComp
+                    lessonID={this.props.match.params.lessonID}
+                />
+                <h3>Answer: {this.state.answer}</h3>
+            </div>
+        );
     }
 }
 

@@ -33,40 +33,38 @@ class ManageAllLessons extends Component {
     if (this.state.isLoading){
       return (<LoadingSymbol/>);
     }
-    else {
-      return (
-        <div className="Body">
-          <Link to="/ManageLessons/NewLesson">
-            <Button
-              text="Create New Lesson"
-              icon="build"
-              intent="success"
-            />
-          </Link>
-          <br />
-          <Card>
-            <HTMLTable striped interactive bordered>
-              <thead>
-                <tr>
-                  <th />
-                  <th>Lesson Name</th>
-                </tr>
-              </thead>
-              <tbody key="table-body">
-                {this.state.lessons.map((value, key) => {
-                  return (
-                    <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
-                      <td > {value.lesson_number} </td>
-                      <td > {value.name} </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </HTMLTable>
-          </Card>
-        </div>
-      );
-    }
+    return (
+      <div className="Body">
+        <Link to="/ManageLessons/NewLesson">
+          <Button
+            text="Create New Lesson"
+            icon="build"
+            intent="success"
+          />
+        </Link>
+        <br />
+        <Card>
+          <HTMLTable striped interactive bordered>
+            <thead>
+              <tr>
+                <th />
+                <th>Lesson Name</th>
+              </tr>
+            </thead>
+            <tbody key="table-body">
+              {this.state.lessons.map((value, key) => {
+                return (
+                  <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
+                    <td > {value.lesson_number} </td>
+                    <td > {value.name} </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </HTMLTable>
+        </Card>
+      </div>
+    );
   }
 }
 
