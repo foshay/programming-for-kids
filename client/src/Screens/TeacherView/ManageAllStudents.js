@@ -15,7 +15,9 @@ class ManageAllStudents extends Component {
         return response.json();
       })
       .then(json => {
-        this.setState({ students: json.data });
+        if (json.data){
+          this.setState({ students: json.data });
+        }
       });
   }
 
