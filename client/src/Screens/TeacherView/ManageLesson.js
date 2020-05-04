@@ -141,8 +141,23 @@ class ManageLesson extends Component {
     }
   }
 
+  deleteButton = () => {
+    if (this.props.match.params.lessonID !== "NewLesson") {
+      return (
+        <Button
+          text="Delete"
+          intent="warning"
+          icon="small-cross"
+          ojnClick={(e) => this.handleRemove(e)}
+        />
+      );
+    }
+    return (
+      <div />
+    );
+  }
+
   render() {
-    // TODO add a delete lesson button (with confirmation popup/alert)
     if (this.state.isLoading){
       return (<LoadingSymbol/>);
     }
@@ -164,12 +179,7 @@ class ManageLesson extends Component {
             icon="small-cross"
             onClick={(e) => this.handleSave(e)}
           />
-          <Button
-            text="Delete"
-            intent="warning"
-            icon="small-cross"
-            onClick={(e) => this.handleRemove(e)}
-          />
+          {this.deleteButton()}
         </ButtonGroup>
         <EditField
           title="Lesson Name"
