@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import {Route, Redirect} from "react-router-dom";
+import {Route, Redirect, withRouter} from "react-router-dom";
 import Loading from '../SmallComponents/Loading';
 const jwt = require('jsonwebtoken');
 
 class ProtectedRoute extends Component {
-    componentDidMount = () => {
-        this.checkTokenRoute();
-    }
-
     checkTokenRoute = () => {
         var secret = this.props.secret;
         console.log("checking token");
@@ -36,9 +32,6 @@ class ProtectedRoute extends Component {
         var path = this.props.path;
         var user = this.checkTokenRoute();
         var exact = this.props.exact;
-
-        console.log("PR req " + requiredUser);
-        console.log("PR cur " + user);
 
         var correctUser = (user === requiredUser);
         console.log ("PR cor " + correctUser);
@@ -71,4 +64,4 @@ class ProtectedRoute extends Component {
     }
 }
 
-export default ProtectedRoute;
+export default withRouter(ProtectedRoute);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
 import { Link, Redirect } from 'react-router-dom';
+import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
 
 class LoginScreen extends Component {
     state = {
