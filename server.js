@@ -70,7 +70,6 @@ app.post('/api/register', (req, res,next) => {
             //Hash Password
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(password, salt, (err, password_hash) => {
-                    // TODO add sql to ensure username is unique
                     sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
                     if (user_type === "teacher") {
                         // TODO check otp
@@ -91,7 +90,6 @@ app.post('/api/register', (req, res,next) => {
                     }
                     else if (user_type === "student") {
                         // TODO set the grades for all existing lessons to 0
-                        // TODO make username unique (currently is not working)
                         let params = [first_name, last_name, username, password_hash, false];
                         // Create user via script, then insert them into the database
                         runCmd("./backend/create_user.sh " + username, function (text, err) {
@@ -317,7 +315,6 @@ app.put('/api/RemoveLesson', (req, res,next) => {
 app.get('/User/:userid', (req, res) => {
     let sql = 'SELECT * FROM User WHERE user_id = ?';
     let user_id = [req.params.userid];
-    // TODO remove userid and replace with username, should make username unique
     let params = user_id;
 
     db.get(sql, params, (err, row) => {
