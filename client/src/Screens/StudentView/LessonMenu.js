@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
-import { trackPromise } from 'react-promise-tracker';
-import { Loading } from '../../SmallComponents/Loading';
-import BounceLoader from 'react-spinners/BounceLoader';
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class LessonMenu extends Component {
   state = {
@@ -28,18 +26,13 @@ class LessonMenu extends Component {
       this.getLessons();
   }
 
-  loading = () => {
-    return(
-      this.state.isLoading ?
-        <BounceLoader /> :
-        <div />
-    )
-  }
-
   render() {
-    return (
-      <div className="Body">
-          {this.loading()}
+    if (this.state.isLoading) {
+      return (<LoadingSymbol/>);
+    }
+    else {
+      return (
+        <div className="Body">
           <ButtonGroup large vertical>
             { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
@@ -58,8 +51,9 @@ class LessonMenu extends Component {
               )
             })}
           </ButtonGroup>
-      </div>
-    );
+        </div>
+      );
+    }
   }
 }
 
