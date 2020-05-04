@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import { HTMLTable, Card, } from "@blueprintjs/core";
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class ManageAllStudents extends Component {
-
   state = {
-    students : [{}]
+    students : [{}],
+    isLoading: true,
   };
 
   getStudents = async () => {
     return fetch('api/Student/all')
       .then(response => {
+        this.setState({isLoading: false});
         return response.json();
       })
       .then(json => {
-        this.setState({ students: json.data });
+        if (json.data){
+          this.setState({ students: json.data });
+        }
       });
   }
 
@@ -28,6 +32,9 @@ class ManageAllStudents extends Component {
   }
 
   render() {
+    if (this.state.isLoading){
+      return (<LoadingSymbol/>);
+    }
     return (
       <div className="Body">
         <Card>
@@ -41,16 +48,6 @@ class ManageAllStudents extends Component {
               </tr>
             </thead>
             <tbody>
-              {/* {this.state.students.map((_, index) => {
-                const id = this.state.lessons[index].lesson_id;
-                const name = this.state.lessons[index].name;
-                return (
-                  <tr onClick={() => this.goToLesson(id)} >
-                    <td> {id} </td>
-                    <td> {name} </td>
-                  </tr>
-                )
-              })} */}
               {this.state.students.map((value, key) => {
                 return (
                   <tr onClick={() => this.goToStudent(value.user_id)} key={key}>

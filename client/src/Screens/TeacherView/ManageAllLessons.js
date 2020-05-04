@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { HTMLTable, Card, Button } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol.js';
 
 class ManageAllLessons extends Component {
   state = {
-    lessons: [{}]
+    lessons: [{}],
+    isLoading: true,
   };
 
   getLessons = async () => {
     return fetch('api/Lesson/all')
       .then(response => {
+        this.setState({isLoading: false});
         return response.json();
       })
       .then(json => {
@@ -27,6 +30,9 @@ class ManageAllLessons extends Component {
   }
 
   render() {
+    if (this.state.isLoading){
+      return (<LoadingSymbol/>);
+    }
     return (
       <div className="Body">
         <Link to="/ManageLessons/NewLesson">
@@ -36,22 +42,22 @@ class ManageAllLessons extends Component {
             intent="success"
           />
         </Link>
-        <br/>
+        <br />
         <Card>
           <HTMLTable striped interactive bordered>
             <thead>
               <tr>
-                <th/>
+                <th />
                 <th>Lesson Name</th>
               </tr>
             </thead>
             <tbody key="table-body">
               {this.state.lessons.map((value, key) => {
                 return (
-                    <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
-                      <td > {value.lesson_number} </td>
-                      <td > {value.name} </td>
-                    </tr>
+                  <tr onClick={() => this.goToLesson(value.lesson_id)} key={key}>
+                    <td > {value.lesson_number} </td>
+                    <td > {value.name} </td>
+                  </tr>
                 )
               })}
             </tbody>
