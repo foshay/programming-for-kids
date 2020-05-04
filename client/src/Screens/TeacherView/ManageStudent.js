@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup} from "@blueprintjs/core";
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class ManageStudent extends Component {
   state={
     student: [{}],
+    isLoading: true,
   }
+
+  componentDidMount = () => {
+    this.getStudent();
+  }
+
+  getStudent = async () => {
+    var user_id = this.props.match.params.studentID;
+    console.log(user_id);
+    // TODO change all instances of this call to /api/User/:user_id
+    return fetch('/User/' + user_id)
+      .then(response => {
+        console.log(response);
+        this.setState({isLoading: false});
+        return response.json();
+      })
+      .then(json => {
+        console.log(json);
+        console.log(json.data);
+        this.setState({ student: json.data });
+      });
+  }
+
   onRemoveStudent = (e) => {
     // TODO add confirmation popup
     // maybe add OTP to confirm?
@@ -37,27 +61,10 @@ class ManageStudent extends Component {
         // }
   }
 
-  getStudents = async () => {
-    var user_id = this.props.match.params.studentID;
-    console.log(user_id);
-    // TODO change all instances of this call to /api/User/:user_id
-    return fetch('/User/' + user_id)
-      .then(response => {
-        console.log(response);
-        return response.json();
-      })
-      .then(json => {
-        console.log(json);
-        console.log(json.data);
-        this.setState({ student: json.data });
-      });
-  }
-
-  componentDidMount = () => {
-    this.getStudents();
-  }
-
   render() {
+    if (this.state.isLoading){
+      return (<LoadingSymbol/>);
+    }
     var student = this.state.student;
     if (student === [{}]) {
       return (
