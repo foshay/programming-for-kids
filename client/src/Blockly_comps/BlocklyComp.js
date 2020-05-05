@@ -16,23 +16,26 @@ require('blockly/python');
 
 
 class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  props = {
+    lessonID: '',
+    initialXml: '',
+  };
+    state = {  
       toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
       // add deletable="false" to <block field of xml to make not deletable.
       // add editable="false" to make not editable
-      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>',
       code: '',
-      newxml: '',
+      newxml: this.props.initialXml,
     };
     
-  }
 
 //this is optional for adding custom categories of blocks
 
 componentDidMount = (workspace) => {
+  
+  //this.state.newxml = this.props.initialXml;
+  //console.log(this.state.newxml);
     window.setTimeout(() => {
       
       this.setState({
@@ -56,7 +59,7 @@ componentDidMount = (workspace) => {
     });
     */
     //We can use this for saving user's progress
-    //workspace.addChangeListener(Blockly.Events.disableOrphans);
+    workspace.addChangeListener(Blockly.Events.disableOrphans);
     this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
     document.getElementById('newxml').value = this.state.initialXml;
 
@@ -104,6 +107,7 @@ class BlocklyComp extends Component {
     };
     props = {
       lessonID: '',
+      initialXml: '',
     };
     
     componentDidMount() {
@@ -114,7 +118,8 @@ class BlocklyComp extends Component {
       // Adding this allows the blockly edit area to show up after routing to the page
       // lessonID is send to editor.jsx for xml loading as well as storing progress
       // lessonID is passed to blockly comp from lessonScreen.
-      const editor = React.createElement(Editor, {lessonID: this.props.lessonID});
+      //console.log("xml"+this.props.initialXml);
+      const editor = React.createElement(Editor, {initialXml: this.props.initialXml});
       if( document.getElementById('blockly') != null)
         ReactDOM.render(editor, document.getElementById('blockly'));
     }
@@ -140,6 +145,7 @@ class BlocklyComp extends Component {
       }
       else {
         var ucode = document.getElementById('code').value;
+        var newxml = document.getElementById('newxml').value;
         jwt.verify(token, secret, (err, decoded) => {
           if (err) {
             console.log("Error: " + err);
@@ -158,6 +164,7 @@ class BlocklyComp extends Component {
             "lesson": this.props.lessonID,
             "code": ucode,
             "user": user,
+            "xml": newxml,
           })
         });
         const body = await response.text();
@@ -165,7 +172,7 @@ class BlocklyComp extends Component {
         this.setState({ responseToPost: body });
       }
       
-      var newxml = document.getElementById('newxml').value;
+      
       //var lesson = "1";
       //var formData = new FormData();
       //formData.append('code', code);

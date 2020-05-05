@@ -6,6 +6,7 @@ class LessonScreen extends Component {
         question: "[Loading]",
         hint: "[Loading]",
         answer: "[Loading]",
+        initialXml: "",
     }
 
     getLesson = async () => {
@@ -19,7 +20,8 @@ class LessonScreen extends Component {
             this.setState({
                 question: json.data.question,
                 hint: json.data.hint,
-                answer: json.data.answer
+                answer: json.data.answer,
+                initialXml: json.data.xml
             });
         });
     }
@@ -35,6 +37,7 @@ class LessonScreen extends Component {
                 <h3>Hint: {this.state.hint}</h3>
                 <BlocklyComp
                     lessonID={this.props.match.params.lessonID}
+                    initialXml={this.state.initialXml}
                 />
                 <h3>Answer: {this.state.answer}</h3>
             </div>
