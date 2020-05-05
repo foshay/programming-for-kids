@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+
+// Home screens
 import TeacherHome from '../Screens/TeacherView/TeacherHome.js';
 import HomeScreen from '../Screens/StudentView/HomeScreen.js'
 import LoginMenu from '../Screens/LoginRegister/LoginMenu.js'
-import Loading from '../SmallComponents/Loading.js';
 
+// Token checking
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary";
 
@@ -36,9 +38,7 @@ class HomePath extends Component{
     render () {
         var loggedIn = this.state.loggedIn;
         if (loggedIn === "") {
-            // If loggedIn is not yet set, 
-            // display a loading symbol
-            return (<Loading/>);
+            return (<div/>);
         }
         if (loggedIn === "student") {
             console.log("/ Student logged in");

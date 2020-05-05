@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Route, Redirect, withRouter} from "react-router-dom";
-import Loading from '../SmallComponents/Loading';
 const jwt = require('jsonwebtoken');
 
 class ProtectedRoute extends Component {
@@ -35,12 +34,7 @@ class ProtectedRoute extends Component {
 
         var correctUser = (user === requiredUser);
         console.log ("PR cor " + correctUser);
-        if (user === '') {
-            console.log("LOADING");
-            return(
-                <Loading />
-            );
-        }
+        if (user === '') { return( <div />); }
         else {
             return (
                 <Route

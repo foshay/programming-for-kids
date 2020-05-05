@@ -5,6 +5,7 @@ import { Button, ButtonGroup, } from "@blueprintjs/core";
 
 import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
 import EditField from '../../SmallComponents/EditField';
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class ManageLesson extends Component {
   state={
@@ -13,6 +14,7 @@ class ManageLesson extends Component {
     question: '',
     hint: '',
     answer: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -25,6 +27,7 @@ class ManageLesson extends Component {
       if (lesson_id !== 'NewLesson'){
         return fetch('/api/lesson/' + lesson_id)
           .then(response => {
+            this.setState({isLoading: false});
             return response.json();
           })
           .then(json => {
@@ -35,6 +38,9 @@ class ManageLesson extends Component {
               answer: json.data.answer
             });
           });
+      }
+      else{
+        this.setState({isLoading: false});
       }
   }
 
@@ -52,8 +58,8 @@ class ManageLesson extends Component {
       return;
     }
 
-    // If we are creating a new lesson
     if (lesson_id === 'NewLesson') {
+      // If we are creating a new lesson
       const response = await fetch('/api/NewLesson', {
         method: 'POST',
         headers: {
@@ -72,14 +78,16 @@ class ManageLesson extends Component {
       if (body === "Success"){
         console.info("Created " + name);
         alert("Lesson Created");
+        // TODO add redirect back to manageLessons, 
+        //  similar to LoginScreen Redirect
       }
       else {
         console.info("Error: " + body);
         alert("Database Error");
       }
     }
-    // If we are editing an existing lesson
     else {
+      // If we are editing an existing lesson
       const response = await fetch('/api/UpdateLesson/', {
         method: 'PUT',
         headers: {
@@ -99,6 +107,7 @@ class ManageLesson extends Component {
       if (body === "Success"){
         console.info("Updated " + name);
         alert("Lesson Updated");
+        // TODO add redirect back to manageLessons
       }
       else {
         console.info("Error: " + body);
@@ -107,8 +116,51 @@ class ManageLesson extends Component {
     }
   };
 
+  onRemove = async e => {
+  // onRemove = () => {
+    var lesson_id = this.props.match.params.lessonID;
+    // TODO add alert with confirmation
+    // TODO possibly add OTP for confirmation
+    // TODO remove all grades from this lesson?
+      // may not be the best idea in case of accidental deletion
+      // however, otp confirmation should make accidental deletion difficult
+    const response = await fetch('/api/RemoveLesson', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        lesson_id: lesson_id,
+      })
+    });
+    const body = await response.text();
+    if (body === "Success") {
+      console.info("Removed " + lesson_id);
+      alert("Lesson Removed");
+      // TODO add redirect back to manageLessons
+    }
+  }
+
+  deleteButton = () => {
+    if (this.props.match.params.lessonID !== "NewLesson") {
+      return (
+        <Button
+          text="Delete"
+          intent="warning"
+          icon="small-cross"
+          ojnClick={(e) => this.handleRemove(e)}
+        />
+      );
+    }
+    return (
+      <div />
+    );
+  }
+
   render() {
-    // TODO add a delete lesson button (with confirmation popup/alert)
+    if (this.state.isLoading){
+      return (<LoadingSymbol/>);
+    }
     return (
       <div className="Edit-Lesson">
         <ButtonGroup large style={{ paddingBottom: "1vh" }}>
@@ -127,6 +179,7 @@ class ManageLesson extends Component {
             icon="small-cross"
             onClick={(e) => this.handleSave(e)}
           />
+          {this.deleteButton()}
         </ButtonGroup>
         <EditField
           title="Lesson Name"

@@ -54,51 +54,78 @@ app.post('/api/register', (req, res,next) => {
     let last_name = body.last_name;
     let user_type = body.user_type;
     let otp = body.otp;
+    let sql = '';
 
-    //Hash Password
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, password_hash) => {
-            // TODO add sql to ensure username is unique
-            let sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
-            if (user_type === "teacher"){
-                // TODO check otp
-                let params = [first_name, last_name, username, password_hash, true];
-                db.run(sql, params, (err) => {
-                    if (err) {
-                        console.log(err);
-                        res.send("DB Failure");
-                    } else {
-                        console.log("User creation succecssful: " + username);
-                        res.send("Success");
-                    }
-                });
-            }
-            else if (user_type === "student"){
-                // TODO set the grades for all existing lessons to 0
-                let params = [first_name, last_name, username, password_hash, false];
-                // Create user via script, then insert them into the database
-                runCmd("./backend/create_user.sh " + username, function (text, err) {
-                    if (text !== "Failure") {
-                        // Add user to the database
+    sql = 'SELECT * FROM User WHERE username = ?'
+    db.get(sql, [username], (err,row) => {
+        if (row){
+            console.log("user already exists: ");
+            console.log(row);
+            res.json({
+                message: "Username exists"
+            });
+            return;
+        }
+        else {
+            //Hash Password
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(password, salt, (err, password_hash) => {
+                    // TODO add sql to ensure username is unique
+                    sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+                    if (user_type === "teacher") {
+                        // TODO check otp
+                        let params = [first_name, last_name, username, password_hash, true];
                         db.run(sql, params, (err) => {
                             if (err) {
                                 console.log(err);
-                                // Remove the new user's directory
-                                rimraf("./users/" + username);
-                                res.send("DB Failure");
+                                res.json({
+                                    "message": "DB Failure",
+                                });
                             } else {
                                 console.log("User creation succecssful: " + username);
-                                res.send(text);
+                                res.json({
+                                    "message": "Success",
+                                });
                             }
                         });
-                    } else {
-                        res.send(text);
+                    }
+                    else if (user_type === "student") {
+                        // TODO set the grades for all existing lessons to 0
+                        // TODO make username unique (currently is not working)
+                        let params = [first_name, last_name, username, password_hash, false];
+                        // Create user via script, then insert them into the database
+                        runCmd("./backend/create_user.sh " + username, function (text, err) {
+                            if (text !== "Failure") {
+                                // Add user to the database
+                                db.run(sql, params, (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                        // Remove the new user's directory
+                                        rimraf("./users/" + username);
+                                        res.json({
+                                            "message": "DB failure",
+                                            "error": err,
+                                        });
+                                    } else {
+                                        console.log("User creation succecssful: " + username);
+                                        res.json({
+                                            "message": "Success",
+                                        });
+                                    }
+                                });
+                            } else {
+                                res.json({
+                                    "message": text,
+                                });
+                            }
+                        });
                     }
                 });
-            }
-        });
+            });
+        }
     });
 });
+
 
 //Login checking via hash.
 app.post('/api/login', (req, res, next) => {
@@ -171,8 +198,8 @@ app.get('/api/Lesson/all', (req, res) => {
     db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(400).json({
-                "error": err.message,
-                "message": "Failure"
+                "message": "Failure",
+                "error": err.message
             });
             return;
         }
@@ -261,6 +288,25 @@ app.put('/api/UpdateLesson', (req, res,next) => {
             res.send("DB Failure");
         } else {
             console.log("Lesson update succecssful: " + name);
+            res.send("Success");
+        }
+    });
+});
+
+// Remove an existing lesson
+app.put('/api/RemoveLesson', (req, res,next) => {
+    let body = req.body;
+    let lesson_id = body.lesson_id;
+
+    let sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+    let params = [lesson_id];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            console.log("Lesson removal succecssful: " + lesson_id);
             res.send("Success");
         }
     });
