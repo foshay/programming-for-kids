@@ -31,6 +31,7 @@ class LessonScreen extends Component {
     }
 
     render(){
+        console.log("Lesson Screen: ", this.state);
         return(
             <div className="BodyMenu-Lesson">
                 <h3>Goal: {this.state.question}</h3>
