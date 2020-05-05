@@ -31,12 +31,25 @@ class Editor extends React.Component {
     
 
 //this is optional for adding custom categories of blocks
+getLesson = async () => {
+  const string = this.props.match.params.lessonID;
+  console.log("String: " + string);
+  return fetch('/api/lesson/' + string)
+  .then(response =>{
+      return response.json();
+  })
+  .then(json =>{
+      this.setState({
+          initialXml: json.data.xml
+      });
+  });
+}
 
 componentDidMount = (workspace) => {
   
   //this.state.newxml = this.props.initialXml;
   //console.log(this.state.newxml);
-    console.log("Editor: " , this.props);
+    this.getLesson();
       
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
@@ -116,7 +129,7 @@ class BlocklyComp extends Component {
       // lessonID is passed to blockly comp from lessonScreen.
       //console.log("xml"+this.props.initialXml);
       console.log("BlocklyComp", this.props);
-      const editor = React.createElement(Editor, {initialXml: this.props.initialXml});
+      const editor = React.createElement(Editor, {lessonID: this.props.lessonID});
       if( document.getElementById('blockly') != null)
         ReactDOM.render(editor, document.getElementById('blockly'));
     }
