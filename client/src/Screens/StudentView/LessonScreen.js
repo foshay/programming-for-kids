@@ -27,6 +27,7 @@ class LessonScreen extends Component {
     }
 
     componentDidMount(){
+        console.log(this.props);
         this.getLesson();
     }
 
