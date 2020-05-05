@@ -26,29 +26,28 @@ class Editor extends React.Component {
       code: '',
       newxml: '',
     };
-    
+
   }
 
-//this is optional for adding custom categories of blocks
-
-componentDidMount = (workspace) => {
+  //this is optional for adding custom categories of blocks
+  componentDidMount = (workspace) => {
     window.setTimeout(() => {
-      
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
           {
             name: 'AI category',
             blocks: [
               { type: 'text' },
-              ],
+            ],
           },
         ]),
       });
+      // TODO see if this needs to be so long
     }, 2000);
   }
 
   workspaceDidChange = (workspace) => {
-      //this part you can do something when the workspace changes (when they place or move a block)
+    //this part you can do something when the workspace changes (when they place or move a block)
     /*
       workspace.registerButtonCallback('sendToGrade', () => {
       alert('Sent to grading script');
@@ -56,16 +55,19 @@ componentDidMount = (workspace) => {
     */
     //We can use this for saving user's progress
     //workspace.addChangeListener(Blockly.Events.disableOrphans);
-    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+
+    // this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    this.setState({ newXml: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) });
     document.getElementById('newxml').value = this.state.initialXml;
 
     //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
     //document.getElementById('generated-xml').innerText = newXml;
-    
+
     //this prints out the blocks to actual python code to the page.
     //require('blockly/python');
     //python = new Generator(name = "Python", INDENT = "4");
-    this.state.code = Blockly.Python.workspaceToCode(workspace);
+    // this.state.code = Blockly.Python.workspaceToCode(workspace);
+    this.setState({code: Blockly.Python.workspaceToCode(workspace) });
     document.getElementById('code').value = this.state.code;
   }
 
@@ -101,6 +103,9 @@ class BlocklyComp extends Component {
       // by default, the toolbox should be shown
       toolboxShown: true,
     };
+
+    // TODO I don't think you should set props here
+    // there may be a different way to require props
     props = {
       lessonID: '',
     };
@@ -149,7 +154,6 @@ class BlocklyComp extends Component {
       
       this.setState({ responseToPost: body });
     };
-  
 
   render() {
     return (
