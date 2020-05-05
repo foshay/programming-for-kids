@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
 import { Link, Redirect } from 'react-router-dom';
+import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@blueprintjs/core';
 
 class LoginScreen extends Component {
     state = {
         responseToPost: '',
         username: '',
         password: '',
-        loggedIn: false,
+        loggedIn: '',
     }
 
     handleLogin = async e => {
-        // var username = document.getElementById("username").value;
-        // var password = document.getElementById("password").value;
         var username = this.state.username;
         var password = this.state.password;
 
@@ -45,14 +43,10 @@ class LoginScreen extends Component {
     };
 
     render = () => {
-        // if (this.state.loggedIn){
-        //     return(
-        //         <Redirect to="/"
-        //             token={this.state.token}
-        //         />
-        //     )
-        // }
-        // else {
+        if (this.state.loggedIn){
+            return ( <Redirect to="/"/>)
+        }
+        else {
             return (
                 <div className="Body">
                     <ControlGroup vertical>
@@ -102,6 +96,6 @@ class LoginScreen extends Component {
             );
         }
     }
-// }
+}
 
 export default LoginScreen;

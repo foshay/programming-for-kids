@@ -2,6 +2,7 @@
 
 # dependencies
 /client/node_modules
+/client/src/database.db
 /.pnp
 .pnp.js
 node_modules
@@ -13,8 +14,7 @@ build
 /build
 /client/build
 users/*
-#temp for user generated code
-lesson_*.py
+*.db
 # misc
 .DS_Store
 .env.local

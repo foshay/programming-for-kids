@@ -49,7 +49,8 @@ class Header extends Component {
             <Menu >
                 <MenuItem icon="home"
                     text="Home"
-                    href={teacher ? "/TeacherHome" : "/Home"}
+                    // href={teacher ? "/TeacherHome" : "/Home"}
+                    href={"/"}
                     disabled={loggedOut}
                 />
                 <MenuItem icon="book"

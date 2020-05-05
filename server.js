@@ -149,11 +149,11 @@ app.post('/api/grade', (req, res) => {
     var response;
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("printf \"" + req.body.code + "\" > ./users/6969/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/6969/pcode/" + req.body.lesson + " " + "6969" + " && rm ./users/6969/pcode/" + req.body.lesson, function (text, error) {
+    runCmd("printf \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user + " && rm ./users/"+req.body.user+"/pcode/" + req.body.lesson, function (text, error) {
         console.log(text);
 
         res.send(
-            `I received your POST request. This is what you sent me: ` + text,
+            `Results of grading your code: ` + text,
         );
     });
 
@@ -224,10 +224,9 @@ app.post('/api/NewLesson', (req, res,next) => {
         } else {
             console.log(row);
             lesson_number = row["MAX (lesson_number)"] + 1;
-            console.log(lesson_number);
+            // console.log(lesson_number);
             sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
             let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
-            console.log(params);
             db.run(sql, params, (err) => {
                 if (err) {
                     console.log(err);
@@ -255,7 +254,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
     let params = [question, answer, name, hint, xml, lesson_id];
-    console.log(params);
+    // console.log(params);
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
@@ -271,10 +270,11 @@ app.put('/api/UpdateLesson', (req, res,next) => {
 
 app.get('/User/:userid', (req, res) => {
     let sql = 'SELECT * FROM User WHERE user_id = ?';
-    // let userid = 
+    let user_id = [req.params.userid];
     // TODO remove userid and replace with username, should make username unique
+    let params = user_id;
 
-    db.get(sql, req.userid, (err, row) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({
                 "error": err.message,
