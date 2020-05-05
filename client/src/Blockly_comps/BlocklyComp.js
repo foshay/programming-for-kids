@@ -16,18 +16,18 @@ require('blockly/python');
 
 
 class Editor extends React.Component {
-  props = {
-    lessonID: '',
-    initialXml: '',
-  };
-    state = {  
+  constructor(props) {
+    super(props);
+    this.state = {
       toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
       // add deletable="false" to <block field of xml to make not deletable.
       // add editable="false" to make not editable
       code: '',
-      newxml: this.props.initialXml,
+      newxml: '',
+      initialXml: '',
     };
+  }
     
 
 //this is optional for adding custom categories of blocks
@@ -36,7 +36,7 @@ componentDidMount = (workspace) => {
   
   //this.state.newxml = this.props.initialXml;
   //console.log(this.state.newxml);
-    window.setTimeout(() => {
+    console.log("Editor: " , this.props);
       
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
@@ -48,8 +48,8 @@ componentDidMount = (workspace) => {
           },
         ]),
       });
-    }, 2000);
-  }
+      this.setState({ initialXml: this.props.initialXml})
+    }
 
   workspaceDidChange = (workspace) => {
       //this part you can do something when the workspace changes (when they place or move a block)
@@ -60,7 +60,7 @@ componentDidMount = (workspace) => {
     */
     //We can use this for saving user's progress
     workspace.addChangeListener(Blockly.Events.disableOrphans);
-    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    this.setState({ newXml: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) });
     document.getElementById('newxml').value = this.state.initialXml;
 
     //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
@@ -69,7 +69,7 @@ componentDidMount = (workspace) => {
     //this prints out the blocks to actual python code to the page.
     //require('blockly/python');
     //python = new Generator(name = "Python", INDENT = "4");
-    this.state.code = Blockly.Python.workspaceToCode(workspace);
+    this.setState({ code: Blockly.Python.workspaceToCode(workspace) });
     document.getElementById('code').value = this.state.code;
   }
 
@@ -105,10 +105,6 @@ class BlocklyComp extends Component {
       // by default, the toolbox should be shown
       toolboxShown: true,
     };
-    props = {
-      lessonID: '',
-      initialXml: '',
-    };
     
     componentDidMount() {
       this.callApi()
@@ -119,6 +115,7 @@ class BlocklyComp extends Component {
       // lessonID is send to editor.jsx for xml loading as well as storing progress
       // lessonID is passed to blockly comp from lessonScreen.
       //console.log("xml"+this.props.initialXml);
+      console.log("BlocklyComp", this.props);
       const editor = React.createElement(Editor, {initialXml: this.props.initialXml});
       if( document.getElementById('blockly') != null)
         ReactDOM.render(editor, document.getElementById('blockly'));

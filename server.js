@@ -190,6 +190,7 @@ app.get('/api/Lesson/:id', (req, res) => {
 
     // get query to database for lesson with :id
     db.get(sql, lesson_id, (err, row) => {
+        console.log(row);
         if (err) {
             res.status(400).json({
                 "error": err.message,
