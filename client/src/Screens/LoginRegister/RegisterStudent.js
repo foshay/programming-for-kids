@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+
 import RegisterForm from './RegisterForm';
 
 class RegisterStudent extends Component {
@@ -8,6 +10,7 @@ class RegisterStudent extends Component {
         password: '',
         first_name: '',
         last_name: '',
+        created: false,
     }
 
     handleRegister = async e => {
@@ -41,22 +44,28 @@ class RegisterStudent extends Component {
         } else {
             console.info("Created " + body);
             alert("User created");
+            this.setState({created: true});
         }
     };
 
     render = () => {
-        return (
-            <div className="Body">
-                <RegisterForm
-                    registerText="Register Student"
-                    handleRegister={(e)=> this.handleRegister(e)}
-                    setUsername={(username)=> this.setState({username: username})}
-                    setPassword={(password)=> this.setState({password: password})}
-                    setFirstName={(first_name)=> this.setState({first_name: first_name})}
-                    setLastName={(last_name)=> this.setState({last_name: last_name})}
-                />
-            </div>
-        );
+        if (this.state.created){
+            return ( <Redirect to="/login"/>);
+        }
+        else {
+            return (
+                <div className="Body">
+                    <RegisterForm
+                        registerText="Register Student"
+                        handleRegister={(e) => this.handleRegister(e)}
+                        setUsername={(username) => this.setState({ username: username })}
+                        setPassword={(password) => this.setState({ password: password })}
+                        setFirstName={(first_name) => this.setState({ first_name: first_name })}
+                        setLastName={(last_name) => this.setState({ last_name: last_name })}
+                    />
+                </div>
+            );
+        }
     }
 }
 

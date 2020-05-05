@@ -11,12 +11,12 @@ class LessonMenu extends Component {
   getLessons = async () => {
       return fetch('api/Lesson/all')
       .then(response => {
-          console.log(response);
-          console.log(response.message);
+          // console.log(response);
+          // console.log(response.message);
           return response.json();
       })
       .then(json =>{
-        console.log("json: " + json);
+        // console.log("json: " + json);
           this.setState({lessons: json.data});
       });
   }
@@ -31,13 +31,13 @@ class LessonMenu extends Component {
           <ButtonGroup large vertical>
             { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
-            {this.state.lessons.map((value, _) => {
+            {this.state.lessons.map((value, index) => {
               return (
-                <div >
+                <div key={index}>
                   <Link to={"/Lesson/" + value.lesson_id}>
                     <Button
                       // example text: Lesson 1: Proof of Concept 1
-                      text={"Lesson " + value.lesson_id + ": " + value.name}
+                      text={"Lesson " + value.lesson_number + ": " + value.name}
                     />
                   </Link>
                   <br />
