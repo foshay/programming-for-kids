@@ -12,16 +12,7 @@ then
     echo "Incorrect amount of arguments. use -h for help"
     exit 1
 fi
-#lines=$(wc -l < $2)
-#counter=1
-#while [ $counter -le $lines ]
-#do
-#    sed -i $counter's/^/\t/g' $2
-#    ((counter++))
-#done
 
-#sed -r 's/  /   /g' $2
-#6969 is user id. $3 is lesson_number
 cat $1 $2 > "users/"$3"/pcode/script.py"
 echo -e "if __name__ == \"__main__\":\n  grade()" >> "users/"$3"/pcode/script.py"
 #docker build -t python-$3 --build-arg USER=$3 .

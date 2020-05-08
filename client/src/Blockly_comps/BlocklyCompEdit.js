@@ -166,14 +166,14 @@ class BlocklyCompEdit extends Component {
             disabled
             id="newxml"
             />
-          {/* <Button
-            text="Grade code"
+          <Button
+            text="Save Lesson"
             large
             icon="tick"
             id="gradeButton"
             intent="success"
             onClick={(e) => this.handleSubmit(e)}
-          /> */}
+          />
         </form>
         <p>{this.state.responseToPost}</p>
       </div>
