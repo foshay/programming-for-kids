@@ -215,7 +215,7 @@ app.post('/api/NewLesson', (req, res,next) => {
     let name = body.name;
     let hint = body.hint;
     // TODO add xml
-    let xml = null;
+    let xml = body.xml;
 
     let sql = 'SELECT MAX (lesson_number) FROM Lesson';
     db.get(sql, [], (err, row) => {
@@ -250,7 +250,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let name = body.name;
     let hint = body.hint;
     // TODO add xml
-    let xml = null;
+    let xml = body.xml;
 
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
