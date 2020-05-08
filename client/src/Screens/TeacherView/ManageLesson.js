@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 import { Button, ButtonGroup, } from "@blueprintjs/core";
 
-import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
+import BlocklyComp from '../../Blockly_comps/BlocklyComp';
 import EditField from '../../SmallComponents/EditField';
 
 class ManageLesson extends Component {
@@ -23,7 +23,7 @@ class ManageLesson extends Component {
       const lesson_id = this.props.match.params.lessonID;
       // only load in info if this is an existing lesson
       if (lesson_id !== 'NewLesson'){
-        return fetch('/api/lesson/' + lesson_id)
+        fetch('/api/lesson/' + lesson_id)
           .then(response => {
             return response.json();
           })
@@ -156,7 +156,7 @@ class ManageLesson extends Component {
           onChange={(value) => this.setState({ answer: value })}
         />
         <br />
-        <BlocklyCompEdit lessonID={this.props.match.params.lessonID} />
+        <BlocklyComp lessonID={this.props.match.params.lessonID} />
       </div>
     );
   }
