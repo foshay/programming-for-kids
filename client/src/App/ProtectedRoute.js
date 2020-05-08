@@ -6,11 +6,11 @@ const jwt = require('jsonwebtoken');
 class ProtectedRoute extends Component {
     checkTokenRoute = () => {
         var secret = this.props.secret;
-        console.log("checking token");
+        // console.log("checking token");
         var token = localStorage.getItem('nccjwt');
         var loggedIn = '';
         if (!token) {
-            console.log("ctr: No Token");
+            // console.log("ctr: No Token");
             loggedIn = "none";
         }
         else {
@@ -20,7 +20,7 @@ class ProtectedRoute extends Component {
                 else if (Boolean(decoded.teacher)) { loggedIn = "teacher"; }
                 // Student is logged in
                 else { loggedIn = "student"; }
-                console.log("ctr: " + loggedIn);
+                // console.log("ctr: " + loggedIn);
             });
         }
         return loggedIn;
@@ -34,7 +34,7 @@ class ProtectedRoute extends Component {
         var exact = this.props.exact;
 
         var correctUser = (user === requiredUser);
-        console.log ("PR cor " + correctUser);
+        // console.log ("PR cor " + correctUser);
         if (user === '') {
             console.log("LOADING");
             return(
