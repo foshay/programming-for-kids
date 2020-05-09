@@ -307,8 +307,13 @@ app.put('/api/UpdateLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log("Lesson update succecssful: " + name);
-            res.send("Success");
+            if (createGradingScript(code, lesson_id)) {
+                console.log("Error on lesson create");
+            }
+            else {
+                console.log("Lesson update succecssful: " + name);
+                res.send("Success");
+            }
         }
     });
 });
@@ -326,6 +331,7 @@ app.put('/api/RemoveLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
+            runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
             res.send("Success");
         }
