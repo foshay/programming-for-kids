@@ -9,10 +9,14 @@ class LessonScreen extends Component {
         initialXml: "",
     }
 
+    componentDidMount(){
+        this.getLesson();
+    }
+
     getLesson = async () => {
         const string = this.props.match.params.lessonID;
-        console.log("String: " + string);
-        return fetch('/api/lesson/' + string)
+        console.log("Lesson ID: " + string);
+        fetch('/api/lesson/' + string)
         .then(response =>{
             return response.json();
         })
@@ -24,11 +28,6 @@ class LessonScreen extends Component {
                 initialXml: json.data.xml
             });
         });
-    }
-
-    componentDidMount(){
-        console.log(this.props);
-        this.getLesson();
     }
 
     render(){
