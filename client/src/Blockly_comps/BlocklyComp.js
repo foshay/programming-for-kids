@@ -31,8 +31,11 @@ class BlocklyComp extends Component{
   componentDidMount = () => {
     this.checkApiConnection();
     this.loadOurBlocks();
-    // console.log(this);
-    const Editor = 
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.initialXml !== prevProps.initialXml) {
+      const Editor =
         <ReactBlocklyComponent.BlocklyEditor
           // The block categories to be available.
           toolboxCategories={this.state.toolboxCategories} //this is obvious what it does
@@ -45,16 +48,17 @@ class BlocklyComp extends Component{
             },
           }}
           //we can possibly change the initial xml on a per lesson basis... or not
-          initialXml={this.state.initialXml}
+          initialXml={this.props.initialXml}
           //the div wrapper that will be generated for blockly
           wrapperDivClassName="fill-height"
           //what method to call when the workspace changes
           workspaceDidChange={(workspace) => this.workspaceDidChange(workspace)}
         />
-    
-    // TODO find a better way to render the editor
-    if (document.getElementById('blockly') != null)
-      ReactDOM.render(Editor , document.getElementById('blockly'));
+
+      // TODO find a better way to render the editor
+      if (document.getElementById('blockly') !== null)
+        ReactDOM.render(Editor, document.getElementById('blockly'));
+    }
   }
 
   loadOurBlocks = () => {
@@ -79,7 +83,8 @@ class BlocklyComp extends Component{
       return response.json();
     })
     .then(json => {
-      this.setState({connectedResponse: json.express});
+      // TODO don't render if not connected?
+      this.setState({connectedResponse: json.message});
     });
   }
 
@@ -103,7 +108,7 @@ class BlocklyComp extends Component{
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "lesson": this.props.lessonID,
+          "lessonID": this.props.lessonID,
           "code": userCode,
           "user": user,
           "xml": newXml
