@@ -5,8 +5,8 @@ result = None
 def grade():
   global result
   if (usercode()) == 20:
-    result = True
+    result = 100
   else:
-    result = False
+    result = 0
   return result
 
