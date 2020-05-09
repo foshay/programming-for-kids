@@ -47,7 +47,7 @@ CREATE TABLE User(
 
 CREATE TABLE Grade(
   lesson_id TEXT PRIMARY KEY,
-  username TEXT UNIQUE,
+  username TEXT,
   progress_xml XML,
-  score INT
+  score INT DEFAULT 0
 );
