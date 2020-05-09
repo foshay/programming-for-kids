@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+
+// Our components
 import BlocklyComp from '../../Blockly_comps/BlocklyComp.js'
-import BounceLoader from 'react-spinners/BounceLoader';
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol.js';
+
+// Token things
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary"
 
 class LessonScreen extends Component {
     state = {
@@ -10,6 +15,7 @@ class LessonScreen extends Component {
         answer: "[Loading]",
         initialXml: "",
         isLoading: true,
+        username: "",
     }
 
     componentDidMount(){
@@ -17,26 +23,50 @@ class LessonScreen extends Component {
     }
 
     getLesson = async () => {
-        const string = this.props.match.params.lessonID;
-        console.log("Lesson ID: " + string);
-        fetch('/api/lesson/' + string)
-        .then(response =>{
-            this.setState({isLoading: false});
-            return response.json();
-        })
-        .then(json =>{
-            this.setState({
-                question: json.data.question,
-                hint: json.data.hint,
-                answer: json.data.answer,
-                initialXml: json.data.xml
+        var username = '';
+        const token = localStorage.getItem('nccjwt');
+        const lessonID = this.props.match.params.lessonID;
+        console.log("Lesson ID: " + lessonID);
+
+        // Check if anyone is logged in before showing anything
+        if (!token) {
+            console.log("No Token");
+            this.setState({ isLoading: false });
+        }
+        else {
+            // Make sure valid token and get username
+            jwt.verify(token, secret, (err, decoded) => {
+                if (err) { return; }
+                username = decoded.username;
+                this.setState({ username });
             });
-        });
+            // Get lesson info from api
+            fetch('/api/studentlesson/' + lessonID + '/' + username)
+                .then(response => {
+                    // api call is finshed stop showing loading
+                    this.setState({ isLoading: false });
+                    return response.json();
+                })
+                .then(json => {
+                    console.log(json);
+                    this.setState({
+                        question: json.data.question,
+                        hint: json.data.hint,
+                        answer: json.data.answer,
+                        initialXml: json.data.xml
+                    });
+                });
+        }
     }
 
     render(){
         if (this.state.isLoading){
+            // api call is loading
             return (<LoadingSymbol/>);
+        }
+        if (this.state.username = ""){
+            // no one is logged in
+            return (<div/>)
         }
         return (
             <div className="BodyMenu-Lesson">
@@ -46,7 +76,7 @@ class LessonScreen extends Component {
                     lessonID={this.props.match.params.lessonID}
                     initialXml={this.state.initialXml}
                 />
-                <h3>Answer: {this.state.answer}</h3>
+                <h3>Expected Answer: {this.state.answer}</h3>
             </div>
         );
     }
