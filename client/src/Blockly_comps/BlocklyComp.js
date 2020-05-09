@@ -33,7 +33,7 @@ class Editor extends React.Component {
 //this is optional for adding custom categories of blocks
 
 componentDidMount = (workspace) => {
-    window.setTimeout(() => {
+    
       
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
@@ -45,7 +45,7 @@ componentDidMount = (workspace) => {
           },
         ]),
       });
-    }, 2000);
+   
   }
 
   workspaceDidChange = (workspace) => {
@@ -56,7 +56,7 @@ componentDidMount = (workspace) => {
     });
     */
     //We can use this for saving user's progress
-    //workspace.addChangeListener(Blockly.Events.disableOrphans);
+    workspace.addChangeListener(Blockly.Events.disableOrphans);
     this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
     document.getElementById('newxml').value = this.state.initialXml;
 
