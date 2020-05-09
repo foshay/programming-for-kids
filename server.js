@@ -151,10 +151,18 @@ app.post('/api/grade', (req, res) => {
 //right now it is hard coded for saving to user id 6969. this can be changed
     runCmd("printf \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user + " && rm ./users/"+req.body.user+"/pcode/" + req.body.lesson, function (text, error) {
         console.log(text);
-
-        res.send(
-            `Results of grading your code: ` + text,
-        );
+        if (error){
+            res.json({
+                message: "Failure",
+                error: error
+            });
+        }
+        else {
+            messageText = "Results of grading your code: " + text;
+            res.json({
+                message: messageText
+            });
+        }
     });
 
 });
