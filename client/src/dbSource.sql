@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------
 DROP TABLE IF EXISTS Lesson;
 DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Grade;
 
 CREATE TABLE Lesson(
   lesson_id TEXT PRIMARY KEY,
@@ -9,7 +10,7 @@ CREATE TABLE Lesson(
   answer TEXT NOT NULL,
   name TEXT NOT NULL,
   hint TEXT,
-  xml TEXT
+  xml XML
 );
 INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml)
 VALUES('ab6da87d-eb81-4151-9715-1b0c24b6a2fe',
@@ -37,10 +38,16 @@ VALUES('19efdb93-94d4-4fec-b74e-ac38b32366ea',
         '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>');
 
 CREATE TABLE User(
-  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT PRIMARY KEY UNIQUE,
+  password TEXT NOT NULL,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  is_teacher BIT NOT NULL
+);
+
+CREATE TABLE Grade(
+  lesson_id TEXT PRIMARY KEY,
   username TEXT UNIQUE,
-  password TEXT NOT NULL,
-  is_teacher BIT
+  progress_xml XML,
+  score INT
 );
