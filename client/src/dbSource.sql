@@ -40,7 +40,7 @@ CREATE TABLE User(
   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
-  username TEXT NOT NULL,
+  username TEXT UNIQUE,
   password TEXT NOT NULL,
   is_teacher BIT
 );

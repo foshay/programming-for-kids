@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Route, Redirect, withRouter} from "react-router-dom";
-import Loading from '../SmallComponents/Loading';
 const jwt = require('jsonwebtoken');
 
 class ProtectedRoute extends Component {

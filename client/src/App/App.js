@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
-import Header from '../header_footer/Header.js';
-
 // Login and Register Screens
 import LoginScreen from '../Screens/LoginRegister/LoginScreen.js';
 import RegisterChoice from '../Screens/LoginRegister/RegisterChoice.js';
@@ -27,10 +25,13 @@ import "../CSS_files/header_footer.css"
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+// Token Dependent files
 import HomePath from './HomePath.js';
 import ProtectedRoute from './ProtectedRoute.js';
+import Header from '../header_footer/Header.js';
 
-// import { trackPromise } from 'react-promise-tracker';
+// For checking token
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary";
 

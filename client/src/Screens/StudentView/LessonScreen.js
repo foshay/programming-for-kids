@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import BlocklyComp from '../../Blockly_comps/BlocklyComp.js'
+import BounceLoader from 'react-spinners/BounceLoader';
+import LoadingSymbol from '../../SmallComponents/LoadingSymbol.js';
 
 class LessonScreen extends Component {
     state = {
@@ -7,6 +9,7 @@ class LessonScreen extends Component {
         hint: "[Loading]",
         answer: "[Loading]",
         initialXml: "",
+        isLoading: true,
     }
 
     componentDidMount(){
@@ -18,6 +21,7 @@ class LessonScreen extends Component {
         console.log("Lesson ID: " + string);
         fetch('/api/lesson/' + string)
         .then(response =>{
+            this.setState({isLoading: false});
             return response.json();
         })
         .then(json =>{
@@ -31,8 +35,10 @@ class LessonScreen extends Component {
     }
 
     render(){
-        console.log("Lesson Screen: ", this.state);
-        return(
+        if (this.state.isLoading){
+            return (<LoadingSymbol/>);
+        }
+        return (
             <div className="BodyMenu-Lesson">
                 <h3>Goal: {this.state.question}</h3>
                 <h3>Hint: {this.state.hint}</h3>
@@ -42,7 +48,7 @@ class LessonScreen extends Component {
                 />
                 <h3>Answer: {this.state.answer}</h3>
             </div>
-        )
+        );
     }
 }
 
