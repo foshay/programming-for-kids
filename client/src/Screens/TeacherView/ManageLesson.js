@@ -70,6 +70,7 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
+          "code": document.getElementById('code').value,
           // TODO add xml
           // TODO add grading script?
         })
@@ -99,6 +100,7 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
+          "code": document.getElementById('code').value,
           // TODO add xml
           // TODO add grading script?
         })

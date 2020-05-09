@@ -1,7 +1,12 @@
 #!/usr/bin/env python
+result = None
+
+# The base function block used for grading
 def grade():
- results = usercode()
- if (results == 20):
-  print("True")
- else:
-  print("False")
+  global result
+  if (usercode()) == 20:
+    result = True
+  else:
+    result = False
+  return result
+

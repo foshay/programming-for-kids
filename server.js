@@ -176,7 +176,7 @@ app.post('/api/grade', (req, res) => {
     var response;
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("printf \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user, function (text, error) {
+    runCmd("printf '%s' \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user, function (text, error) {
         console.log(text);
         if (error) {
             res.send(`Something went wrong`);
@@ -234,18 +234,15 @@ app.get('/api/Lesson/:id', (req, res) => {
 });
 
 function createGradingScript(code, lessonID) {
-    runCmd("printf \"" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
+    
+    runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
         console.log(text);
         var res = 0;
         if (error) {
             res = 1;
         }
-        res.send(
-            res
-        );
+        return res;
     });
-
-
 }
 
 // Make a new lesson

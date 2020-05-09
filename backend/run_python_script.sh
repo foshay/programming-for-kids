@@ -14,9 +14,11 @@ then
 fi
 
 cat $1 $2 > "users/"$3"/pcode/script.py"
-echo -e "if __name__ == \"__main__\":\n  grade()" >> "users/"$3"/pcode/script.py"
+echo -e "if __name__ == \"__main__\":\n  print(grade())" >> "users/"$3"/pcode/script.py"
 #docker build -t python-$3 --build-arg USER=$3 .
 #docker run python-$3
 #Run the newly generated file in virtual env here
-python "users/"$3"/pcode/script.py"
+result=`python "users/"$3"/pcode/script.py"`
+echo "$result" | tail -n1
+#get all other input with : echo "$result" | head -n-1
 exit 0

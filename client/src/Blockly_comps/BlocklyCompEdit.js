@@ -19,7 +19,8 @@ class Editor extends React.Component {
       //can use this.props.lessonID to select xml for the lesson based on lesson selected.
       // add deletable="false" to <block field of xml to make not deletable.
       // add editable="false" to make not editable
-      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>',
+      //<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="logic_boolean" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="BOOL">FALSE</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>
+      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="logic_boolean" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="BOOL">TRUE</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>',
       code: '',
       newxml: '',
     };
@@ -29,19 +30,33 @@ class Editor extends React.Component {
 //this is optional for adding custom categories of blocks
 
 componentDidMount = (workspace) => {
-    window.setTimeout(() => {
-      
+    
+  Blockly.Blocks['user_code'] = {
+    init: function() {
+      this.appendValueInput("input")
+        .setCheck(null)
+        .appendField("User Code");
+      this.setOutput(true, null);
+      this.setColour(0);
+      this.setTooltip("This block runs the user's written code");
+      this.setHelpUrl("");
+    }
+  };
+  Blockly.Python['user_code'] = function(block) {
+    var value_input = Blockly.Python.valueToCode(block, 'input', Blockly.Python.ORDER_ATOMIC);
+    var code = 'usercode(' + value_input + ')';
+    return [code, Blockly.Python.ORDER_NONE];
+  }
       this.setState({
         toolboxCategories: this.state.toolboxCategories.concat([
           {
-            name: 'AI category',
+            name: 'User code',
             blocks: [
-              { type: 'text' },
+              { type: 'user_code' },
               ],
           },
         ]),
       });
-    }, 2000);
   }
 
   workspaceDidChange = (workspace) => {
@@ -52,10 +67,10 @@ componentDidMount = (workspace) => {
     });
     */
     //We can use this for saving user's progress
-    //workspace.addChangeListener(Blockly.Events.disableOrphans);
-    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    document.getElementById('newxml').value = this.state.initialXml;
-
+    workspace.addChangeListener(Blockly.Events.disableOrphans);
+    var newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    //document.getElementById('newxml').value = this.state.initialXml;
+    console.log(newXml);
     //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
     //document.getElementById('generated-xml').innerText = newXml;
     
@@ -166,14 +181,6 @@ class BlocklyCompEdit extends Component {
             disabled
             id="newxml"
             />
-          <Button
-            text="Save Lesson"
-            large
-            icon="tick"
-            id="gradeButton"
-            intent="success"
-            onClick={(e) => this.handleSubmit(e)}
-          />
         </form>
         <p>{this.state.responseToPost}</p>
       </div>
