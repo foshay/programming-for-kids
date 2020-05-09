@@ -127,6 +127,35 @@ class BlocklyComp extends Component{
     workspace.addChangeListener(Blockly.Events.disableOrphans);
     this.setState({ newXml: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) });
     this.setState({ code: Blockly.Python.workspaceToCode(workspace) });
+
+    var username;
+    var token = localStorage.getItem('nccjwt');
+    if (!token) {
+      console.log("No Token");
+    }
+    else {
+      var newXml = this.state.newXml;
+      jwt.verify(token, secret, (err, decoded) => {
+        if (err) { return; }
+        username = decoded.username;
+      });
+      fetch('/api/SaveLessonProgress/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "lesson_id": this.props.lessonID,
+          "username": username,
+          "xml": newXml
+        })
+      })
+      .then((response) => {
+        console.log(response);
+      }).then((json) => {
+        console.log(json);
+      });
+    }
   }
 
   render = () => {
