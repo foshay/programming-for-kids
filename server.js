@@ -487,6 +487,9 @@ app.get('/User/:username', (req, res) => {
     let username = req.params.username;
     let params = [username];
 
+    // TODO also return scores for each lesson, stored in Grade
+    // scores should be in data.scores
+
     db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({

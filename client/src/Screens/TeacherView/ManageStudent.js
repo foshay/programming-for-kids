@@ -86,6 +86,7 @@ class ManageStudent extends Component {
             <br />
           </ButtonGroup>
           <h1>Grades Table </h1> 
+          {/* TODO add grades table */}
           <h3>(not yet implemented)</h3>
         </div>
         // we want to see the grade for each lesson
