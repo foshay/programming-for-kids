@@ -152,11 +152,12 @@ app.post('/api/login', (req, res, next) => {
     let username = body.username;
     let password = body.password;
     let sql = 'SELECT * FROM User WHERE username = ?';
+    console.log("Attempting login: ");
+    console.log([username, password]);
 
     // Check if there is a user with 'username' in the User
     // table, then check that we were given correct password
     db.get(sql, [username], (err, row) => {
-        console.log(row);
         //If the query is successful, compare the hash and return result
         if(!err && row !== undefined){
             let password_hash = row.password;
@@ -169,6 +170,7 @@ app.post('/api/login', (req, res, next) => {
                     var token = jwt.sign({username: username, teacher: is_teacher}, secret, {
                         expiresIn: 86400    //Expires in 24 hours
                     });
+                    console.log("Successful login");
                     console.log("True token: " + token);
                     res.json({
                         "message": "Success",
@@ -309,7 +311,7 @@ app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
             }
             // Only change returned xml if progress has been made
             if (row.progress_xml) {
-                data.xml = row;
+                data.xml = row.progress_xml;
                 console.log("Progress_xml is present");
             }
             console.log("Retrieving lesson:");
