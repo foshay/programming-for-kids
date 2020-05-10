@@ -38,7 +38,7 @@ VALUES('19efdb93-94d4-4fec-b74e-ac38b32366ea',
         '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>');
 
 CREATE TABLE User(
-  username TEXT PRIMARY KEY UNIQUE,
+  username TEXT PRIMARY KEY,
   password TEXT NOT NULL,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
@@ -46,8 +46,13 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Grade(
-  lesson_id TEXT PRIMARY KEY,
-  username TEXT,
   progress_xml XML,
-  score INT DEFAULT 0
+  score INT DEFAULT 0,
+  lesson_id TEXT NOT NULL,
+  username TEXT NOT NULL,
+  FOREIGN KEY (lesson_id) REFERENCES Lesson (lesson_id)
+    ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (username) REFERENCES User (username)
+    ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY (lesson_id, username)
 );
