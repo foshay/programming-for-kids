@@ -68,7 +68,7 @@ class ManageLesson extends Component {
 
     if (lesson_id === 'NewLesson') {
       // If we are creating a new lesson
-      const response = await fetch('/api/NewLesson', {
+      fetch('/api/NewLesson', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,22 +81,24 @@ class ManageLesson extends Component {
           "code": code,
           "xml": xml,
         })
+      }).then(response => {
+        return response.json();
+      }).then(json => {
+        if (json.message === "Success") {
+          console.info("Created " + name);
+          alert("Lesson Created");
+          // TODO add redirect back to manageLessons, 
+          //  similar to LoginScreen Redirect
+        }
+        else {
+          console.info("Error: " + json.message);
+          alert("Database Error");
+        }
       });
-      const body = await response.text();
-      if (body === "Success"){
-        console.info("Created " + name);
-        alert("Lesson Created");
-        // TODO add redirect back to manageLessons, 
-        //  similar to LoginScreen Redirect
-      }
-      else {
-        console.info("Error: " + body);
-        alert("Database Error");
-      }
     }
     else {
       // If we are editing an existing lesson
-      const response = await fetch('/api/UpdateLesson/', {
+      fetch('/api/UpdateLesson/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -110,17 +112,21 @@ class ManageLesson extends Component {
           "code": code,
           "xml": xml,
         })
-      });
-      const body = await response.text();
-      if (body === "Success"){
-        console.info("Updated " + name);
-        alert("Lesson Updated");
-        // TODO add redirect back to manageLessons
-      }
-      else {
-        console.info("Error: " + body);
-        alert("Database Error");
-      }
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(json => {
+          if (json.message === "Success") {
+            console.info("Updated " + name);
+            alert("Lesson Updated");
+            // TODO add redirect back to manageLessons
+          }
+          else {
+            console.info("Error: " + json.message);
+            alert("Database Error");
+          }
+        });
     }
   };
 
@@ -133,7 +139,7 @@ class ManageLesson extends Component {
       // may not be the best idea in case of accidental deletion
       // however, otp confirmation should make accidental deletion difficult
       // This may happen with the schema anyway
-    const response = await fetch('/api/RemoveLesson', {
+    fetch('/api/RemoveLesson', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -141,13 +147,17 @@ class ManageLesson extends Component {
       body: JSON.stringify({
         lesson_id: lesson_id,
       })
-    });
-    const body = await response.text();
-    if (body === "Success") {
-      console.info("Removed " + lesson_id);
-      alert("Lesson Removed");
-      // TODO add redirect back to manageLessons
-    }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        if (json.message === "Success") {
+          console.info("Removed " + lesson_id);
+          alert("Lesson Removed");
+          // TODO add redirect back to manageLessons
+        }
+      });
   }
 
   deleteButton = () => {
@@ -221,8 +231,8 @@ class ManageLesson extends Component {
         <BlocklyComp edit
         lessonID={this.props.match.params.lessonID} 
         initialXml={this.state.initialXml}
-        setCode={(code) => this.setState({code})}
-        setXml={(xml) => this.setState({xml})}
+        setCode={(code) => this.setState({code: code})}
+        setXml={(xml) => this.setState({xml: xml})}
         />
       </div>
     );
