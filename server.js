@@ -310,7 +310,7 @@ app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
             // Only change returned xml if progress has been made
             if (row.progress_xml) {
                 data.xml = row;
-                console.log("Student has made progress");
+                console.log("Progress_xml is present");
             }
             console.log("Retrieving lesson:");
             console.log(data);
@@ -334,12 +334,14 @@ app.post('/api/SaveLessonProgress/', (req, res) => {
     
     db.run(sql, params, (err) => {
         if (err) {
+            console.log("Progress update failed: ");
             console.log(err);
             res.status(500).json({
                 "message": "DB Failure"
             });
         } else {
-            console.log("Progress update succecssful: " + username + " " + lesson_id);
+            console.log("Progress update succecssful: ");
+            console.log([username, lesson_id, xml]);
             res.json({
                 "message": "Success"
             });
