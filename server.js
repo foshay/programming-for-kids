@@ -438,20 +438,19 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let answer = body.answer;
     let name = body.name;
     let hint = body.hint;
-    // TODO add xml
     let xml = body.xml;
+    let code = body.code;
 
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
     let params = [question, answer, name, hint, xml, lesson_id];
-    // console.log(params);
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
             res.send("DB Failure");
         } else {
             if (createGradingScript(code, lesson_id)) {
-                console.log("Error on lesson create");
+                console.log("Error on lesson update");
             }
             else {
                 console.log("Lesson update succecssful: " + name);
