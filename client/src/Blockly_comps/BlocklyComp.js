@@ -125,36 +125,45 @@ class BlocklyComp extends Component{
 
   workspaceDidChange = (workspace) => {
     workspace.addChangeListener(Blockly.Events.disableOrphans);
-    this.setState({ newXml: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace)) });
-    this.setState({ code: Blockly.Python.workspaceToCode(workspace) });
+    const oldCode = this.state.code;
+    const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    const code = Blockly.Python.workspaceToCode(workspace);
+    this.setState({ newXml: newXml});
+    this.setState({ code: code });
 
-    var username;
-    var token = localStorage.getItem('nccjwt');
-    if (!token) {
-      console.log("No Token");
-    }
-    else {
-      var newXml = this.state.newXml;
-      jwt.verify(token, secret, (err, decoded) => {
-        if (err) { return; }
-        username = decoded.username;
-      });
-      fetch('/api/SaveLessonProgress/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "lesson_id": this.props.lessonID,
-          "username": username,
-          "xml": newXml
+    // if code has changed
+    // Save lesson progress
+    if (code !== oldCode && oldCode) {
+      console.log(oldCode);
+      console.log(code);
+      var username;
+      var token = localStorage.getItem('nccjwt');
+      if (!token) {
+        console.log("No Token");
+      }
+      else {
+        jwt.verify(token, secret, (err, decoded) => {
+          if (err) { return; }
+          username = decoded.username;
+        });
+        fetch('/api/SaveLessonProgress/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "lesson_id": this.props.lessonID,
+            "username": username,
+            "xml": newXml
+          })
         })
-      })
-      .then((response) => {
-        console.log(response);
-      }).then((json) => {
-        console.log(json);
-      });
+          .then((response) => {
+            return response.json();
+          }).then((json) => {
+            console.log("Saving progress...");
+            console.log(json);
+          });
+      }
     }
   }
 
