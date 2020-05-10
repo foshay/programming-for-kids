@@ -62,16 +62,49 @@ class BlocklyComp extends Component{
   }
 
   loadOurBlocks = () => {
-    this.setState({
-      toolboxCategories: this.state.toolboxCategories.concat([
-        {
-          name: 'AI category',
-          blocks: [
-            { type: 'text' },
-          ],
-        },
-      ]),
-    });
+    if (this.props.edit) {
+      // make a block for user_code
+      Blockly.Blocks['user_code'] = {
+        init: function () {
+          this.appendValueInput("input")
+            .setCheck(null)
+            .appendField("User Code");
+          this.setOutput(true, null);
+          this.setColour(0);
+          this.setTooltip("This block runs the user's written code");
+          this.setHelpUrl("");
+        }
+      };
+      Blockly.Python['user_code'] = function (block) {
+        var value_input = Blockly.Python.valueToCode(block, 'input', Blockly.Python.ORDER_ATOMIC);
+        var code = 'usercode(' + value_input + ')';
+        return [code, Blockly.Python.ORDER_NONE];
+      }
+      this.setState({
+        toolboxCategories: this.state.toolboxCategories.concat([
+          {
+            // TODO add color
+            name: 'User code',
+            blocks: [
+              { type: 'user_code' },
+            ],
+          },
+        ]),
+      });
+    }
+    else {
+      this.setState({
+        toolboxCategories: this.state.toolboxCategories.concat([
+          {
+            // TODO add color
+            name: 'AI category',
+            blocks: [
+              { type: 'text' },
+            ],
+          },
+        ]),
+      });
+    }
   }
 
   checkApiConnection = () => {
@@ -116,8 +149,9 @@ class BlocklyComp extends Component{
       })
       .then((response) => {
         console.log(response);
-        // this.setState({gradeResponse: response});
+        return response.json();
       }).then((json) => {
+        this.setState({gradeResponse: json.message});
         console.log(json);
       });
     }
@@ -128,42 +162,66 @@ class BlocklyComp extends Component{
     const oldCode = this.state.code;
     const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
     const code = Blockly.Python.workspaceToCode(workspace);
-    this.setState({ newXml: newXml});
-    this.setState({ code: code });
 
-    // if code has changed
-    // Save lesson progress
-    if (code !== oldCode && oldCode) {
-      console.log(oldCode);
-      console.log(code);
-      var username;
-      var token = localStorage.getItem('nccjwt');
-      if (!token) {
-        console.log("No Token");
-      }
-      else {
-        jwt.verify(token, secret, (err, decoded) => {
-          if (err) { return; }
-          username = decoded.username;
-        });
-        fetch('/api/SaveLessonProgress/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "lesson_id": this.props.lessonID,
-            "username": username,
-            "xml": newXml
-          })
-        })
-          .then((response) => {
-            return response.json();
-          }).then((json) => {
-            console.log("Saving progress...");
-            console.log(json);
+    if (this.props.edit) {
+      this.props.setCode(code);
+      this.props.setXml(newXml);
+    }
+    else {
+      this.setState({ newXml: newXml });
+      this.setState({ code: code });
+      // if code has changed
+      // Save lesson progress
+      if (code !== oldCode && oldCode) {
+        console.log(oldCode);
+        console.log(code);
+        var username;
+        var token = localStorage.getItem('nccjwt');
+        if (!token) {
+          console.log("No Token");
+        }
+        else {
+          jwt.verify(token, secret, (err, decoded) => {
+            if (err) { return; }
+            username = decoded.username;
           });
+          fetch('/api/SaveLessonProgress/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "lesson_id": this.props.lessonID,
+              "username": username,
+              "xml": newXml
+            })
+          })
+            .then((response) => {
+              return response.json();
+            }).then((json) => {
+              console.log("Saving progress...");
+              console.log(json);
+            });
+        }
       }
+    }
+  }
+
+  GradeButton = () => {
+    if (this.props.edit) {
+      return <div/>
+    }
+    else {
+      return (
+        <Button
+          text={"Grade code"}
+          large
+          icon="tick"
+          id="gradeButton"
+          intent="success"
+          onClick={(e) => this.handleSubmit(e)}
+        />
+      )
     }
   }
 
@@ -173,14 +231,7 @@ class BlocklyComp extends Component{
         <ToggleToolbox/>
         <div style={{ height: '600px', width: `100%` }} id="blockly" />
         <p>{this.state.gradeResponse}</p>
-        <Button
-          text="Grade code"
-          large
-          icon="tick"
-          id="gradeButton"
-          intent="success"
-          onClick={(e) => this.handleSubmit(e)}
-        />
+        <this.GradeButton/>
         <p>{this.state.connectedResponse}</p>
       </div>
     )

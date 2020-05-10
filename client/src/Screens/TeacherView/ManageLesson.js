@@ -14,6 +14,11 @@ class ManageLesson extends Component {
     question: '',
     hint: '',
     answer: '',
+    code: '',
+    xml: '',
+    // this is the default for new lesson, but could
+    // be different for existing lesson
+    initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="math_number" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="NUM">100</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>',
     isLoading: true,
   }
 
@@ -24,6 +29,7 @@ class ManageLesson extends Component {
   getLessonInfo = async () => {
       const lesson_id = this.props.match.params.lessonID;
       // only load in info if this is an existing lesson
+      // TODO add loading in xml for existing lesson
       if (lesson_id !== 'NewLesson'){
         fetch('/api/lesson/' + lesson_id)
           .then(response => {
@@ -51,6 +57,8 @@ class ManageLesson extends Component {
     var hint = this.state.hint;
     var answer = this.state.answer;
     var lesson_id = this.props.match.params.lessonID;
+    var code = this.state.code;
+    var xml = this.state.xml;
 
     // check that none are empty
     if ((name === '') || (question === '') || (hint === '') || (answer === '')) {
@@ -70,9 +78,8 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
-          "code": document.getElementById('code').value,
-          // TODO add xml
-          // TODO add grading script?
+          "code": code,
+          "xml": xml,
         })
       });
       const body = await response.text();
@@ -100,9 +107,8 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
-          "code": document.getElementById('code').value,
-          // TODO add xml
-          // TODO add grading script?
+          "code": code,
+          "xml": xml,
         })
       });
       const body = await response.text();
@@ -126,6 +132,7 @@ class ManageLesson extends Component {
     // TODO remove all grades from this lesson?
       // may not be the best idea in case of accidental deletion
       // however, otp confirmation should make accidental deletion difficult
+      // This may happen with the schema anyway
     const response = await fetch('/api/RemoveLesson', {
       method: 'POST',
       headers: {
@@ -211,7 +218,12 @@ class ManageLesson extends Component {
           onChange={(value) => this.setState({ answer: value })}
         />
         <br />
-        <BlocklyComp lessonID={this.props.match.params.lessonID} />
+        <BlocklyComp edit
+        lessonID={this.props.match.params.lessonID} 
+        initialXml={this.state.initialXml}
+        setCode={(code) => this.setState({code})}
+        setXml={(xml) => this.setState({xml})}
+        />
       </div>
     );
   }
