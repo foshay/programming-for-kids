@@ -37,9 +37,7 @@ function runCmd(cmd, callback) {
                 return callback("\`\`\`" + stderr + "\n" + stdout + "\`\`\`");
             }
         }
-        // console.log(stdout);
         if (callback) {
-            //console.log("Callback stdout");
             return callback(stdout);
         }
     });
@@ -78,6 +76,10 @@ app.post('/api/register', async (req, res, next) => {
                 is_teacher = true;
                 // TODO check otp
                 // if otp does not match, respond with error and return
+
+                // check otp
+
+                // otp does not match, return without inserting to database
             }
             else if (user_type === "student") {
                 is_teacher = false;
@@ -87,6 +89,7 @@ app.post('/api/register', async (req, res, next) => {
                 res.status(400).json({
                     "message": "Invalid user type",
                 });
+                // return without inserting to database
                 return;
             }
 
@@ -101,9 +104,10 @@ app.post('/api/register', async (req, res, next) => {
                     res.status(400).json({
                         "message": "Username exists",
                     });
+                    // username exists, return without doing more
                     return;
                 }
-                if (user_type === "student") {
+                else if (user_type === "student") {
                     // Create student directory via script
                     runCmd("./backend/create_user.sh " + username, function (text, err) {
                         if (text === "Failure") {
@@ -112,6 +116,8 @@ app.post('/api/register', async (req, res, next) => {
                             });
                             console.log("Failure during user directory creation");
                             rimraf("./users/" + username);
+                            // TODO see if we should run a command to remove the new user from
+                            // the database now
                             return;
                         }
                     });
@@ -147,12 +153,15 @@ app.post('/api/login', (req, res, next) => {
     let password = body.password;
     let sql = 'SELECT * FROM User WHERE username = ?';
 
+    // Check if there is a user with 'username' in the User
+    // table, then check that we were given correct password
     db.get(sql, [username], (err, row) => {
         console.log(row);
         //If the query is successful, compare the hash and return result
         if(!err && row !== undefined){
             let password_hash = row.password;
             let is_teacher = row.is_teacher;
+            // Check the password
             bcrypt.compare(password, password_hash, (err, result) => {
                 if(result === true){
                     //Sign a token with username as payload
@@ -166,8 +175,9 @@ app.post('/api/login', (req, res, next) => {
                         "token": token
                     });
                 }else{
-                    res.json({
-                        "message": "Failure"
+                    // status: unauthorized
+                    res.status(401).json({
+                        "message": "Wrong password"
                     });
                 }
             });
