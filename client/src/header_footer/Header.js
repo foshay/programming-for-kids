@@ -43,18 +43,23 @@ class Header extends Component {
     }
 
     usernameMessage = () => {
-        if (this.username){
+        if (this.state.username){
             return(
                 <div>
                     <MenuItem
                         text={"Logged in as " + this.state.username}
                     />
+                    {/* <h4>
+                        {"Logged in as " + this.state.username}
+                    </h4> */}
                     <MenuDivider />
                 </div>
             );
         }
         else {
-            <div/>
+            return(
+                <div />
+            );
         }
     }
 
