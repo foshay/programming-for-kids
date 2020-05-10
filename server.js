@@ -371,9 +371,6 @@ function createGradingScript(code, lessonID) {
 
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
-    // TODO set grade for this lesson for all students to 0
-    // SELECT username FROM User WHERE is_teacher=0
-    // make an entry for all the usernames in the Grade table...?
 
     let body = req.body;
     let lesson_id = uuidv4();
@@ -390,7 +387,6 @@ app.post('/api/NewLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log(row);
             lesson_number = row["MAX (lesson_number)"] + 1;
             // console.log(lesson_number);
             // TODO change this to be just one call
@@ -399,14 +395,34 @@ app.post('/api/NewLesson', (req, res,next) => {
             db.run(sql, params, (err) => {
                 if (err) {
                     console.log(err);
-                    res.send("DB Failure");
+                    res.json({
+                        "message": "DB Failure",
+                        "error": err
+                    });
+                    return;
                 } else {
                     if (createGradingScript(code, lesson_id)) {
                         console.log("Error on lesson create");
                     }
                     else {
-                        console.log("Lesson creation succecssful: " + name);
-                        res.send("Success");
+                        // TODO set grade for this lesson for all students to 0
+                        // make an entry for all the usernames in the Grade table...?
+                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username FROM User WHERE is_teacher=0';
+                        let params = [lesson_id];
+                        db.run(sql, params, (err) => {
+                            if (err){
+                                console.log(err);
+                                res.json({
+                                    "message": "DB Failure",
+                                    "error": err
+                                });
+                                return;
+                            }
+                            console.log("Lesson creation succecssful: " + name);
+                            res.json({
+                                "message": "Success",
+                            });
+                        });
                     }
                 }
             });
