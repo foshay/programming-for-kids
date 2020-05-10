@@ -204,7 +204,7 @@ app.get('/api/connect', (req, res, next) => {
 });
 
 app.post('/api/grade', (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     var body = req.body;
     var lesson_id = body.lessonID;
     var code = body.code;
@@ -222,6 +222,7 @@ app.post('/api/grade', (req, res) => {
             errorText = error;
         }
         else {
+            console.log("Results of grading code: ");
             console.log(text);
             messageText = "Results of grading your code: " + text;
             let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
@@ -267,7 +268,7 @@ app.get('/api/Lesson/:id', (req, res) => {
 
     // get query to database for lesson with :id
     db.get(sql, lesson_id, (err, row) => {
-        console.log(row);
+        // console.log(row);
         if (err) {
             res.status(400).json({
                 "error": err.message,
