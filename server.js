@@ -495,6 +495,8 @@ app.get('/User/:username', (req, res) => {
             })
             return;
         }
+        console.log("Retrieving user:");
+        console.log(row);
         res.json({
             message: "Success",
             data: row

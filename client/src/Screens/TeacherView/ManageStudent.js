@@ -16,7 +16,7 @@ class ManageStudent extends Component {
     var user_id = this.props.match.params.studentID;
     console.log(user_id);
     // TODO change all instances of this call to /api/User/:user_id
-    return fetch('/User/' + user_id)
+    fetch('/User/' + user_id)
       .then(response => {
         console.log(response);
         this.setState({isLoading: false});
