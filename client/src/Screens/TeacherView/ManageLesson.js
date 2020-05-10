@@ -7,6 +7,10 @@ import BlocklyComp from '../../Blockly_comps/BlocklyComp';
 import EditField from '../../SmallComponents/EditField';
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
+// this is the default for new lesson, but could
+// be different for existing lesson
+const initialXml = '<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="math_number" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="NUM">100</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>';
+
 class ManageLesson extends Component {
   state={
     // TODO change this to take in array of props
@@ -16,9 +20,7 @@ class ManageLesson extends Component {
     answer: '',
     code: '',
     xml: '',
-    // this is the default for new lesson, but could
-    // be different for existing lesson
-    initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="math_number" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="NUM">100</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>',
+    initialXml: '',
     isLoading: true,
   }
 
@@ -41,11 +43,13 @@ class ManageLesson extends Component {
               name: json.data.name,
               question: json.data.question,
               hint: json.data.hint,
-              answer: json.data.answer
+              answer: json.data.answer,
+              initialXml: json.data.xml
             });
           });
       }
       else{
+        this.setState({initialXml: initialXml});
         this.setState({isLoading: false});
       }
   }
