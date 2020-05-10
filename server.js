@@ -53,7 +53,7 @@ function runCmd(cmd, callback) {
 // Insert user into user table
 app.post('/api/register', async (req, res, next) => {
     let body = req.body;
-    console.log(body);
+    // console.log(body);
     let username = body.username;
     let password = body.password;
     let first_name = body.first_name;
@@ -286,7 +286,6 @@ app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
 
     // get query to database for lesson with :lesson_id
     db.get(sql, params, (err, row) => {
-        console.log(row);
         if (err) {
             res.status(400).json({
                 "error": err.message,
@@ -295,31 +294,31 @@ app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
             return;
         }
         data = row;
-    });
 
-    // Check progress saved in the Grade table
-    sql = 'SELECT progress_xml FROM Grade WHERE lesson_id = ? AND username = ?'
-    params = [lesson_id, username];
-    db.get(sql, params, (err, row) => {
-        console.log(row);
-        if (err) {
-            res.status(500).json({
-                "error": err.message,
-                "message": "DB Failure"
-            });
-            console.log(err);
-            return;
-        }
-        // Only change returned xml if progress has been made
-        if (row){
-            data.xml = row;
+        // Check progress saved in the Grade table
+        sql = 'SELECT progress_xml FROM Grade WHERE lesson_id = ? AND username = ?'
+        params = [lesson_id, username];
+        db.get(sql, params, (err, row) => {
+            if (err) {
+                res.status(500).json({
+                    "error": err.message,
+                    "message": "DB Failure"
+                });
+                console.log(err);
+                return;
+            }
+            // Only change returned xml if progress has been made
+            if (row.progress_xml) {
+                data.xml = row;
+                console.log("Student has made progress");
+            }
+            console.log("Retrieving lesson:");
             console.log(data);
-        }
-    });
-
-    res.json({
-        message: "Success",
-        data: data
+            res.json({
+                message: "Success",
+                data: data
+            });
+        });
     });
 });
 
