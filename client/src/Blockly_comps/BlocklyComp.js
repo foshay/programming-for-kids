@@ -34,7 +34,7 @@ class BlocklyComp extends Component{
   }
 
   componentDidUpdate = (prevProps) => {
-    if (this.props.initialXml !== prevProps.initialXml) {
+    if ((this.props.initialXml !== prevProps.initialXml) || prevProps.initialXml) {
       const Editor =
         <ReactBlocklyComponent.BlocklyEditor
           // The block categories to be available.
