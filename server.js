@@ -212,7 +212,7 @@ app.post('/api/grade', (req, res) => {
         + username+ "/pcode/" + lesson_id, function (text, error) {
         console.log(text);
         if (error){
-            messageText = "Failure running code";
+            messageText = "Something went wrong.";
             errorText = error;
         }
         else {
@@ -351,6 +351,17 @@ app.post('/api/SaveLessonProgress/', (req, res) => {
     });
 });
 
+function createGradingScript(code, lessonID) {
+    runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
+        console.log(text);
+        var res = 0;
+        if (error) {
+            res = 1;
+        }
+        return res;
+    });
+}
+
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
     // TODO set grade for this lesson for all students to 0
@@ -364,6 +375,7 @@ app.post('/api/NewLesson', (req, res,next) => {
     let name = body.name;
     let hint = body.hint;
     let xml = body.xml;
+    let code = body.code;
 
     let sql = 'SELECT MAX (lesson_number) FROM Lesson';
     db.get(sql, [], (err, row) => {
@@ -382,8 +394,13 @@ app.post('/api/NewLesson', (req, res,next) => {
                     console.log(err);
                     res.send("DB Failure");
                 } else {
-                    console.log("Lesson creation succecssful: " + name);
-                    res.send("Success");
+                    if (createGradingScript(code, lesson_id)) {
+                        console.log("Error on lesson create");
+                    }
+                    else {
+                        console.log("Lesson creation succecssful: " + name);
+                        res.send("Success");
+                    }
                 }
             });
         }
@@ -410,8 +427,13 @@ app.put('/api/UpdateLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log("Lesson update succecssful: " + name);
-            res.send("Success");
+            if (createGradingScript(code, lesson_id)) {
+                console.log("Error on lesson create");
+            }
+            else {
+                console.log("Lesson update succecssful: " + name);
+                res.send("Success");
+            }
         }
     });
 });
@@ -429,6 +451,7 @@ app.put('/api/RemoveLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
+            runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
             res.send("Success");
         }
