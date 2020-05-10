@@ -96,7 +96,7 @@ app.post('/api/register', async (req, res, next) => {
             // Insert new user to database
             sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
             params = [first_name, last_name, username, password_hash, is_teacher];
-            console.log("Attempting insert:");
+            console.log("Attempting user creation:");
             console.log(params);
             db.run(sql, params, (err) => {
                 if (err) {
@@ -107,7 +107,7 @@ app.post('/api/register', async (req, res, next) => {
                     // username exists, return without doing more
                     return;
                 }
-                else if (user_type === "student") {
+                if (user_type === "student") {
                     // Create student directory via script
                     runCmd("./backend/create_user.sh " + username, function (text, err) {
                         if (text === "Failure") {
@@ -129,15 +129,22 @@ app.post('/api/register', async (req, res, next) => {
                         if (err) {
                             console.log(err);
                             console.log("Error populating grades: " + username);
+                            // TODO remove row in User?
                             res.json({
                                 "message": "Failure",
                             });
                             return;
                         }
-                        console.log("User creation succecssful: " + username);
+                        console.log("Student creation succecssful: " + username);
                         res.json({
                             "message": "Success",
                         });
+                    });
+                }
+                else {
+                    console.log("Teacher creation succecssful: " + username);
+                    res.json({
+                        "message": "Success",
                     });
                 }
             });
@@ -210,27 +217,26 @@ app.post('/api/grade', (req, res) => {
         + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id 
         + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/" 
         + username+ "/pcode/" + lesson_id, function (text, error) {
-        console.log(text);
         if (error){
             messageText = "Something went wrong.";
             errorText = error;
         }
         else {
+            console.log(text);
             messageText = "Results of grading your code: " + text;
+            let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
+            let params = [text, username, lesson_id];
+            db.run(sql, params, (error) => {
+                if (error) {
+                    messageText = "Database Error";
+                    errorText = error;
+                }
+            });
         }
-    });
-    
-    let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
-    let params = [text, username, lesson_id];
-    db.run(sql, params, (error) => {
-        if (error) {
-            messageText = "Database Error";
-            errorText = error;
-        }
-    });
-    res.json({
-        message: messageText,
-        error: errorText
+        res.json({
+            message: messageText,
+            error: errorText
+        });
     });
 });
 
