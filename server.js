@@ -385,7 +385,9 @@ app.post('/api/NewLesson', (req, res,next) => {
     db.get(sql, [], (err, row) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
             lesson_number = row["MAX (lesson_number)"] + 1;
             // console.log(lesson_number);
@@ -447,14 +449,21 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
             if (createGradingScript(code, lesson_id)) {
                 console.log("Error on lesson update");
+                res.json({
+                    "message": "Error creating grading script"
+                })
             }
             else {
                 console.log("Lesson update succecssful: " + name);
-                res.send("Success");
+                res.json({
+                    "message": "Success"
+                })
             }
         }
     });
@@ -471,11 +480,15 @@ app.put('/api/RemoveLesson', (req, res,next) => {
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
             runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
-            res.send("Success");
+            res.json({
+                "message": "Success"
+            })
         }
     });
 });
