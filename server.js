@@ -37,17 +37,23 @@ function runCmd(cmd, callback) {
                 return callback("\`\`\`" + stderr + "\n" + stdout + "\`\`\`");
             }
         }
-        // console.log(stdout);
         if (callback) {
-            //console.log("Callback stdout");
             return callback(stdout);
         }
     });
 }
 
-//Register a user. If username already exists, return "Failure"
-app.post('/api/register', (req, res,next) => {
+// Register a user
+// Makes either a student or a teacher
+// If student
+    // Make a user directory
+    // Make grade entries for all existing lessons
+// If teacher
+    // check otp token
+// Insert user into user table
+app.post('/api/register', async (req, res, next) => {
     let body = req.body;
+    // console.log(body);
     let username = body.username;
     let password = body.password;
     let first_name = body.first_name;
@@ -55,74 +61,94 @@ app.post('/api/register', (req, res,next) => {
     let user_type = body.user_type;
     let otp = body.otp;
     let sql = '';
+    let params = '';
 
-    sql = 'SELECT * FROM User WHERE username = ?'
-    db.get(sql, [username], (err,row) => {
-        if (row){
-            console.log("user already exists: ");
-            console.log(row);
-            res.json({
-                message: "Username exists"
-            });
-            return;
-        }
-        else {
-            //Hash Password
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(password, salt, (err, password_hash) => {
-                    // TODO add sql to ensure username is unique
-                    sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
-                    if (user_type === "teacher") {
-                        // TODO check otp
-                        let params = [first_name, last_name, username, password_hash, true];
-                        db.run(sql, params, (err) => {
-                            if (err) {
-                                console.log(err);
-                                res.json({
-                                    "message": "DB Failure",
-                                });
-                            } else {
-                                console.log("User creation succecssful: " + username);
-                                res.json({
-                                    "message": "Success",
-                                });
-                            }
-                        });
-                    }
-                    else if (user_type === "student") {
-                        // TODO set the grades for all existing lessons to 0
-                        // TODO make username unique (currently is not working)
-                        let params = [first_name, last_name, username, password_hash, false];
-                        // Create user via script, then insert them into the database
-                        runCmd("./backend/create_user.sh " + username, function (text, err) {
-                            if (text !== "Failure") {
-                                // Add user to the database
-                                db.run(sql, params, (err) => {
-                                    if (err) {
-                                        console.log(err);
-                                        // Remove the new user's directory
-                                        rimraf("./users/" + username);
-                                        res.json({
-                                            "message": "DB failure",
-                                            "error": err,
-                                        });
-                                    } else {
-                                        console.log("User creation succecssful: " + username);
-                                        res.json({
-                                            "message": "Success",
-                                        });
-                                    }
-                                });
-                            } else {
-                                res.json({
-                                    "message": text,
-                                });
-                            }
-                        });
-                    }
+    // TODO add checking that password meets requirements
+    // i.e. contains symbol, number of chars, etc.
+
+    // Hash Password
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+            password_hash = hash;
+
+            // Have to have these inside bcrypt because bcrypt is async
+            if (user_type === "teacher") {
+                is_teacher = true;
+                // TODO check otp
+                // if otp does not match, respond with error and return
+
+                // check otp
+
+                // otp does not match, return without inserting to database
+            }
+            else if (user_type === "student") {
+                is_teacher = false;
+            }
+            else {
+                // user_type must either be teacher or student
+                res.status(400).json({
+                    "message": "Invalid user type",
                 });
+                // return without inserting to database
+                return;
+            }
+
+            // Insert new user to database
+            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+            params = [first_name, last_name, username, password_hash, is_teacher];
+            console.log("Attempting user creation:");
+            console.log(params);
+            db.run(sql, params, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({
+                        "message": "Username exists",
+                    });
+                    // username exists, return without doing more
+                    return;
+                }
+                if (user_type === "student") {
+                    // Create student directory via script
+                    runCmd("./backend/create_user.sh " + username, function (text, err) {
+                        if (text === "Failure") {
+                            res.status(500).json({
+                                "message": text,
+                            });
+                            console.log("Failure during user directory creation");
+                            rimraf("./users/" + username);
+                            // TODO see if we should run a command to remove the new user from
+                            // the database now
+                            return;
+                        }
+                    });
+                    // Insert a row to Grade for each existing lesson for this user
+                    // xml_progress is NULL, score is default 0
+                    sql = 'INSERT INTO Grade(username, lesson_id) SELECT ?, lesson_id FROM Lesson';
+                    params = [username];
+                    db.run(sql, params, (err) => {
+                        if (err) {
+                            console.log(err);
+                            console.log("Error populating grades: " + username);
+                            // TODO remove row in User?
+                            res.json({
+                                "message": "Failure",
+                            });
+                            return;
+                        }
+                        console.log("Student creation succecssful: " + username);
+                        res.json({
+                            "message": "Success",
+                        });
+                    });
+                }
+                else {
+                    console.log("Teacher creation succecssful: " + username);
+                    res.json({
+                        "message": "Success",
+                    });
+                }
             });
-        }
+        });
     });
 });
 
@@ -133,13 +159,17 @@ app.post('/api/login', (req, res, next) => {
     let username = body.username;
     let password = body.password;
     let sql = 'SELECT * FROM User WHERE username = ?';
+    console.log("Attempting login: ");
+    console.log([username, password]);
 
-    db.get(sql, [username], (err,row) => {
-        console.log(row);
+    // Check if there is a user with 'username' in the User
+    // table, then check that we were given correct password
+    db.get(sql, [username], (err, row) => {
         //If the query is successful, compare the hash and return result
-        if(!err && row != undefined){
+        if(!err && row !== undefined){
             let password_hash = row.password;
             let is_teacher = row.is_teacher;
+            // Check the password
             bcrypt.compare(password, password_hash, (err, result) => {
                 if(result === true){
                     //Sign a token with username as payload
@@ -147,19 +177,22 @@ app.post('/api/login', (req, res, next) => {
                     var token = jwt.sign({username: username, teacher: is_teacher}, secret, {
                         expiresIn: 86400    //Expires in 24 hours
                     });
+                    console.log("Successful login");
                     console.log("True token: " + token);
                     res.json({
                         "message": "Success",
                         "token": token
                     });
                 }else{
-                    //console.log("Login fail" + err);
-                    res.json({
-                        "message": "Failure"
+                    // status: unauthorized
+                    res.status(401).json({
+                        "message": "Wrong password"
                     });
                 }
             });
-        }else{
+        }
+        // If either db error, or username not in datbase
+        else{
             res.json({"message": "Failure"});
         }
     });
@@ -167,30 +200,46 @@ app.post('/api/login', (req, res, next) => {
 
 //---------------------------------------------------------------  Grading api calls below here ----------------------------------------------------
 app.get('/api/connect', (req, res, next) => {
-    res.send({ express: 'Connected to the grading server' });
+    res.json({ message: 'Connected to the grading server' });
 });
 
 app.post('/api/grade', (req, res) => {
-    console.log("body "+req.body.code+" "+req.body.lesson);
-    console.log(req.body);
-    var response;
-    //var rand = Math.floor((Math.random() * 10000) + 1);
-//right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("printf '%s' \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user, function (text, error) {
-        console.log(text);
-        if (error) {
-            res.send(`Something went wrong`);
+    // console.log(req.body);
+    var body = req.body;
+    var lesson_id = body.lessonID;
+    var code = body.code;
+    var username = body.username;
+
+    var messageText;
+    var errorText;
+
+    runCmd("printf \"" + code + "\" > ./users/" + username+ "/pcode/" + lesson_id 
+        + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id 
+        + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/" 
+        + username+ "/pcode/" + lesson_id, function (text, error) {
+        if (error){
+            messageText = "Something went wrong.";
+            errorText = error;
         }
-        res.send(
-            `Results of grading your code: ` + text
-        );
+        else {
+            console.log("Results of grading code: ");
+            console.log(text);
+            messageText = "Results of grading your code: " + text;
+            let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
+            let params = [text, username, lesson_id];
+            db.run(sql, params, (error) => {
+                if (error) {
+                    messageText = "Database Error";
+                    errorText = error;
+                }
+            });
+        }
+        res.json({
+            message: messageText,
+            error: errorText
+        });
     });
-
 });
-
-// const DBSOURCE = "./client/src/database.db";
-
-// module.exports = (app, db) =>{
 
 /************** Lesson Requests ****************/
 // GET all Lessons
@@ -219,6 +268,7 @@ app.get('/api/Lesson/:id', (req, res) => {
 
     // get query to database for lesson with :id
     db.get(sql, lesson_id, (err, row) => {
+        // console.log(row);
         if (err) {
             res.status(400).json({
                 "error": err.message,
@@ -233,8 +283,84 @@ app.get('/api/Lesson/:id', (req, res) => {
     });
 });
 
-function createGradingScript(code, lessonID) {
+// GET single Lesson with username
+app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
+    let sql = 'SELECT * FROM Lesson WHERE lesson_id = ?';
+    let lesson_id = req.params.lesson_id;
+    let username = req.params.username;
+
+    let data;
+    let params;
+    params = [lesson_id]
+
+    // get query to database for lesson with :lesson_id
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            res.status(400).json({
+                "error": err.message,
+                "message": "Failure"
+            });
+            return;
+        }
+        data = row;
+        // We don't want to return the xml of the teacher's grading script
+        data.xml = '';
+
+        // Check progress saved in the Grade table
+        sql = 'SELECT progress_xml FROM Grade WHERE lesson_id = ? AND username = ?'
+        params = [lesson_id, username];
+        db.get(sql, params, (err, row) => {
+            if (err) {
+                res.status(500).json({
+                    "error": err.message,
+                    "message": "DB Failure"
+                });
+                console.log(err);
+                return;
+            }
+            // Only change returned xml if progress has been made
+            if (row.progress_xml) {
+                data.xml = row.progress_xml;
+                console.log("Progress_xml is present");
+            }
+            console.log("Retrieving lesson:");
+            console.log(data);
+            res.json({
+                message: "Success",
+                data: data
+            });
+        });
+    });
+});
+
+// Saves xml progress in grade table
+app.post('/api/SaveLessonProgress/', (req, res) => {
+    let body = req.body;
+    let xml = body.xml;
+    let lesson_id = body.lesson_id;
+    let username = body.username;
+
+    let sql = 'UPDATE Grade SET progress_xml=? WHERE lesson_id=? AND username=?';
+    let params = [xml, lesson_id, username];
     
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log("Progress update failed: ");
+            console.log(err);
+            res.status(500).json({
+                "message": "DB Failure"
+            });
+        } else {
+            console.log("Progress update succecssful: ");
+            console.log([username, lesson_id, xml]);
+            res.json({
+                "message": "Success"
+            });
+        }
+    });
+});
+
+function createGradingScript(code, lessonID) {
     runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
         console.log(text);
         var res = 0;
@@ -247,39 +373,60 @@ function createGradingScript(code, lessonID) {
 
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
-    // TODO set grade for this lesson for all students to 0
+
     let body = req.body;
     let lesson_id = uuidv4();
     let question = body.question;
     let answer = body.answer;
     let name = body.name;
     let hint = body.hint;
-    // TODO add xml
-    let xml = null;
+    let xml = body.xml;
     let code = body.code;
 
     let sql = 'SELECT MAX (lesson_number) FROM Lesson';
     db.get(sql, [], (err, row) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
-            console.log(row);
             lesson_number = row["MAX (lesson_number)"] + 1;
             // console.log(lesson_number);
+            // TODO change this to be just one call
             sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
             let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
             db.run(sql, params, (err) => {
                 if (err) {
                     console.log(err);
-                    res.send("DB Failure");
+                    res.json({
+                        "message": "DB Failure",
+                        "error": err
+                    });
+                    return;
                 } else {
                     if (createGradingScript(code, lesson_id)) {
                         console.log("Error on lesson create");
                     }
                     else {
-                        console.log("Lesson creation succecssful: " + name);
-                        res.send("Success");
+                        // TODO set grade for this lesson for all students to 0
+                        // make an entry for all the usernames in the Grade table...?
+                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username FROM User WHERE is_teacher=0';
+                        let params = [lesson_id];
+                        db.run(sql, params, (err) => {
+                            if (err){
+                                console.log(err);
+                                res.json({
+                                    "message": "DB Failure",
+                                    "error": err
+                                });
+                                return;
+                            }
+                            console.log("Lesson creation succecssful: " + name);
+                            res.json({
+                                "message": "Success",
+                            });
+                        });
                     }
                 }
             });
@@ -295,24 +442,30 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let answer = body.answer;
     let name = body.name;
     let hint = body.hint;
-    // TODO add xml
-    let xml = null;
+    let xml = body.xml;
+    let code = body.code;
 
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
     let params = [question, answer, name, hint, xml, lesson_id];
-    // console.log(params);
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
             if (createGradingScript(code, lesson_id)) {
-                console.log("Error on lesson create");
+                console.log("Error on lesson update");
+                res.json({
+                    "message": "Error creating grading script"
+                })
             }
             else {
                 console.log("Lesson update succecssful: " + name);
-                res.send("Success");
+                res.json({
+                    "message": "Success"
+                })
             }
         }
     });
@@ -329,22 +482,28 @@ app.put('/api/RemoveLesson', (req, res,next) => {
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.send("DB Failure");
+            res.json({
+                "message": "DB Failure"
+            })
         } else {
             runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
-            res.send("Success");
+            res.json({
+                "message": "Success"
+            })
         }
     });
 });
 
 /****************** User Requests *****************/
 
-app.get('/User/:userid', (req, res) => {
-    let sql = 'SELECT * FROM User WHERE user_id = ?';
-    let user_id = [req.params.userid];
-    // TODO remove userid and replace with username, should make username unique
-    let params = user_id;
+app.get('/User/:username', (req, res) => {
+    let sql = 'SELECT * FROM User WHERE username = ?';
+    let username = req.params.username;
+    let params = [username];
+
+    // TODO also return scores for each lesson, stored in Grade
+    // scores should be in data.scores
 
     db.get(sql, params, (err, row) => {
         if (err) {
@@ -354,6 +513,8 @@ app.get('/User/:userid', (req, res) => {
             })
             return;
         }
+        console.log("Retrieving user:");
+        console.log(row);
         res.json({
             message: "Success",
             data: row

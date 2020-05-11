@@ -8,6 +8,7 @@ class Header extends Component {
     state ={
         studentLoggedIn: false,
         teacherLoggedIn: false,
+        username: '',
     }
 
     logOut = () => {
@@ -32,12 +33,33 @@ class Header extends Component {
                     this.setState({ teacherLoggedIn: true });
                 }
                 else {
-                    console.log("Student logged in");
                     //Student is logging in
+                    console.log("Student logged in");
                     this.setState({ studentLoggedIn: true });
-                    // console.log("In else: " + this.state.studentLoggedIn);
                 }
+                this.setState({ username: decoded.username });
             });
+        }
+    }
+
+    usernameMessage = () => {
+        if (this.state.username){
+            return(
+                <div>
+                    <MenuItem
+                        text={"Logged in as " + this.state.username}
+                    />
+                    {/* <h4>
+                        {"Logged in as " + this.state.username}
+                    </h4> */}
+                    <MenuDivider />
+                </div>
+            );
+        }
+        else {
+            return(
+                <div />
+            );
         }
     }
 
@@ -47,6 +69,7 @@ class Header extends Component {
         const loggedOut = !(teacher||student);
         const popMenu = (
             <Menu >
+                <this.usernameMessage/>
                 <MenuItem icon="home"
                     text="Home"
                     // href={teacher ? "/TeacherHome" : "/Home"}

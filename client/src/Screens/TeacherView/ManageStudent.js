@@ -16,7 +16,7 @@ class ManageStudent extends Component {
     var user_id = this.props.match.params.studentID;
     console.log(user_id);
     // TODO change all instances of this call to /api/User/:user_id
-    return fetch('/User/' + user_id)
+    fetch('/User/' + user_id)
       .then(response => {
         console.log(response);
         this.setState({isLoading: false});
@@ -32,7 +32,6 @@ class ManageStudent extends Component {
   onRemoveStudent = (e) => {
     // TODO add confirmation popup
     // maybe add OTP to confirm?
-
         alert("This feature is not yet implemented");
 
         e.preventDefault();
@@ -87,6 +86,7 @@ class ManageStudent extends Component {
             <br />
           </ButtonGroup>
           <h1>Grades Table </h1> 
+          {/* TODO add grades table */}
           <h3>(not yet implemented)</h3>
         </div>
         // we want to see the grade for each lesson

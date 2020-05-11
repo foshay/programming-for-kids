@@ -1,40 +1,102 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, ControlGroup, InputGroup, ButtonGroup } from '@blueprintjs/core';
-import { Link } from 'react-router-dom';
-import OtpInput from 'react-otp-input'
+import { Link, Redirect } from 'react-router-dom';
+
+// import OtpInput from 'react-otp-input'
 
 class RegisterForm extends Component {
     state = {
         username: '',
         password: '',
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         passwordConfirm: '',
-        otp: ''
+        otp: '',
+        created: false
     }
 
-    renderOTPInput = () => {
-        if (this.props.requireOTP) {
-            return (
-                <FormGroup label="Teacher OTP:" labelFor="otp">
-                    <OtpInput
-                        id="otp"
-                        onChange={(value) => {
-                            this.setState({ otp: value });
-                            this.props.setOTP(value)
-                        } }
-                        value={this.state.otp}
-                        numInputs={6}
-                        separator={<span>-</span>}
-                        inputStyle={"OTP-container"}
-                    />
-                </FormGroup>
-            );
+    handleRegister = async e => {
+        e.preventDefault();
+        var username = this.state.username;
+        var password = this.state.password;
+        var firstName = this.state.firstName;
+        var lastName = this.state.lastName;
+        var otp = this.state.otp;
+        var userType = this.props.userType;
+        if (userType === "teacher"){
+            // if (username === '' | password === '' | firstName === '' | lastName === '' | otp === '') {
+            if (username === '' | password === '' | firstName === '' | lastName === '') {
+                alert("Must fill in all fields to register");
+                return;
+            }
+            // TODO add code to handle the 'teacher code' otp
         }
-        else { return (<div/>); }
+        else {
+            if (username === '' | password === '' | firstName === '' | lastName === '') {
+                alert("Must fill in all fields to register");
+                return;
+            }
+        }
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": username,
+                "password": password,
+                "first_name": firstName,
+                "last_name": lastName,
+                "user_type": userType,
+                "otp": otp,
+            })
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(json => {
+            const message = json.message;
+            console.info(message);
+            if (message === "Username exists") {
+                alert("Username taken, choose a different username");
+                console.info("Taken: " + username);
+            } else if (message === "DB Failure") {
+                alert("Issue creating account");
+            } else if (message === "Success") {
+                console.info("Created " + username);
+                // alert("User created");
+                this.setState({ created: true });
+            }
+        });
+    };
+
+    renderOTPInput = () => {
+        return (<div/>);
+        // TODO enable otp
+        // if (this.props.userType === "teacher") {
+        //     return (
+        //         <FormGroup label="Teacher OTP:" labelFor="otp">
+        //             <OtpInput
+        //                 id="otp"
+        //                 onChange={(value) => {
+        //                     this.setState({ otp: value });
+        //                     this.props.setOTP(value)
+        //                 } }
+        //                 value={this.state.otp}
+        //                 numInputs={6}
+        //                 separator={<span>-</span>}
+        //                 inputStyle={"OTP-container"}
+        //             />
+        //         </FormGroup>
+        //     );
+        // }
+        // else { return (<div/>); }
     }
 
     render = () => {
+        if (this.state.created){
+            return ( <Redirect to="/login"/>);
+        }
         return (
             <div>
                 <ControlGroup vertical>
@@ -50,27 +112,27 @@ class RegisterForm extends Component {
                             placeholder="Enter Username..."
                         />
                     </FormGroup>
-                    <FormGroup label="First Name:" labelFor="first_name">
+                    <FormGroup label="First Name:" labelFor="firstName">
                         <InputGroup
-                            id="first_name"
+                            id="firstName"
                             onChange={e => {
                                 var value = e.target.value;
-                                this.setState({ first_name: value });
+                                this.setState({ firstName: value });
                                 this.props.setFirstName(value);
                             }}
-                            value={this.state.first_name}
+                            value={this.state.firstName}
                             placeholder="Enter First Name..."
                         />
                     </FormGroup>
-                    <FormGroup label="Last Name:" labelFor="last_name">
+                    <FormGroup label="Last Name:" labelFor="lastName">
                         <InputGroup
-                            id="last_name"
+                            id="lastName"
                             onChange={e => {
                                 var value = e.target.value;
-                                this.setState({ last_name: value });
+                                this.setState({ lastName: value });
                                 this.props.setLastName(value);
                             }}
-                            value={this.state.last_name}
+                            value={this.state.lastName}
                             placeholder="Enter Last Name..."
                         />
                     </FormGroup>
@@ -114,11 +176,13 @@ class RegisterForm extends Component {
                     <ButtonGroup vertical large>
                         <Button
                             icon="confirm"
-                            text={this.props.registerText}
+                            text={(this.props.userType === "teacher") ?
+                                "Register Teacher" : "Register Student"
+                            }
                             onClick={
                                 (e) => {
                                     (this.state.password === this.state.passwordConfirm) ?
-                                        this.props.handleRegister(e) :
+                                        this.handleRegister(e) :
                                         alert("Password must match confirmed password.");
                                 }
                             }
