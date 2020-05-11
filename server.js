@@ -303,6 +303,8 @@ app.get('/api/StudentLesson/:lesson_id/:username', (req, res) => {
             return;
         }
         data = row;
+        // We don't want to return the xml of the teacher's grading script
+        data.xml = '';
 
         // Check progress saved in the Grade table
         sql = 'SELECT progress_xml FROM Grade WHERE lesson_id = ? AND username = ?'

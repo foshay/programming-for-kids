@@ -7,13 +7,14 @@ import LoadingSymbol from '../../SmallComponents/LoadingSymbol.js';
 // Token things
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary"
+const initialXml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>';
 
 class LessonScreen extends Component {
     state = {
         question: "[Loading]",
         hint: "[Loading]",
         answer: "[Loading]",
-        initialXml: "",
+        progressXml: '',
         isLoading: true,
         username: "",
     }
@@ -53,8 +54,15 @@ class LessonScreen extends Component {
                         question: json.data.question,
                         hint: json.data.hint,
                         answer: json.data.answer,
-                        initialXml: json.data.xml
+                        progressXml: json.data.xml
                     });
+                    // If no progress has been made, set the progressXml to the initialXml
+                    // initialXml contains just the user code function block
+                    if (!json.data.initialXml){
+                        this.setState({
+                            progressXml: initialXml,
+                        })
+                    }
                 });
         }
     }
@@ -74,7 +82,7 @@ class LessonScreen extends Component {
                 <h3>Hint: {this.state.hint}</h3>
                 <BlocklyComp
                     lessonID={this.props.match.params.lessonID}
-                    initialXml={this.state.initialXml}
+                    initialXml={this.state.progressXml}
                     username={this.state.username}
                 />
                 <h3>Expected Answer: {this.state.answer}</h3>
