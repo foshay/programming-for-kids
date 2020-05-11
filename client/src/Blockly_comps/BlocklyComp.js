@@ -19,7 +19,7 @@ const secret = "this is temporary"
 
 class BlocklyComp extends Component{
   state ={
-    toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
+    toolboxCategories: '',
     code: '',
     newXml: '',
     initialXml: this.props.initialXml,
@@ -30,28 +30,40 @@ class BlocklyComp extends Component{
 
   componentDidMount = () => {
     this.checkApiConnection();
-    this.loadOurBlocks();
-    // This runs if running from ManageLesson which does not need to 
-    // check the database for intialXml if it is a new lesson
+    var toolbox = this.loadBlocks();
+
+    // This runs if initialXml is being passed in without an api call
+    // i.e. when making New Lesson
     if (this.props.initialXml){
-      this.renderEditor();
+      // since there is no re render between loading toolbox and rendering
+      // the editor, we must pass in the toolbox
+      this.renderEditor(toolbox);
     }
   }
 
   componentDidUpdate = (prevProps) => {
-    console.log(prevProps.initialXml);
-    console.log(this.props.initialXml);
     // This runs if a new intialXml has loaded from the database
     if (this.props.initialXml !== prevProps.initialXml) {
+      console.log("InitialXml updated");
       this.renderEditor();
     }
   }
 
-  renderEditor = () => {
+  // This renders the blockly editor by setting the div with id='blockly'
+  // to be a blocklyEditor
+  renderEditor = (toolbox) => {
+    // toolboxCategories is passed in if there was no waiting
+    // for a promise to finish. Otherwise, toolbox has been
+    // loaded into the toolboxCategories state because the page
+    // was re rendered when the new initialXml was passed in through the
+    // props after being loaded in the api call
+    var toolboxCategories;
+    if (toolbox) { toolboxCategories = toolbox; }
+    else { toolboxCategories = this.state.toolboxCategories; }
     const Editor =
       <ReactBlocklyComponent.BlocklyEditor
         // The block categories to be available.
-        toolboxCategories={this.state.toolboxCategories} //this is obvious what it does
+        toolboxCategories={toolboxCategories} //this is obvious what it does
         workspaceConfiguration={{
           grid: {
             spacing: 20,
@@ -73,7 +85,8 @@ class BlocklyComp extends Component{
       ReactDOM.render(Editor, document.getElementById('blockly'));
   }
 
-  loadOurBlocks = () => {
+  loadBlocks = () => {
+    var toolboxCategories = parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML);
     if (this.props.edit) {
       // make a block for user_code
       Blockly.Blocks['user_code'] = {
@@ -92,8 +105,7 @@ class BlocklyComp extends Component{
         var code = 'usercode(' + value_input + ')';
         return [code, Blockly.Python.ORDER_NONE];
       }
-      this.setState({
-        toolboxCategories: this.state.toolboxCategories.concat([
+      toolboxCategories = toolboxCategories.concat([
           {
             // TODO add color
             name: 'User code',
@@ -101,12 +113,11 @@ class BlocklyComp extends Component{
               { type: 'user_code' },
             ],
           },
-        ]),
-      });
+      ]);
+      this.setState({ toolboxCategories: toolboxCategories });
     }
     else {
-      this.setState({
-        toolboxCategories: this.state.toolboxCategories.concat([
+      toolboxCategories = toolboxCategories.concat([
           {
             // TODO add color
             name: 'AI category',
@@ -114,11 +125,13 @@ class BlocklyComp extends Component{
               { type: 'text' },
             ],
           },
-        ]),
-      });
+        ]);
+      this.setState({ toolboxCategories: toolboxCategories });
     }
+    return toolboxCategories;
   }
 
+  // This is to show the user whether they are connected to the grading server
   checkApiConnection = () => {
     fetch('/api/connect')
     .then(response => {
@@ -133,6 +146,7 @@ class BlocklyComp extends Component{
     });
   }
 
+  // Checks the token and calls the api/grade call if the token is valid
   handleSubmit = (e) => {
     e.preventDefault();
     var user;
@@ -145,6 +159,8 @@ class BlocklyComp extends Component{
       var newXml = this.state.newXml;
       jwt.verify(token, secret, (err, decoded) => {
         if (err) { return; }
+        // TODO possibly add grading for teacher as they test the code they made
+        if (decoded.is_teacher) { return; }
         user = decoded.username;
       });
       fetch('/api/grade', {
@@ -175,6 +191,8 @@ class BlocklyComp extends Component{
     const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
     const code = Blockly.Python.workspaceToCode(workspace);
 
+    // We need to send the code and newXml up to the manageLesson comp
+    // it can then be sent to the api
     if (this.props.edit) {
       this.props.setCode(code);
       this.props.setXml(newXml);
@@ -220,6 +238,7 @@ class BlocklyComp extends Component{
   }
 
   GradeButton = () => {
+    // don't show the grade button if this is being shown for editing a lesson
     if (this.props.edit) {
       return <div/>
     }
