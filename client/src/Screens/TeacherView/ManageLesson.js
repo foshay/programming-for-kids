@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 
 import { Button, ButtonGroup, } from "@blueprintjs/core";
 
+import { useHistory } from 'react-router-dom';
 import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
 import EditField from '../../SmallComponents/EditField';
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
@@ -79,7 +80,7 @@ class ManageLesson extends Component {
       if (body === "Success"){
         console.info("Created " + name);
         alert("Lesson Created");
-        // TODO add redirect back to manageLessons, 
+        // TODO add redirect back to manageLessons,
         //  similar to LoginScreen Redirect
       }
       else {
@@ -118,30 +119,35 @@ class ManageLesson extends Component {
     }
   };
 
-  onRemove = async e => {
+  handleRemove = async e => {
   // onRemove = () => {
     var lesson_id = this.props.match.params.lessonID;
-    // TODO add alert with confirmation
     // TODO possibly add OTP for confirmation
-    // TODO remove all grades from this lesson?
-      // may not be the best idea in case of accidental deletion
-      // however, otp confirmation should make accidental deletion difficult
-    const response = await fetch('/api/RemoveLesson', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        lesson_id: lesson_id,
-      })
-    });
-    const body = await response.text();
-    if (body === "Success") {
-      console.info("Removed " + lesson_id);
-      alert("Lesson Removed");
-      // TODO add redirect back to manageLessons
+      console.log("handling remove");
+    var result = window.confirm("Are you sure you want to delete this lesson?");
+    console.log("result == " + result);
+    if(result){
+        //Send request to delete the lesson
+        const response = await fetch('/api/RemoveLesson', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lesson_id: lesson_id,
+            })
+        });
+        console.log("request sent");
+        //Wait for confirmation
+        const body = await response.text();
+        if (body === "Success") {
+            console.log("heard back about delete");
+          console.info("Removed " + lesson_id);
+          alert("Lesson Removed");
+          this.props.history.push('/ManageLessons');
+        }
     }
-  }
+}
 
   deleteButton = () => {
     if (this.props.match.params.lessonID !== "NewLesson") {
@@ -150,7 +156,11 @@ class ManageLesson extends Component {
           text="Delete"
           intent="warning"
           icon="small-cross"
-          ojnClick={(e) => this.handleRemove(e)}
+          onClick={(e) => {
+              this.handleRemove(e);
+
+            }
+          }
         />
       );
     }
