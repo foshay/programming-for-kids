@@ -146,6 +146,10 @@ class ManageLesson extends Component {
           alert("Lesson Removed");
           this.props.history.push('/ManageLessons');
         }
+        else{
+            console.info("Error: " + body);
+            alert("Database Error");
+        }
     }
 }
 
