@@ -174,11 +174,13 @@ app.post('/api/grade', (req, res) => {
     var response;
     //var rand = Math.floor((Math.random() * 10000) + 1);
 //right now it is hard coded for saving to user id 6969. this can be changed
-    runCmd("printf \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user + " && rm ./users/"+req.body.user+"/pcode/" + req.body.lesson, function (text, error) {
+    runCmd("printf '%s' \"" + req.body.code + "\" > ./users/" + req.body.user + "/pcode/" + req.body.lesson + " && ./backend/run_python_script.sh ./grading_scripts/" + req.body.lesson + " ./users/"+req.body.user+"/pcode/" + req.body.lesson + " " + req.body.user, function (text, error) {
         console.log(text);
-
+        if (error) {
+            res.send(`Something went wrong`);
+        }
         res.send(
-            `Results of grading your code: ` + text,
+            `Results of grading your code: ` + text
         );
     });
 
@@ -229,6 +231,18 @@ app.get('/api/Lesson/:id', (req, res) => {
     });
 });
 
+function createGradingScript(code, lessonID) {
+    
+    runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
+        console.log(text);
+        var res = 0;
+        if (error) {
+            res = 1;
+        }
+        return res;
+    });
+}
+
 // Make a new lesson
 app.post('/api/NewLesson', (req, res,next) => {
     // TODO set grade for this lesson for all students to 0
@@ -240,6 +254,7 @@ app.post('/api/NewLesson', (req, res,next) => {
     let hint = body.hint;
     // TODO add xml
     let xml = null;
+    let code = body.code;
 
     let sql = 'SELECT MAX (lesson_number) FROM Lesson';
     db.get(sql, [], (err, row) => {
@@ -257,8 +272,13 @@ app.post('/api/NewLesson', (req, res,next) => {
                     console.log(err);
                     res.send("DB Failure");
                 } else {
-                    console.log("Lesson creation succecssful: " + name);
-                    res.send("Success");
+                    if (createGradingScript(code, lesson_id)) {
+                        console.log("Error on lesson create");
+                    }
+                    else {
+                        console.log("Lesson creation succecssful: " + name);
+                        res.send("Success");
+                    }
                 }
             });
         }
@@ -285,8 +305,13 @@ app.put('/api/UpdateLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
-            console.log("Lesson update succecssful: " + name);
-            res.send("Success");
+            if (createGradingScript(code, lesson_id)) {
+                console.log("Error on lesson create");
+            }
+            else {
+                console.log("Lesson update succecssful: " + name);
+                res.send("Success");
+            }
         }
     });
 });
@@ -304,6 +329,7 @@ app.put('/api/RemoveLesson', (req, res,next) => {
             console.log(err);
             res.send("DB Failure");
         } else {
+            runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
             res.send("Success");
         }
