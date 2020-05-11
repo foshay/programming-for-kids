@@ -14,195 +14,259 @@ import ConfigFiles from 'react-blockly/src/initContent/content';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper';
 require('blockly/python');
 
+const jwt = require('jsonwebtoken');
+const secret = "this is temporary"
 
-class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
-      //can use this.props.lessonID to select xml for the lesson based on lesson selected.
-      // add deletable="false" to <block field of xml to make not deletable.
-      // add editable="false" to make not editable
-      initialXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>',
-      code: '',
-      newxml: '',
-    };
-    
+class BlocklyComp extends Component{
+  state ={
+    toolboxCategories: '',
+    code: '',
+    newXml: '',
+    initialXml: this.props.initialXml,
+
+    gradeResponse: '',
+    connectedResponse: '',
   }
 
-//this is optional for adding custom categories of blocks
+  componentDidMount = () => {
+    this.checkApiConnection();
+    var toolbox = this.loadBlocks();
 
-componentDidMount = (workspace) => {
-    
-      
-      this.setState({
-        toolboxCategories: this.state.toolboxCategories.concat([
+    // This runs if initialXml is being passed in without an api call
+    // i.e. when making New Lesson
+    if (this.props.initialXml){
+      // since there is no re render between loading toolbox and rendering
+      // the editor, we must pass in the toolbox
+      this.renderEditor(toolbox);
+    }
+  }
+
+  componentDidUpdate = (prevProps) => {
+    // This runs if a new intialXml has loaded from the database
+    if (this.props.initialXml !== prevProps.initialXml) {
+      console.log("InitialXml updated");
+      this.renderEditor();
+    }
+  }
+
+  // This renders the blockly editor by setting the div with id='blockly'
+  // to be a blocklyEditor
+  renderEditor = (toolbox) => {
+    // toolboxCategories is passed in if there was no waiting
+    // for a promise to finish. Otherwise, toolbox has been
+    // loaded into the toolboxCategories state because the page
+    // was re rendered when the new initialXml was passed in through the
+    // props after being loaded in the api call
+    var toolboxCategories;
+    if (toolbox) { toolboxCategories = toolbox; }
+    else { toolboxCategories = this.state.toolboxCategories; }
+    const Editor =
+      <ReactBlocklyComponent.BlocklyEditor
+        // The block categories to be available.
+        toolboxCategories={toolboxCategories} //this is obvious what it does
+        workspaceConfiguration={{
+          grid: {
+            spacing: 20,
+            length: 3,
+            colour: '#0000FF',
+            snap: true,
+          },
+        }}
+        //we can possibly change the initial xml on a per lesson basis... or not
+        initialXml={this.props.initialXml}
+        //the div wrapper that will be generated for blockly
+        wrapperDivClassName="fill-height"
+        //what method to call when the workspace changes
+        workspaceDidChange={(workspace) => this.workspaceDidChange(workspace)}
+      />
+
+    // TODO find a better way to render the editor
+    if (document.getElementById('blockly') !== null)
+      ReactDOM.render(Editor, document.getElementById('blockly'));
+  }
+
+  loadBlocks = () => {
+    var toolboxCategories = parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML);
+    if (this.props.edit) {
+      // make a block for user_code
+      Blockly.Blocks['user_code'] = {
+        init: function () {
+          this.appendValueInput("input")
+            .setCheck(null)
+            .appendField("User Code");
+          this.setOutput(true, null);
+          this.setColour(0);
+          this.setTooltip("This block runs the user's written code");
+          this.setHelpUrl("");
+        }
+      };
+      Blockly.Python['user_code'] = function (block) {
+        var value_input = Blockly.Python.valueToCode(block, 'input', Blockly.Python.ORDER_ATOMIC);
+        var code = 'usercode(' + value_input + ')';
+        return [code, Blockly.Python.ORDER_NONE];
+      }
+      toolboxCategories = toolboxCategories.concat([
           {
+            // TODO add color
+            name: 'User code',
+            blocks: [
+              { type: 'user_code' },
+            ],
+          },
+      ]);
+      this.setState({ toolboxCategories: toolboxCategories });
+    }
+    else {
+      toolboxCategories = toolboxCategories.concat([
+          {
+            // TODO add color
             name: 'AI category',
             blocks: [
               { type: 'text' },
-              ],
+            ],
           },
-        ]),
+        ]);
+      this.setState({ toolboxCategories: toolboxCategories });
+    }
+    return toolboxCategories;
+  }
+
+  // This is to show the user whether they are connected to the grading server
+  checkApiConnection = () => {
+    fetch('/api/connect')
+    .then(response => {
+      // if (response.status !== 200) {
+      //   throw Error(response.json.message);
+      // }
+      return response.json();
+    })
+    .then(json => {
+      // TODO don't render if not connected?
+      this.setState({connectedResponse: json.message});
+    });
+  }
+
+  // Checks the token and calls the api/grade call if the token is valid
+  handleSubmit = (e) => {
+    e.preventDefault();
+    var username;
+    var token = localStorage.getItem('nccjwt');
+    if (!token) {
+      console.log("No Token");
+    }
+    else {
+      var userCode = this.state.code;
+      var newXml = this.state.newXml;
+      jwt.verify(token, secret, (err, decoded) => {
+        if (err) { return; }
+        // TODO possibly add grading for teacher as they test the code they made
+        if (decoded.is_teacher) { return; }
+        username = decoded.username;
       });
-   
+      fetch('/api/grade', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "lessonID": this.props.lessonID,
+          "code": userCode,
+          "username": username,
+          "xml": newXml
+        })
+      })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((json) => {
+        this.setState({gradeResponse: json.message});
+        console.log(json);
+      });
+    }
   }
 
   workspaceDidChange = (workspace) => {
-      //this part you can do something when the workspace changes (when they place or move a block)
-    /*
-      workspace.registerButtonCallback('sendToGrade', () => {
-      alert('Sent to grading script');
-    });
-    */
-    //We can use this for saving user's progress
     workspace.addChangeListener(Blockly.Events.disableOrphans);
-    this.state.newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-    document.getElementById('newxml').value = this.state.initialXml;
+    const oldCode = this.state.code;
+    const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    const code = Blockly.Python.workspaceToCode(workspace);
 
-    //print xml to screen instead. requires <pre id="generated-xml"></pre> to be on page.
-    //document.getElementById('generated-xml').innerText = newXml;
-    
-    //this prints out the blocks to actual python code to the page.
-    //require('blockly/python');
-    //python = new Generator(name = "Python", INDENT = "4");
-    this.state.code = Blockly.Python.workspaceToCode(workspace);
-    document.getElementById('code').value = this.state.code;
+    // We need to send the code and newXml up to the manageLesson comp
+    // it can then be sent to the api
+    if (this.props.edit) {
+      this.props.setCode(code);
+      this.props.setXml(newXml);
+    }
+    else {
+      this.setState({ newXml: newXml });
+      this.setState({ code: code });
+      // if code has changed
+      // Save lesson progress
+      if (code !== oldCode && oldCode) {
+        console.log(oldCode);
+        console.log(code);
+        var username;
+        var token = localStorage.getItem('nccjwt');
+        if (!token) {
+          console.log("No Token");
+        }
+        else {
+          jwt.verify(token, secret, (err, decoded) => {
+            if (err) { return; }
+            username = decoded.username;
+          });
+          fetch('/api/SaveLessonProgress/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "lesson_id": this.props.lessonID,
+              "username": username,
+              "xml": newXml
+            })
+          })
+            .then((response) => {
+              return response.json();
+            }).then((json) => {
+              console.log("Saving progress...");
+              console.log(json);
+            });
+        }
+      }
+    }
   }
 
-  render = () => (
-    <ReactBlocklyComponent.BlocklyEditor
-        // The block categories to be available.
-      toolboxCategories={this.state.toolboxCategories}
-      //this is obvious what it does
-      workspaceConfiguration={{
-        grid: {
-          spacing: 20,
-          length: 3,
-          colour: '#0000FF',
-          snap: true,
-        },
-      }}
-      //we can possibly change the initial xml on a per lesson basis... or not
-      initialXml={this.state.initialXml}
-      //the div wrapper that will be generated for blockly
-      wrapperDivClassName="fill-height"
-      //what method to call when the workspace changes
-      workspaceDidChange={this.workspaceDidChange}
-    />
-    
-  )
-}
-
-class BlocklyComp extends Component {
-    state = {
-      response: '',
-      post: '',
-      responseToPost: '',
-      // by default, the toolbox should be shown
-      toolboxShown: true,
-    };
-    props = {
-      lessonID: '',
-    };
-    
-    componentDidMount() {
-      this.callApi()
-        .then(res => this.setState({ response: res.express }))
-        .catch(err => console.error(err));
-      
-      // Adding this allows the blockly edit area to show up after routing to the page
-      // lessonID is send to editor.jsx for xml loading as well as storing progress
-      // lessonID is passed to blockly comp from lessonScreen.
-      const editor = React.createElement(Editor, {lessonID: this.props.lessonID});
-      if( document.getElementById('blockly') != null)
-        ReactDOM.render(editor, document.getElementById('blockly'));
+  GradeButton = () => {
+    // don't show the grade button if this is being shown for editing a lesson
+    if (this.props.edit) {
+      return <div/>
     }
-    
-    callApi = async () => {
-      const response = await fetch('/api/connect');
-      const body = await response.json();
-      if (response.status !== 200) throw Error(body.message);
-      
-      return body;
-    };
-    
-    handleSubmit = async e => {
-      e.preventDefault();
-      const jwt = require('jsonwebtoken');
-      const secret = "this is temporary";
-      var user = '';
-      console.log("checking token");
-      var token = localStorage.getItem('nccjwt');
-      if (!token) {
-        console.log("CT: No Token");
-        return "none";
-      }
-      else {
-        var ucode = document.getElementById('code').value;
-        jwt.verify(token, secret, (err, decoded) => {
-          if (err) {
-            console.log("Error: " + err);
-            return "none";
-          }
-          else {
-            user = decoded.username;
-          }
-        });
-        const response = await fetch('/api/grade', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            "lesson": this.props.lessonID,
-            "code": ucode,
-            "user": user,
-          })
-        });
-        const body = await response.text();
-        
-        this.setState({ responseToPost: body });
-      }
-      
-      var newxml = document.getElementById('newxml').value;
-      //var lesson = "1";
-      //var formData = new FormData();
-      //formData.append('code', code);
-      //formData.append('lesson', lesson);
-      
-    };
-  
-
-  render() {
-    return (
-      <div> 
-        <ToggleToolbox/>
-        <div style={{ height: '600px', width: `100%` }} id="blockly" />
-        <p>{this.state.response}</p>
-        <textarea
-          style={{display: "none"}}
-          disabled
-          id="code"
-        />
-        <textarea
-          style={{display: "none"}}
-          disabled
-          id="newxml"
-        />
+    else {
+      return (
         <Button
-          text="Grade code"
+          text={"Grade code"}
           large
           icon="tick"
           id="gradeButton"
           intent="success"
           onClick={(e) => this.handleSubmit(e)}
         />
-        <p>{this.state.responseToPost}</p>
+      )
+    }
+  }
+
+  render = () => {
+    return (
+      <div>
+        <ToggleToolbox/>
+        <div style={{ height: '600px', width: `100%` }} id="blockly" />
+        <p>{this.state.gradeResponse}</p>
+        <this.GradeButton/>
+        <p>{this.state.connectedResponse}</p>
       </div>
     )
   }
+
 }
-
-
 export default BlocklyComp

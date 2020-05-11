@@ -4,7 +4,6 @@ import { Button, ButtonGroup, FormGroup, InputGroup, ControlGroup } from '@bluep
 
 class LoginScreen extends Component {
     state = {
-        responseToPost: '',
         username: '',
         password: '',
         loggedIn: '',
@@ -15,7 +14,8 @@ class LoginScreen extends Component {
         var password = this.state.password;
 
         e.preventDefault();
-        const response = await fetch('/api/login', {
+        // const response = await 
+        fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,22 +24,20 @@ class LoginScreen extends Component {
                 "username": username,
                 "password": password,
             })
-        });
-
-        var body = await response.json();
-        var message = await body.message;
-        this.setState({ responseToPost: message });
-        //body is the response from the server after receiving the login information
-        //we can use this for authenticating users (cookie or something)
-        console.info(this.state.responseToPost);
-        console.log("Console message: " + message);
-        if(message === "Success"){
-            var token = await body.token;
-            localStorage.setItem('nccjwt', token);
-            this.setState({loggedIn: true});
-        }else{
-            alert("Invalid username or password");
-        }
+        }).then(response => {
+            return response.json();
+        }).then(body => {
+            console.log(body);
+            var message = body.message;
+            console.log("Console message: " + message);
+            if (message === "Success") {
+                var token = body.token;
+                localStorage.setItem('nccjwt', token);
+                this.setState({ loggedIn: true });
+            } else {
+                alert("Invalid username or password");
+            }
+        })
     };
 
     render = () => {

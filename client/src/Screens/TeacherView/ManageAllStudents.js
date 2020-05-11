@@ -50,7 +50,7 @@ class ManageAllStudents extends Component {
             <tbody>
               {this.state.students.map((value, key) => {
                 return (
-                  <tr onClick={() => this.goToStudent(value.user_id)} key={key}>
+                  <tr onClick={() => this.goToStudent(value.username)} key={key}>
                     <td> {value.first_name} </td>
                     <td> {value.last_name} </td>
                     <td> {value.username} </td>

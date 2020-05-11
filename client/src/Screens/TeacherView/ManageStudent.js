@@ -35,6 +35,7 @@ class ManageStudent extends Component {
     console.log("in removeStudent");
     var result = window.confirm("Are you sure you want to delete this student?");
     if(result){
+
         e.preventDefault();
         console.log("student: " + this.state.student);
         var username = this.state.student.username;
@@ -90,7 +91,9 @@ class ManageStudent extends Component {
             />
             <br />
           </ButtonGroup>
-          <h1>Grades Table </h1>
+
+          <h1>Grades Table </h1> 
+          {/* TODO add grades table */}
           <h3>(not yet implemented)</h3>
         </div>
         // we want to see the grade for each lesson

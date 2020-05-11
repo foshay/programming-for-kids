@@ -3,10 +3,14 @@ import {Link} from "react-router-dom";
 
 import { Button, ButtonGroup, } from "@blueprintjs/core";
 
-import { useHistory } from 'react-router-dom';
-import BlocklyCompEdit from '../../Blockly_comps/BlocklyCompEdit';
+
+import BlocklyComp from '../../Blockly_comps/BlocklyComp';
 import EditField from '../../SmallComponents/EditField';
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
+
+// this is the default for new lesson, but could
+// be different for existing lesson
+const initialXml = '<xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="ErpV]!}X6kPbrq*n_`iN">result</variable></variables><block type="procedures_defreturn" id="XH45#0:M(suDIRq]3O1l" deletable="false" editable="false" x="310" y="170"><field name="NAME">grade</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment><statement name="STACK"><block type="variables_set" deletable="false" editable="false" id="6xOK)3K|RZkq$i,D2_))"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field><value name="VALUE"><block type="math_number" deletable="false" id=".$k.:z=-]T^;!lB.XaY5"><field name="NUM">100</field></block></value></block></statement><value name="RETURN"><block type="variables_get" deletable="false" editable="false" id="%wF(EBeasse-{5yvnKdz"><field name="VAR" id="ErpV]!}X6kPbrq*n_`iN">result</field></block></value></block></xml>';
 
 class ManageLesson extends Component {
   state={
@@ -15,6 +19,9 @@ class ManageLesson extends Component {
     question: '',
     hint: '',
     answer: '',
+    code: '',
+    xml: '',
+    initialXml: '',
     isLoading: true,
   }
 
@@ -25,8 +32,9 @@ class ManageLesson extends Component {
   getLessonInfo = async () => {
       const lesson_id = this.props.match.params.lessonID;
       // only load in info if this is an existing lesson
+      // TODO add loading in xml for existing lesson
       if (lesson_id !== 'NewLesson'){
-        return fetch('/api/lesson/' + lesson_id)
+        fetch('/api/lesson/' + lesson_id)
           .then(response => {
             this.setState({isLoading: false});
             return response.json();
@@ -36,11 +44,13 @@ class ManageLesson extends Component {
               name: json.data.name,
               question: json.data.question,
               hint: json.data.hint,
-              answer: json.data.answer
+              answer: json.data.answer,
+              initialXml: json.data.xml
             });
           });
       }
       else{
+        this.setState({initialXml: initialXml});
         this.setState({isLoading: false});
       }
   }
@@ -52,6 +62,8 @@ class ManageLesson extends Component {
     var hint = this.state.hint;
     var answer = this.state.answer;
     var lesson_id = this.props.match.params.lessonID;
+    var code = this.state.code;
+    var xml = this.state.xml;
 
     // check that none are empty
     if ((name === '') || (question === '') || (hint === '') || (answer === '')) {
@@ -61,7 +73,7 @@ class ManageLesson extends Component {
 
     if (lesson_id === 'NewLesson') {
       // If we are creating a new lesson
-      const response = await fetch('/api/NewLesson', {
+      fetch('/api/NewLesson', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,11 +83,24 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
-          "code": document.getElementById('code').value,
-          // TODO add xml
-          // TODO add grading script?
+          "code": code,
+          "xml": xml,
         })
+      }).then(response => {
+        return response.json();
+      }).then(json => {
+        if (json.message === "Success") {
+          console.info("Created " + name);
+          alert("Lesson Created");
+          // TODO add redirect back to manageLessons, 
+          //  similar to LoginScreen Redirect
+        }
+        else {
+          console.info("Error: " + json.message);
+          alert("Database Error");
+        }
       });
+
       const body = await response.text();
       if (body === "Success"){
         console.info("Created " + name);
@@ -90,7 +115,7 @@ class ManageLesson extends Component {
     }
     else {
       // If we are editing an existing lesson
-      const response = await fetch('/api/UpdateLesson/', {
+      fetch('/api/UpdateLesson/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -101,23 +126,27 @@ class ManageLesson extends Component {
           "answer": answer,
           "name": name,
           "hint": hint,
-          "code": document.getElementById('code').value,
-          // TODO add xml
-          // TODO add grading script?
+          "code": code,
+          "xml": xml,
         })
-      });
-      const body = await response.text();
-      if (body === "Success"){
-        console.info("Updated " + name);
-        alert("Lesson Updated");
-        // TODO add redirect back to manageLessons
-      }
-      else {
-        console.info("Error: " + body);
-        alert("Database Error");
-      }
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(json => {
+          if (json.message === "Success") {
+            console.info("Updated " + name);
+            alert("Lesson Updated");
+            // TODO add redirect back to manageLessons
+          }
+          else {
+            console.info("Error: " + json.message);
+            alert("Database Error");
+          }
+        });
     }
   };
+
 
   handleRemove = async e => {
   // onRemove = () => {
@@ -153,10 +182,12 @@ class ManageLesson extends Component {
     }
 }
 
+
   deleteButton = () => {
     if (this.props.match.params.lessonID !== "NewLesson") {
       return (
         <Button
+          style={{ marginLeft: "1vh" }}
           text="Delete"
           intent="warning"
           icon="small-cross"
@@ -165,6 +196,7 @@ class ManageLesson extends Component {
 
             }
           }
+
         />
       );
     }
@@ -225,7 +257,12 @@ class ManageLesson extends Component {
           onChange={(value) => this.setState({ answer: value })}
         />
         <br />
-        <BlocklyCompEdit lessonID={this.props.match.params.lessonID} />
+        <BlocklyComp edit
+        lessonID={this.props.match.params.lessonID} 
+        initialXml={this.state.initialXml}
+        setCode={(code) => this.setState({code: code})}
+        setXml={(xml) => this.setState({xml: xml})}
+        />
       </div>
     );
   }
