@@ -92,7 +92,7 @@ class ManageLesson extends Component {
         if (json.message === "Success") {
           console.info("Created " + name);
           alert("Lesson Created");
-          // TODO add redirect back to manageLessons, 
+          // TODO add redirect back to manageLessons,
           //  similar to LoginScreen Redirect
         }
         else {
@@ -101,8 +101,7 @@ class ManageLesson extends Component {
         }
       });
 
-      const body = await response.text();
-      if (body === "Success"){
+/*      if (body === "Success"){
         console.info("Created " + name);
         alert("Lesson Created");
         // TODO add redirect back to manageLessons,
@@ -111,7 +110,7 @@ class ManageLesson extends Component {
       else {
         console.info("Error: " + body);
         alert("Database Error");
-      }
+    } */
     }
     else {
       // If we are editing an existing lesson
@@ -258,7 +257,7 @@ class ManageLesson extends Component {
         />
         <br />
         <BlocklyComp edit
-        lessonID={this.props.match.params.lessonID} 
+        lessonID={this.props.match.params.lessonID}
         initialXml={this.state.initialXml}
         setCode={(code) => this.setState({code: code})}
         setXml={(xml) => this.setState({xml: xml})}

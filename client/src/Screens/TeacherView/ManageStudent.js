@@ -13,10 +13,8 @@ class ManageStudent extends Component {
   }
 
   getStudent = async () => {
-    var user_id = this.props.match.params.studentID;
-    console.log(user_id);
-    // TODO change all instances of this call to /api/User/:user_id
-    return fetch('/api/User/' + user_id)
+    var username = this.props.match.params.username;
+    return fetch('/api/User/' + username)
       .then(response => {
         console.log(response);
         this.setState({isLoading: false});
@@ -92,7 +90,7 @@ class ManageStudent extends Component {
             <br />
           </ButtonGroup>
 
-          <h1>Grades Table </h1> 
+          <h1>Grades Table </h1>
           {/* TODO add grades table */}
           <h3>(not yet implemented)</h3>
         </div>

@@ -214,9 +214,9 @@ app.post('/api/grade', (req, res) => {
     var messageText;
     var errorText;
 
-    runCmd("printf \"" + code + "\" > ./users/" + username+ "/pcode/" + lesson_id 
-        + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id 
-        + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/" 
+    runCmd("printf \"" + code + "\" > ./users/" + username+ "/pcode/" + lesson_id
+        + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id
+        + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/"
         + username+ "/pcode/" + lesson_id, function (text, error) {
         if (error){
             messageText = "Something went wrong.";
@@ -343,7 +343,7 @@ app.post('/api/SaveLessonProgress/', (req, res) => {
 
     let sql = 'UPDATE Grade SET progress_xml=? WHERE lesson_id=? AND username=?';
     let params = [xml, lesson_id, username];
-    
+
     db.run(sql, params, (err) => {
         if (err) {
             console.log("Progress update failed: ");
@@ -443,7 +443,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let question = body.question;
     let answer = body.answer;
     let name = body.name;
-    let hint = body.hint; 
+    let hint = body.hint;
     let xml = body.xml;
     let code = body.code;
 
@@ -485,22 +485,19 @@ app.delete('/api/RemoveLesson', (req, res,next) => {
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.json({
-                "message": "DB Failure"
-            })
+            res.send("DB Failure");
         } else {
             runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
-            res.json({
-                "message": "Success"
-            })
+            res.send("Success");
         }
     });
 });
 
 /****************** User Requests *****************/
 
-app.get('/User/:username', (req, res) => {
+app.get('/api/User/:username', (req, res) => {
+    console.log("Student requested");
     let sql = 'SELECT * FROM User WHERE username = ?';
     let username = req.params.username;
     let params = [username];
