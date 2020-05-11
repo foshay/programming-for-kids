@@ -31,34 +31,46 @@ class BlocklyComp extends Component{
   componentDidMount = () => {
     this.checkApiConnection();
     this.loadOurBlocks();
+    // This runs if running from ManageLesson which does not need to 
+    // check the database for intialXml if it is a new lesson
+    if (this.props.initialXml){
+      this.renderEditor();
+    }
   }
 
   componentDidUpdate = (prevProps) => {
+    console.log(prevProps.initialXml);
+    console.log(this.props.initialXml);
+    // This runs if a new intialXml has loaded from the database
     if (this.props.initialXml !== prevProps.initialXml) {
-      const Editor =
-        <ReactBlocklyComponent.BlocklyEditor
-          // The block categories to be available.
-          toolboxCategories={this.state.toolboxCategories} //this is obvious what it does
-          workspaceConfiguration={{
-            grid: {
-              spacing: 20,
-              length: 3,
-              colour: '#0000FF',
-              snap: true,
-            },
-          }}
-          //we can possibly change the initial xml on a per lesson basis... or not
-          initialXml={this.props.initialXml}
-          //the div wrapper that will be generated for blockly
-          wrapperDivClassName="fill-height"
-          //what method to call when the workspace changes
-          workspaceDidChange={(workspace) => this.workspaceDidChange(workspace)}
-        />
-
-      // TODO find a better way to render the editor
-      if (document.getElementById('blockly') !== null)
-        ReactDOM.render(Editor, document.getElementById('blockly'));
+      this.renderEditor();
     }
+  }
+
+  renderEditor = () => {
+    const Editor =
+      <ReactBlocklyComponent.BlocklyEditor
+        // The block categories to be available.
+        toolboxCategories={this.state.toolboxCategories} //this is obvious what it does
+        workspaceConfiguration={{
+          grid: {
+            spacing: 20,
+            length: 3,
+            colour: '#0000FF',
+            snap: true,
+          },
+        }}
+        //we can possibly change the initial xml on a per lesson basis... or not
+        initialXml={this.props.initialXml}
+        //the div wrapper that will be generated for blockly
+        wrapperDivClassName="fill-height"
+        //what method to call when the workspace changes
+        workspaceDidChange={(workspace) => this.workspaceDidChange(workspace)}
+      />
+
+    // TODO find a better way to render the editor
+    if (document.getElementById('blockly') !== null)
+      ReactDOM.render(Editor, document.getElementById('blockly'));
   }
 
   loadOurBlocks = () => {
