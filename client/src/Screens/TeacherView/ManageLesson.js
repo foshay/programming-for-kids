@@ -134,34 +134,34 @@ class ManageLesson extends Component {
     }
   };
 
-  onRemove = async e => {
-  // onRemove = () => {
-    var lesson_id = this.props.match.params.lessonID;
+  onRemove = () => {
     // TODO add alert with confirmation
     // TODO possibly add OTP for confirmation
     // TODO remove all grades from this lesson?
       // may not be the best idea in case of accidental deletion
       // however, otp confirmation should make accidental deletion difficult
       // This may happen with the schema anyway
-    fetch('/api/RemoveLesson', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        lesson_id: lesson_id,
-      })
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        if (json.message === "Success") {
-          console.info("Removed " + lesson_id);
-          alert("Lesson Removed");
-          // TODO add redirect back to manageLessons
-        }
-      });
+    alert("Feature not implemented");
+    // var lesson_id = this.props.match.params.lessonID;
+    // fetch('/api/RemoveLesson', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     lesson_id: lesson_id,
+    //   })
+    // })
+    //   .then(response => {
+    //     return response.json();
+    //   })
+    //   .then(json => {
+    //     if (json.message === "Success") {
+    //       console.info("Removed " + lesson_id);
+    //       alert("Lesson Removed");
+    //       // TODO add redirect back to manageLessons
+    //     }
+    //   });
   }
 
   deleteButton = () => {
@@ -172,7 +172,7 @@ class ManageLesson extends Component {
           text="Delete"
           intent="warning"
           icon="small-cross"
-          onClick={(e) => this.handleRemove(e)}
+          onClick={(e) => this.onRemove(e)}
         />
       );
     }
