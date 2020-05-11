@@ -339,7 +339,7 @@ app.delete('/api/RemoveLesson', (req, res,next) => {
 
 /****************** User Requests *****************/
 
-app.get('/User/:userid', (req, res) => {
+app.get('/api/User/:userid', (req, res) => {
     let sql = 'SELECT * FROM User WHERE user_id = ?';
     let user_id = [req.params.userid];
     let params = user_id;
@@ -375,6 +375,30 @@ app.get('/api/Student/all', (req, res) => {
             message: "Success",
             data: rows
         });
+    });
+});
+
+app.delete('/api/RemoveStudent', (req,res) => {
+    let body = req.body;
+    let username = body.username;
+
+    let sql = 'DELETE FROM User WHERE username=?';
+    let params = [username];
+    console.log("Sent username: " + username);
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            runCmd("rm -rf ./users/" + username, function (text, error) {
+                console.log("In runcmd callback");
+                if(error){
+                    console.log(error);
+                }
+            });
+            console.log("Student Removed");
+            res.send("Success");
+        }
     });
 });
 
