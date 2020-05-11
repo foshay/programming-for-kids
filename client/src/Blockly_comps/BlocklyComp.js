@@ -149,7 +149,7 @@ class BlocklyComp extends Component{
   // Checks the token and calls the api/grade call if the token is valid
   handleSubmit = (e) => {
     e.preventDefault();
-    var user;
+    var username;
     var token = localStorage.getItem('nccjwt');
     if (!token) {
       console.log("No Token");
@@ -161,7 +161,7 @@ class BlocklyComp extends Component{
         if (err) { return; }
         // TODO possibly add grading for teacher as they test the code they made
         if (decoded.is_teacher) { return; }
-        user = decoded.username;
+        username = decoded.username;
       });
       fetch('/api/grade', {
         method: 'POST',
@@ -171,7 +171,7 @@ class BlocklyComp extends Component{
         body: JSON.stringify({
           "lessonID": this.props.lessonID,
           "code": userCode,
-          "user": user,
+          "username": username,
           "xml": newXml
         })
       })
