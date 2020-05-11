@@ -232,7 +232,7 @@ app.get('/api/Lesson/:id', (req, res) => {
 });
 
 function createGradingScript(code, lessonID) {
-    
+
     runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
         console.log(text);
         var res = 0;
@@ -293,6 +293,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let answer = body.answer;
     let name = body.name;
     let hint = body.hint;
+    let code = body.code;
     // TODO add xml
     let xml = null;
 
