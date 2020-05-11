@@ -135,7 +135,7 @@ class BlocklyComp extends Component{
 
   handleSubmit = (e) => {
     e.preventDefault();
-    var user;
+    var username;
     var token = localStorage.getItem('nccjwt');
     if (!token) {
       console.log("No Token");
@@ -145,7 +145,7 @@ class BlocklyComp extends Component{
       var newXml = this.state.newXml;
       jwt.verify(token, secret, (err, decoded) => {
         if (err) { return; }
-        user = decoded.username;
+        username = decoded.username;
       });
       fetch('/api/grade', {
         method: 'POST',
@@ -155,7 +155,7 @@ class BlocklyComp extends Component{
         body: JSON.stringify({
           "lessonID": this.props.lessonID,
           "code": userCode,
-          "user": user,
+          "username": username,
           "xml": newXml
         })
       })
