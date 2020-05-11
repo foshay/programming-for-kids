@@ -64,7 +64,7 @@ class LessonScreen extends Component {
             // api call is loading
             return (<LoadingSymbol/>);
         }
-        if (this.state.username = ""){
+        if (this.state.username === ""){
             // no one is logged in
             return (<div/>)
         }
