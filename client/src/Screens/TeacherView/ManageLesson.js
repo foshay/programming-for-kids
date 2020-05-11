@@ -129,7 +129,7 @@ class ManageLesson extends Component {
     if(result){
         //Send request to delete the lesson
         const response = await fetch('/api/RemoveLesson', {
-          method: 'PUT',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },

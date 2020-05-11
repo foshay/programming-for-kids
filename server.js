@@ -318,7 +318,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
 });
 
 // Remove an existing lesson. Will also cascade to remove any Grades linked to that lesson.
-app.put('/api/RemoveLesson', (req, res,next) => {
+app.delete('/api/RemoveLesson', (req, res,next) => {
     let body = req.body;
     let lesson_id = body.lesson_id;
 
