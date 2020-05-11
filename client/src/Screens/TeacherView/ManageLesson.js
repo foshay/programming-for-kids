@@ -168,10 +168,11 @@ class ManageLesson extends Component {
     if (this.props.match.params.lessonID !== "NewLesson") {
       return (
         <Button
+          style={{ marginLeft: "1vh" }}
           text="Delete"
           intent="warning"
           icon="small-cross"
-          ojnClick={(e) => this.handleRemove(e)}
+          onClick={(e) => this.handleRemove(e)}
         />
       );
     }
