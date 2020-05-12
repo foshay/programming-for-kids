@@ -13,10 +13,8 @@ class ManageStudent extends Component {
   }
 
   getStudent = async () => {
-    var user_id = this.props.match.params.studentID;
-    console.log(user_id);
-    // TODO change all instances of this call to /api/User/:user_id
-    fetch('/User/' + user_id)
+    var username = this.props.match.params.username;
+    return fetch('/api/User/' + username)
       .then(response => {
         console.log(response);
         this.setState({isLoading: false});
@@ -29,35 +27,41 @@ class ManageStudent extends Component {
       });
   }
 
-  onRemoveStudent = (e) => {
+  onRemoveStudent = async (e) => {
     // TODO add confirmation popup
     // maybe add OTP to confirm?
-        alert("This feature is not yet implemented");
+    console.log("in removeStudent");
+    var result = window.confirm("Are you sure you want to delete this student?");
+    if(result){
 
         e.preventDefault();
-        // var user_id = this.props.match.params.studentID;
+        console.log("student: " + this.state.student);
+        var username = this.state.student.username;
 
-        // const response = await fetch('/api/RemoveStudent', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "username": username,
-        //         "otp": otp,
-        //     })
-        // });
+        const response = await fetch('/api/RemoveStudent', {
+             method: 'DELETE',
+             headers: {
+                 'Content-Type': 'application/json',
+             },
+                  body: JSON.stringify({
+                 "username": username
+                 //"otp": otp,
+             })
+         });
+         var body = await response.text();
+         var message = await body.message;
 
-        // var body = await response.json();
-        // var message = await body.message;
-        // this.setState({ responseToPost: message });
-        // console.info(this.state.responseToPost);
-        // console.log("Console message: " + message);
-        // if(message === "Success"){
-        //     alert("Removed " + username);
-        // }else{
-        //     alert("Invalid username or otp");
-        // }
+         this.setState({ responseToPost: message });
+         console.info(this.state.responseToPost);
+         console.log("Console message: " + message);
+
+         if(body === "Success"){
+             alert("Removed " + username);
+             this.props.history.push('/ManageStudents');
+         }else{
+             alert("Invalid username or otp");
+         }
+     }
   }
 
   render() {
@@ -85,7 +89,8 @@ class ManageStudent extends Component {
             />
             <br />
           </ButtonGroup>
-          <h1>Grades Table </h1> 
+
+          <h1>Grades Table </h1>
           {/* TODO add grades table */}
           <h3>(not yet implemented)</h3>
         </div>

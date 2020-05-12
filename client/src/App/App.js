@@ -80,25 +80,25 @@ class App extends Component {
           <Route exact path="/Register" component={RegisterChoice} />
           <Route exact path="/Register/Student" component={RegisterStudent} />
           <Route exact path="/Register/Teacher" component={RegisterTeacher} />
-          <ProtectedRoute exact path="/login" component={LoginScreen} 
+          <ProtectedRoute exact path="/login" component={LoginScreen}
             requiredUser="none" secret={secret} />
 
           {/* The components below should only be accessible for logged in students */}
-          <ProtectedRoute exact path="/LessonMenu" component={LessonMenu} 
+          <ProtectedRoute exact path="/LessonMenu" component={LessonMenu}
             requiredUser="student" secret={secret} />
-          <ProtectedRoute exact path="/CardGame" component={CardGame} 
+          <ProtectedRoute exact path="/CardGame" component={CardGame}
             requiredUser="student" secret={secret} />
-          <ProtectedRoute path="/Lesson/:lessonID" component={LessonScreen} 
+          <ProtectedRoute path="/Lesson/:lessonID" component={LessonScreen}
             requiredUser="student" secret={secret} />
 
           {/* The components below should only be accessible for logged in teachers */}
-          <ProtectedRoute exact path="/ManageStudents" component={ManageAllStudents} 
+          <ProtectedRoute exact path="/ManageStudents" component={ManageAllStudents}
             requiredUser="teacher" secret={secret} />
-          <ProtectedRoute path="/ManageStudents/:studentID" component={ManageStudent} 
+          <ProtectedRoute path="/ManageStudents/:username" component={ManageStudent} 
             requiredUser="teacher" secret={secret} />
-          <ProtectedRoute exact path="/ManageLessons" component={ManageAllLessons} 
+          <ProtectedRoute exact path="/ManageLessons" component={ManageAllLessons}
             requiredUser="teacher" secret={secret} />
-          <ProtectedRoute path="/ManageLessons/:lessonID" component={ManageLesson} 
+          <ProtectedRoute path="/ManageLessons/:lessonID" component={ManageLesson}
             requiredUser="teacher" secret={secret} />
         </Router>
       </div>

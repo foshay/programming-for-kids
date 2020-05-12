@@ -21,10 +21,11 @@ class ManageAllStudents extends Component {
       });
   }
 
-  goToStudent = (studentID) => {
+  goToStudent = (username) => {
     // changes the url when a button is clicked
     // TODO change this to a Link or Redirect rather than push
-    this.props.history.push(`/ManageStudents/${studentID}`);
+    console.log("Username in all: " + username);
+    this.props.history.push(`/ManageStudents/${username}`);
   }
 
   componentDidMount() {

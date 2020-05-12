@@ -63,6 +63,7 @@ app.post('/api/register', async (req, res, next) => {
     let sql = '';
     let params = '';
 
+
     // TODO add checking that password meets requirements
     // i.e. contains symbol, number of chars, etc.
 
@@ -213,9 +214,9 @@ app.post('/api/grade', (req, res) => {
     var messageText;
     var errorText;
 
-    runCmd("printf \"" + code + "\" > ./users/" + username+ "/pcode/" + lesson_id 
-        + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id 
-        + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/" 
+    runCmd("printf \"" + code + "\" > ./users/" + username+ "/pcode/" + lesson_id
+        + " && ./backend/run_python_script.sh ./grading_scripts/" + lesson_id
+        + " ./users/" + username+ "/pcode/" + lesson_id + " " + username+ " && rm ./users/"
         + username+ "/pcode/" + lesson_id, function (text, error) {
         if (error){
             messageText = "Something went wrong.";
@@ -342,7 +343,7 @@ app.post('/api/SaveLessonProgress/', (req, res) => {
 
     let sql = 'UPDATE Grade SET progress_xml=? WHERE lesson_id=? AND username=?';
     let params = [xml, lesson_id, username];
-    
+
     db.run(sql, params, (err) => {
         if (err) {
             console.log("Progress update failed: ");
@@ -361,6 +362,7 @@ app.post('/api/SaveLessonProgress/', (req, res) => {
 });
 
 function createGradingScript(code, lessonID) {
+
     runCmd("printf '%s' \"#!/usr/bin/env python\n" + code + "\" > ./grading_scripts/" + lessonID, function (text, error) {
         console.log(text);
         var res = 0;
@@ -445,6 +447,7 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     let xml = body.xml;
     let code = body.code;
 
+
     let sql = 'UPDATE Lesson SET question=?, answer=?, name=?, hint=?, xml=? WHERE lesson_id=?';
 
     let params = [question, answer, name, hint, xml, lesson_id];
@@ -471,8 +474,8 @@ app.put('/api/UpdateLesson', (req, res,next) => {
     });
 });
 
-// Remove an existing lesson
-app.put('/api/RemoveLesson', (req, res,next) => {
+// Remove an existing lesson. Will also cascade to remove any Grades linked to that lesson.
+app.delete('/api/RemoveLesson', (req, res,next) => {
     let body = req.body;
     let lesson_id = body.lesson_id;
 
@@ -482,22 +485,19 @@ app.put('/api/RemoveLesson', (req, res,next) => {
     db.run(sql, params, (err) => {
         if (err) {
             console.log(err);
-            res.json({
-                "message": "DB Failure"
-            })
+            res.send("DB Failure");
         } else {
             runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
             console.log("Lesson removal succecssful: " + lesson_id);
-            res.json({
-                "message": "Success"
-            })
+            res.send("Success");
         }
     });
 });
 
 /****************** User Requests *****************/
 
-app.get('/User/:username', (req, res) => {
+app.get('/api/User/:username', (req, res) => {
+    console.log("Student requested");
     let sql = 'SELECT * FROM User WHERE username = ?';
     let username = req.params.username;
     let params = [username];
@@ -538,6 +538,30 @@ app.get('/api/Student/all', (req, res) => {
             message: "Success",
             data: rows
         });
+    });
+});
+
+app.delete('/api/RemoveStudent', (req,res) => {
+    let body = req.body;
+    let username = body.username;
+
+    let sql = 'DELETE FROM User WHERE username=?';
+    let params = [username];
+    console.log("Sent username: " + username);
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+            res.send("DB Failure");
+        } else {
+            runCmd("rm -rf ./users/" + username, function (text, error) {
+                console.log("In runcmd callback");
+                if(error){
+                    console.log(error);
+                }
+            });
+            console.log("Student Removed");
+            res.send("Success");
+        }
     });
 });
 

@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 
 import { Button, ButtonGroup, } from "@blueprintjs/core";
 
+
 import BlocklyComp from '../../Blockly_comps/BlocklyComp';
 import EditField from '../../SmallComponents/EditField';
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
@@ -91,7 +92,7 @@ class ManageLesson extends Component {
         if (json.message === "Success") {
           console.info("Created " + name);
           alert("Lesson Created");
-          // TODO add redirect back to manageLessons, 
+          // TODO add redirect back to manageLessons,
           //  similar to LoginScreen Redirect
         }
         else {
@@ -99,6 +100,17 @@ class ManageLesson extends Component {
           alert("Database Error");
         }
       });
+
+/*      if (body === "Success"){
+        console.info("Created " + name);
+        alert("Lesson Created");
+        // TODO add redirect back to manageLessons,
+        //  similar to LoginScreen Redirect
+      }
+      else {
+        console.info("Error: " + body);
+        alert("Database Error");
+    } */
     }
     else {
       // If we are editing an existing lesson
@@ -134,35 +146,41 @@ class ManageLesson extends Component {
     }
   };
 
-  onRemove = () => {
-    // TODO add alert with confirmation
+
+  handleRemove = async e => {
+  // onRemove = () => {
+    var lesson_id = this.props.match.params.lessonID;
     // TODO possibly add OTP for confirmation
-    // TODO remove all grades from this lesson?
-      // may not be the best idea in case of accidental deletion
-      // however, otp confirmation should make accidental deletion difficult
-      // This may happen with the schema anyway
-    alert("Feature not implemented");
-    // var lesson_id = this.props.match.params.lessonID;
-    // fetch('/api/RemoveLesson', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     lesson_id: lesson_id,
-    //   })
-    // })
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(json => {
-    //     if (json.message === "Success") {
-    //       console.info("Removed " + lesson_id);
-    //       alert("Lesson Removed");
-    //       // TODO add redirect back to manageLessons
-    //     }
-    //   });
-  }
+      console.log("handling remove");
+    var result = window.confirm("Are you sure you want to delete this lesson?");
+    console.log("result == " + result);
+    if(result){
+        //Send request to delete the lesson
+        const response = await fetch('/api/RemoveLesson', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lesson_id: lesson_id,
+            })
+        });
+        console.log("request sent");
+        //Wait for confirmation
+        const body = await response.text();
+        if (body === "Success") {
+            console.log("heard back about delete");
+          console.info("Removed " + lesson_id);
+          alert("Lesson Removed");
+          this.props.history.push('/ManageLessons');
+        }
+        else{
+            console.info("Error: " + body);
+            alert("Database Error");
+        }
+    }
+}
+
 
   deleteButton = () => {
     if (this.props.match.params.lessonID !== "NewLesson") {
@@ -172,7 +190,12 @@ class ManageLesson extends Component {
           text="Delete"
           intent="warning"
           icon="small-cross"
-          onClick={(e) => this.onRemove(e)}
+          onClick={(e) => {
+              this.handleRemove(e);
+
+            }
+          }
+
         />
       );
     }
@@ -234,7 +257,7 @@ class ManageLesson extends Component {
         />
         <br />
         <BlocklyComp edit
-        lessonID={this.props.match.params.lessonID} 
+        lessonID={this.props.match.params.lessonID}
         initialXml={this.state.initialXml}
         setCode={(code) => this.setState({code: code})}
         setXml={(xml) => this.setState({xml: xml})}
