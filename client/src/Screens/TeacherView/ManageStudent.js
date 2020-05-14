@@ -89,7 +89,8 @@ class ManageStudent extends Component {
           </ButtonGroup>
 
           <Card>
-            <HTMLTable striped interactive bordered>
+            {/* <HTMLTable striped interactive bordered> */}
+            <HTMLTable striped bordered>
               <thead>
                 <tr>
                   <th />
@@ -101,7 +102,7 @@ class ManageStudent extends Component {
                 {this.state.grades.map((value, key) => {
                   return (
                     <tr key ={key}> 
-                      {/* onClick={() => this.goToLesson(value.lesson_id)} key={key}> */}
+                      {/* <tr onClick={() => this.showXml(value.progress_xml)} key={key}> */}
                       <td > {value.lesson_number} </td>
                       <td > {value.name} </td>
                       <td > {value.score} </td>
