@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup} from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, HTMLTable} from "@blueprintjs/core";
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 
 class ManageStudent extends Component {
   state={
     student: [{}],
+    grades: [{}],
     isLoading: true,
   }
 
@@ -17,19 +18,18 @@ class ManageStudent extends Component {
     return fetch('/api/User/' + username)
       .then(response => {
         console.log(response);
-        this.setState({isLoading: false});
         return response.json();
       })
       .then(json => {
         console.log(json);
         console.log(json.data);
         this.setState({ student: json.data });
+        this.setState({ grades: json.data.grades });
+        this.setState({ isLoading: false });
       });
   }
 
   onRemoveStudent = async (e) => {
-    // TODO add confirmation popup
-    // maybe add OTP to confirm?
     console.log("in removeStudent");
     var result = window.confirm("Are you sure you want to delete this student?");
     if(result){
@@ -38,30 +38,29 @@ class ManageStudent extends Component {
         console.log("student: " + this.state.student);
         var username = this.state.student.username;
 
-        const response = await fetch('/api/RemoveStudent', {
-             method: 'DELETE',
-             headers: {
-                 'Content-Type': 'application/json',
-             },
-                  body: JSON.stringify({
-                 "username": username
-                 //"otp": otp,
-             })
-         });
-         var body = await response.text();
-         var message = await body.message;
+      const response = await fetch('/api/RemoveStudent', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "username": username
+        })
+      });
+      var body = await response.text();
+      var message = await body.message;
 
-         this.setState({ responseToPost: message });
-         console.info(this.state.responseToPost);
-         console.log("Console message: " + message);
+      this.setState({ responseToPost: message });
+      console.info(this.state.responseToPost);
+      console.log("Console message: " + message);
 
-         if(body === "Success"){
-             alert("Removed " + username);
-             this.props.history.push('/ManageStudents');
-         }else{
-             alert("Invalid username or otp");
-         }
-     }
+      if (body === "Success") {
+        alert("Removed " + username);
+        this.props.history.push('/ManageStudents');
+      } else {
+        alert("Invalid username or otp");
+      }
+    }
   }
 
   render() {
@@ -76,8 +75,7 @@ class ManageStudent extends Component {
     }
     else {
       return (
-        <div className="Body2">
-          <div className="Body"/>
+        <div className="Body">
           <ButtonGroup vertical>
             <h1> Manage Student </h1>
             <h3>{student.first_name + " " + student.last_name} </h3>
@@ -90,9 +88,29 @@ class ManageStudent extends Component {
             <br />
           </ButtonGroup>
 
-          <h1>Grades Table </h1>
-          {/* TODO add grades table */}
-          <h3>(not yet implemented)</h3>
+          <Card>
+            <HTMLTable striped interactive bordered>
+              <thead>
+                <tr>
+                  <th />
+                  <th>Lesson Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody key="table-body">
+                {this.state.grades.map((value, key) => {
+                  return (
+                    <tr key ={key}> 
+                      {/* onClick={() => this.goToLesson(value.lesson_id)} key={key}> */}
+                      <td > {value.lesson_number} </td>
+                      <td > {value.name} </td>
+                      <td > {value.score} </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </HTMLTable>
+          </Card>
         </div>
         // we want to see the grade for each lesson
         // we also want to access the saved xml for each lesson

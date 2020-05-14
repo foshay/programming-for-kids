@@ -497,27 +497,45 @@ app.delete('/api/RemoveLesson', (req, res,next) => {
 /****************** User Requests *****************/
 
 app.get('/api/User/:username', (req, res) => {
-    console.log("Student requested");
     let sql = 'SELECT * FROM User WHERE username = ?';
     let username = req.params.username;
     let params = [username];
-
-    // TODO also return scores for each lesson, stored in Grade
-    // scores should be in data.scores
+    console.log("Student requested: " + username);
+    let data = {};
 
     db.get(sql, params, (err, row) => {
         if (err) {
+            console.log(err);
             res.status(400).json({
                 "error": err.message,
                 "message": "Failure"
             })
             return;
         }
+        data.username = row.username;
+        data.first_name = row.first_name;
+        data.last_name = row.last_name;
         console.log("Retrieving user:");
-        console.log(row);
-        res.json({
-            message: "Success",
-            data: row
+        console.log(data);
+        // Get the lesson number, name, id, progress_xml, and score for the student
+        // with requested username, and sort by lesson_number
+        sql = 'SELECT Lesson.lesson_number, Lesson.name, Lesson.lesson_id, Grade.progress_xml, Grade.score FROM Lesson LEFT JOIN Grade ON Lesson.lesson_id = Grade.lesson_id WHERE username=? GROUP BY Lesson.lesson_number';
+        params = [username];
+        db.all(sql, params, (err, row) => {
+            console.log(row);
+            if (err) {
+                console.log(err);
+                res.status(400).json({
+                    "error": err.message,
+                    "message": "Failure"
+                })
+                return;
+            }
+            data.grades = row;
+            res.json({
+                message: "Success",
+                data: data
+            });
         });
     });
 });
