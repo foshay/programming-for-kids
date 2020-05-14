@@ -95,7 +95,8 @@ app.post('/api/register', async (req, res, next) => {
             }
 
             // Insert new user to database
-            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) \
+                    VALUES (?,?,?,?,?)';
             params = [first_name, last_name, username, password_hash, is_teacher];
             console.log("Attempting user creation:");
             console.log(params);
@@ -396,7 +397,8 @@ app.post('/api/NewLesson', (req, res,next) => {
             lesson_number = row["MAX (lesson_number)"] + 1;
             // console.log(lesson_number);
             // TODO change this to be just one call
-            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
+            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) \
+                    VALUES (?,?,?,?,?,?,?)';
             let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
             db.run(sql, params, (err) => {
                 if (err) {
@@ -413,7 +415,8 @@ app.post('/api/NewLesson', (req, res,next) => {
                     else {
                         // TODO set grade for this lesson for all students to 0
                         // make an entry for all the usernames in the Grade table...?
-                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username FROM User WHERE is_teacher=0';
+                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username \
+                                FROM User WHERE is_teacher=0';
                         let params = [lesson_id];
                         db.run(sql, params, (err) => {
                             if (err){
@@ -519,7 +522,10 @@ app.get('/api/User/:username', (req, res) => {
         console.log(data);
         // Get the lesson number, name, id, progress_xml, and score for the student
         // with requested username, and sort by lesson_number
-        sql = 'SELECT Lesson.lesson_number, Lesson.name, Lesson.lesson_id, Grade.progress_xml, Grade.score FROM Lesson LEFT JOIN Grade ON Lesson.lesson_id = Grade.lesson_id WHERE username=? GROUP BY Lesson.lesson_number';
+        sql = 'SELECT Lesson.lesson_number, Lesson.name, Lesson.lesson_id, \
+                Grade.progress_xml, Grade.score FROM Lesson \
+                LEFT JOIN Grade ON Lesson.lesson_id = Grade.lesson_id \
+                WHERE username=? GROUP BY Lesson.lesson_number';
         params = [username];
         db.all(sql, params, (err, row) => {
             console.log(row);
