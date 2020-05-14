@@ -1,25 +1,11 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, ControlGroup, InputGroup, ButtonGroup } from '@blueprintjs/core';
 import { Link, Redirect } from 'react-router-dom';
-import { totp } from 'otplib';
-import qrcode from 'qrcode';
+import { authenticator } from 'otplib';
 import OtpInput from 'react-otp-input'
 
-const secret = "sdnfosandounapsgonasadfasdf";
-
-const user = "TestUsername";
-const service = "NCC";
-
-const otpauth = totp.keyuri(user, service, secret);
-
-qrcode.toDataURL(otpauth, (err, imageURL) => {
-    if(err){
-        console.log('Error with QR');
-        return;
-    }
-    console.log("qrcode url: " + imageURL);
-});
-
+//IMPORANT: make sure secret is in base32 already and matches gen-otp-qr.js
+const secret = 'KVKFKRCPNZQUYMLXOVYDSQKJKZDTSRLD';
 
 class RegisterForm extends Component {
     state = {
@@ -41,16 +27,16 @@ class RegisterForm extends Component {
         var otp = this.state.otp;
         var userType = this.props.userType;
         if (userType === "teacher"){
-            // if (username === '' | password === '' | firstName === '' | lastName === '' | otp === '') {
             if (username === '' | password === '' | firstName === '' | lastName === '' | otp === '') {
                 alert("Must fill in all fields to register");
                 return;
             }
 
-            var isValid = totp.check(otp, secret);
-            console.log("check: " + isValid);
-            isValid = totp.verify({otp, secret});
-            console.log("verify: " + isValid);
+            var isValid = authenticator.check(otp, secret);
+            console.log("checking if : "+ otp + " is valid: " + isValid);
+            console.log("Expected: " + authenticator.generate(secret));
+            //isValid = totp.verify({otp, secret});
+            //console.log("verify: " + isValid);
 
             if(!isValid){
                     alert("Invalid OTP token");
@@ -99,22 +85,15 @@ class RegisterForm extends Component {
     renderOTPInput = () => {
         // TODO enable otp
          if (this.props.userType === "teacher") {
-             const token = totp.generate(secret);
-             console.log("Token: " + token);
-             var isValid = totp.check(token, secret);
-             console.log("check: " + isValid);
-             //isValid = totp.verify({this.state.otp, secret});
-             //console.log("verify: " + isValid);
              return (
                  <FormGroup label="Teacher OTP:" labelFor="otp">
                      <OtpInput
                          id="otp"
-                         //value = 1234;
-                        // value={this.state.otp}
-                         onChange={otp => {
-                             console.log("OTP: " + otp);
-                             //this.setState({ otp: value });
-                             //this.props.setOTP(value)
+                         value={this.state.otp}
+                         onChange={value => {
+                             console.log("OTP: " + value);
+                             this.setState({ otp: value });
+                             this.props.setOTP(value);
                             }
                         }
                          numInputs={6}

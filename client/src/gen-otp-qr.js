@@ -1,14 +1,17 @@
 var qrcode = require('qrcode');
-require('otplib');
-const user = "TestUsername";
+var otplib = require('otplib');
+const user = "Teacher";
 const service = "NCC";
+//IMPORANT: make sure secret is in base32 already and matches RegisterForm.js
+const secret = 'KVKFKRCPNZQUYMLXOVYDSQKJKZDTSRLD';
 
-const otpauth = totp.keyuri(user, service, "sdnfosandounapsgonasadfasdf");
+const otpauth = otplib.authenticator.keyuri(user, service, secret);
 
-qrcode.toDateURL(otpauth, (err, imageURL) => {
+qrcode.toDataURL(otpauth, (err, imageURL) => {
     if(err){
-        console.log('Error with QR');
+        console.log("qrcode error");
         return;
     }
     console.log(imageURL);
+//    qrcode.toFile("./ncc-otp.png", imageURL);
 });
