@@ -11,10 +11,10 @@ To work on the project you will need node version 13.8.x. To work with the Intel
 2. Run the ```setup.sh``` file in the `setup` directory to install all dependencies.
 3. Run ```start.sh``` in the main directory to start the application.
 
-## Authentication
+## Teacher Registration Authentication
 When registering a teacher, a one-time password must be provided. To obtain a valid password for registration, complete the following steps:
 
-1. Download the Google Authenticator app on your  [Android](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US) or [Apple](https://apps.apple.com/us/app/google-authenticator/id388497605).
-2. Press the '+' button select the "Scan a QR code" option.
+1. Download the Google Authenticator app on your  [Android](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US) or [Apple](https://apps.apple.com/us/app/google-authenticator/id388497605) mobile device.
+2. Open the app and press the '+' button. Then select the "Scan a QR code" option.
 3. Open the file called "otp-qr.png" and scan it with your phone via the Google Authenticator app.
 4. Use the code that is generated via the app in the one-time password field on the registration page.
