@@ -83,27 +83,24 @@ class RegisterForm extends Component {
     };
 
     renderOTPInput = () => {
-        // TODO enable otp
-         if (this.props.userType === "teacher") {
-             return (
-                 <FormGroup label="Teacher OTP:" labelFor="otp">
-                     <OtpInput
-                         id="otp"
-                         value={this.state.otp}
-                         onChange={value => {
-                             console.log("OTP: " + value);
-                             this.setState({ otp: value });
-                             this.props.setOTP(value);
-                            }
-                        }
-                         numInputs={6}
-                         separator={<span>-</span>}
-                         inputStyle={"OTP-container"}
-                     />
-                 </FormGroup>
-             );
-         }
-         else { return (<div/>); }
+        if (this.props.userType === "teacher") {
+            return (
+                <FormGroup label="Teacher OTP:" labelFor="otp">
+                    <OtpInput
+                        id="otp"
+                        value={this.state.otp}
+                        onChange={value => {
+                            console.log("OTP: " + value);
+                            this.setState({ otp: value });
+                        } }
+                        numInputs={6}
+                        separator={<span>-</span>}
+                        inputStyle={"OTP-container"}
+                    />
+                </FormGroup>
+            );
+        }
+        else { return (<div />); }
     }
 
     render = () => {
@@ -119,7 +116,6 @@ class RegisterForm extends Component {
                             onChange={e => {
                                 var value = e.target.value;
                                 this.setState({ username: value });
-                                this.props.setUsername(value);
                             }}
                             value={this.state.username}
                             placeholder="Enter Username..."
@@ -131,7 +127,6 @@ class RegisterForm extends Component {
                             onChange={e => {
                                 var value = e.target.value;
                                 this.setState({ firstName: value });
-                                this.props.setFirstName(value);
                             }}
                             value={this.state.firstName}
                             placeholder="Enter First Name..."
@@ -143,7 +138,6 @@ class RegisterForm extends Component {
                             onChange={e => {
                                 var value = e.target.value;
                                 this.setState({ lastName: value });
-                                this.props.setLastName(value);
                             }}
                             value={this.state.lastName}
                             placeholder="Enter Last Name..."
@@ -155,9 +149,6 @@ class RegisterForm extends Component {
                             onChange={(e) => {
                                 var value = e.target.value;
                                 this.setState({ password: value });
-                                if (this.state.passwordConfirm === value) {
-                                    this.props.setPassword(value);
-                                }
                             }}
                             value={this.state.password}
                             placeholder="Enter Password..."
@@ -176,9 +167,6 @@ class RegisterForm extends Component {
                                 e => {
                                     var value = e.target.value;
                                     this.setState({ passwordConfirm: value });
-                                    (value === this.state.password) ?
-                                        this.props.setPassword(value) :
-                                        this.props.setPassword('')
                                 }
                             }
                             value={this.state.passwordConfirm}
