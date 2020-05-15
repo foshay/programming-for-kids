@@ -242,6 +242,7 @@ class RegisterForm extends Component {
                     <this.renderOTPInput />
                     <ButtonGroup vertical large>
                         <Button
+                            className={'vertical-margin'}
                             icon="confirm"
                             text={(this.props.userType === "teacher") ?
                                 "Register Teacher" : "Register Student"
@@ -256,15 +257,14 @@ class RegisterForm extends Component {
                             id="registerButton"
                             intent="success"
                         />
-                        <br />
                         <Link to="/register">
                             <Button
+                                className={'vertical-margin'}
                                 intent="warning"
                                 icon="small-cross"
                                 text="Back" />
                         </Link>
-                        <br />
-                        <br />
+                        <div style={{'height': '4vh'}} />
                         <FormGroup label="Already Have an Account?" />
                         <Link to="/login">
                             <Button

@@ -6,10 +6,11 @@ import { Button, ButtonGroup } from "@blueprintjs/core";
 class RegisterChoice extends Component {
   render() {
     return (
-      <div className="Body">
+      <div className="home-menu">
         <ButtonGroup vertical large>
           <Link to="/register/student">
             <Button
+              className={"vertical-margin"}
               type="submit"
               id="registerStudentButton"
               icon="confirm"
@@ -17,9 +18,9 @@ class RegisterChoice extends Component {
               intent="primary"
             />
           </Link>
-          <br/>
           <Link to="/register/teacher">
             <Button
+              className={"vertical-margin"}
               type="submit"
               id="registerTeacherButton"
               icon="confirm"
@@ -27,9 +28,9 @@ class RegisterChoice extends Component {
               intent="primary"
             />
           </Link>
-          <br/>
           <Link to="/">
             <Button
+              className={"vertical-margin"}
               type="button"
               intent="warning"
               icon="small-cross"

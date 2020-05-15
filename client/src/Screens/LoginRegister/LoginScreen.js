@@ -46,7 +46,7 @@ class LoginScreen extends Component {
         }
         else {
             return (
-                <div className="Body">
+                <div className="home-menu">
                     <ControlGroup vertical>
                         <FormGroup
                             label="Username"
@@ -73,6 +73,7 @@ class LoginScreen extends Component {
                         </FormGroup>
                         <ButtonGroup vertical large>
                             <Button
+                                className={"vertical-margin"}
                                 type="submit"
                                 id="loginButton"
                                 intent="success"
@@ -80,9 +81,9 @@ class LoginScreen extends Component {
                                 text="Log In"
                                 onClick={(e) => this.handleLogin(e)}
                             />
-                            <br />
                             <Link to="/">
                                 <Button
+                                    className={"vertical-margin"}
                                     text="Back"
                                     intent="warning"
                                     icon="small-cross"
