@@ -45,21 +45,13 @@ class BlocklyComp extends Component{
     // This runs if a new intialXml has loaded from the database
     if (this.props.initialXml !== prevProps.initialXml) {
       console.log("InitialXml updated");
-      this.renderEditor();
+      this.renderEditor(this.state.toolboxCategories);
     }
   }
 
   // This renders the blockly editor by setting the div with id='blockly'
   // to be a blocklyEditor
-  renderEditor = (toolbox) => {
-    // toolboxCategories is passed in if there was no waiting
-    // for a promise to finish. Otherwise, toolbox has been
-    // loaded into the toolboxCategories state because the page
-    // was re rendered when the new initialXml was passed in through the
-    // props after being loaded in the api call
-    var toolboxCategories;
-    if (toolbox) { toolboxCategories = toolbox; }
-    else { toolboxCategories = this.state.toolboxCategories; }
+  renderEditor = (toolboxCategories) => {
     const Editor =
       <ReactBlocklyComponent.BlocklyEditor
         // The block categories to be available.
