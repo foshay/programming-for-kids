@@ -115,15 +115,28 @@ class ManageStudent extends Component {
                 {this.state.grades.map((lesson, key) => {
                   return (
                     <tr onClick={() => {
-                      if (this.state.shown) {
-                        this.setState({
-                          shown: false,
-                          viewed_xml: '',
-                          viewed_id: '',
-                          viewed_name: ''
-                        });
+                      if (this.state.shown){
+                        // If another lesson is shown, just switch to this one
+                        if (this.state.viewed_id !== lesson.lesson_id) {
+                          this.setState({
+                            // shown: !this.state.shown,
+                            viewed_xml: lesson.progress_xml,
+                            viewed_id: lesson.lesson_id,
+                            viewed_name: lesson.name
+                          });
+                        }
+                        else {
+                          // clicked on the same lesson to hide
+                          this.setState({
+                            shown: false,
+                            viewed_xml: '',
+                            viewed_id: '',
+                            viewed_name: ''
+                          });
+                        }
                       }
                       else {
+                        // No lesson is shown, show this lesson
                         this.setState({
                           shown: !this.state.shown,
                           viewed_xml: lesson.progress_xml,
