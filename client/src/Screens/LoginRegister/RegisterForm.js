@@ -15,7 +15,9 @@ class RegisterForm extends Component {
         lastName: '',
         passwordConfirm: '',
         otp: '',
-        created: false
+        created: false,
+        passwordHelperText: '',
+        usernameHelperText: '',
     }
 
     handleRegister = async e => {
@@ -26,17 +28,34 @@ class RegisterForm extends Component {
         var lastName = this.state.lastName;
         var otp = this.state.otp;
         var userType = this.props.userType;
+        // If password doesn't meet requirements
+        if (this.state.passwordHelperText !== ""){
+            alert("Password not strong enough.\n \
+            Must be between 4 and 20 characters.\n \
+            Must contain at least one digit.\n \
+            Must contain at least one symbol.\n \
+            Cannot contain any spaces.");
+            return;
+        }
+        // If username doesn't meet requirements
+        if (this.state.usernameHelperText !== ""){
+            alert("Invalid username.\n \
+            Must be between 4 and 20 characters.\n \
+            Must start with a letter.\n \
+            Cannot contain any symbols.\n \
+            Cannot contain any spaces.");
+            return;
+        }
         if (userType === "teacher"){
             if (username === '' | password === '' | firstName === '' | lastName === '' | otp === '') {
                 alert("Must fill in all fields to register");
                 return;
             }
 
+            // Check whether given correct otp
             var isValid = authenticator.check(otp, secret);
             console.log("checking if : "+ otp + " is valid: " + isValid);
             console.log("Expected: " + authenticator.generate(secret));
-            //isValid = totp.verify({otp, secret});
-            //console.log("verify: " + isValid);
 
             if(!isValid){
                     alert("Invalid OTP token");
@@ -44,6 +63,7 @@ class RegisterForm extends Component {
             }
         }
         else {
+            // Student registering
             if (username === '' | password === '' | firstName === '' | lastName === '') {
                 alert("Must fill in all fields to register");
                 return;
@@ -76,12 +96,12 @@ class RegisterForm extends Component {
                 alert("Issue creating account");
             } else if (message === "Success") {
                 console.info("Created " + username);
-                // alert("User created");
                 this.setState({ created: true });
             }
         });
     };
 
+    // This renders a field to input OTP if this is a register teacher form
     renderOTPInput = () => {
         if (this.props.userType === "teacher") {
             return (
@@ -107,15 +127,41 @@ class RegisterForm extends Component {
         if (this.state.created){
             return ( <Redirect to="/login"/>);
         }
+        var hasSymbol = new RegExp(/[!@#$%^&*()]/);
+        var hasNum = new RegExp(/\d/);
+        var hasSpace = new RegExp(/\s/);
+        var startWithLetter = new RegExp(/^[a-zA-Z].*$/);
         return (
             <div>
                 <ControlGroup vertical>
-                    <FormGroup label="Username:" labelFor="username">
+                    <FormGroup
+                        label="Username:"
+                        labelFor="username"
+                        helperText={this.state.usernameHelperText}
+                    >
                         <InputGroup
                             id="username"
                             onChange={e => {
                                 var value = e.target.value;
                                 this.setState({ username: value });
+                                if (!startWithLetter.test(value)){
+                                    this.setState({usernameHelperText: "Must start with a letter."});
+                                }
+                                else if (hasSpace.test(value)){
+                                    this.setState({usernameHelperText: "Cannot contain spaces."});
+                                }
+                                else if (hasSymbol.test(value)){
+                                    this.setState({usernameHelperText: "Cannot contain symbols."});
+                                }
+                                else if (value.length < 4){
+                                    this.setState({usernameHelperText: "Too short."});
+                                }
+                                else if (value.length > 20){
+                                    this.setState({usernameHelperText: "Too long."});
+                                }
+                                else {
+                                    this.setState({usernameHelperText: ""});
+                                }
                             }}
                             value={this.state.username}
                             placeholder="Enter Username..."
@@ -143,12 +189,32 @@ class RegisterForm extends Component {
                             placeholder="Enter Last Name..."
                         />
                     </FormGroup>
-                    <FormGroup label="Password:" labelFor="password">
+                    <FormGroup 
+                        label="Password:"
+                        labelFor="password"
+                        helperText={this.state.passwordHelperText}
+                    >
                         <InputGroup
                             id="password"
                             onChange={(e) => {
                                 var value = e.target.value;
                                 this.setState({ password: value });
+                                if (hasSpace.test(value)) {
+                                    this.setState({passwordHelperText: "Cannot contain spaces."});
+                                }
+                                else if (value.length < 4) {
+                                    this.setState({passwordHelperText: "Too short."});
+                                }
+                                else if (value.length > 20) {
+                                    this.setState({passwordHelperText: "Too long."});
+                                }
+                                else if (!hasNum.test(value)) {
+                                    this.setState({passwordHelperText: "Must contain at least one digit."});
+                                }
+                                else if (!hasSymbol.test(value)) {
+                                    this.setState({passwordHelperText: "Must contain at least one symbol."});
+                                }
+                                else { this.setState({passwordHelperText: ""}); }
                             }}
                             value={this.state.password}
                             placeholder="Enter Password..."
