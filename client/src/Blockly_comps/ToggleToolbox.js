@@ -14,6 +14,11 @@ class ToggleToolbox extends Component {
             // this hides/shows the toolbox
             item.style["display"] = this.state.toolboxShown ? "none" : "block";
         }
+        array = document.getElementsByClassName("blocklyFlyout");
+        for (let item of array) {
+            // this hides/shows the toolbox
+            item.style["display"] = this.state.toolboxShown ? "none" : "block";
+        }
     }
 
     render() {
