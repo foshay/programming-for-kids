@@ -135,15 +135,16 @@ class ManageStudent extends Component {
           </ButtonGroup>
         </div>
 
-        <DisplayBlocks
-          hidden={!this.state.shown}
-          initialXml={this.state.viewed_xml}
-          lesson_id={this.state.viewed_id}
-          lesson_name={this.state.viewed_name}
-          hidePopup={() => this.hidePopup()}
-          key={this.state.viewed_id}
-        />
-        <br/>
+        <div className="vertical-margin">
+          <DisplayBlocks
+            hidden={!this.state.shown}
+            initialXml={this.state.viewed_xml}
+            lesson_id={this.state.viewed_id}
+            lesson_name={this.state.viewed_name}
+            hidePopup={() => this.hidePopup()}
+            key={this.state.viewed_id}
+          />
+        </div>
 
         <div className="centered horizontal-margin">
           <Card >

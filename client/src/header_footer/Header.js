@@ -72,7 +72,6 @@ class Header extends Component {
                 <this.usernameMessage/>
                 <MenuItem icon="home"
                     text="Home"
-                    // href={teacher ? "/TeacherHome" : "/Home"}
                     href={"/"}
                     disabled={loggedOut}
                 />
@@ -83,10 +82,8 @@ class Header extends Component {
                 />
                 <MenuItem
                     icon={"clipboard"}
-                    text={teacher ? "Manage Students" : "View Grades"}
-                    // href={teacher ? "/ManageStudents" : "/Grades"}
-                    href={teacher ? "/ManageStudents" : "/"}
-                    disabled={loggedOut}
+                    text={teacher ? "Manage Students" : "Grades"}
+                    href={teacher ? "/ManageStudents" : "/Grades"}
                 />
                 <MenuDivider />
                     {/* TODO add Settings*/}

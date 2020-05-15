@@ -15,14 +15,14 @@ class HomeScreen extends Component {
               intent="primary"
             />
           </Link>
-          {/* <Link to="/CardGame">
+          <Link to="/Grades">
             <Button
               className={"vertical-margin"}
-              text="Card Game"
+              text="Grades"
               type="button"
-              icon="ninja"
+              icon="clipboard"
             />
-          </Link> */}
+          </Link>
           {/* <Button
             className={"vertical-margin"}
             text="Settings"

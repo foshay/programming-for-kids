@@ -9,7 +9,7 @@ import RegisterTeacher from '../Screens/LoginRegister/RegisterTeacher.js';
 
 // Student Screens
 import LessonMenu from '../Screens/StudentView/LessonMenu.js'
-// import Grades from '../Screens/StudentView/Grades.js'
+import Grades from '../Screens/StudentView/Grades.js'
 import LessonScreen from '../Screens/StudentView/LessonScreen.js'
 
 // Teacher Screens
@@ -86,8 +86,8 @@ class App extends Component {
           {/* The components below should only be accessible for logged in students */}
           <ProtectedRoute exact path="/LessonMenu" component={LessonMenu}
             requiredUser="student" secret={secret} />
-          {/* <ProtectedRoute exact path="/Grades" component={Grades}
-            requiredUser="student" secret={secret} /> */}
+          <ProtectedRoute exact path="/Grades" component={Grades}
+            requiredUser="student" secret={secret} />
           <ProtectedRoute path="/Lesson/:lessonID" component={LessonScreen}
             requiredUser="student" secret={secret} />
 

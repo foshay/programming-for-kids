@@ -8,6 +8,8 @@ import { Card, Text } from '@blueprintjs/core';
 // Token things
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary"
+
+// blank usercode xml
 const initialXml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="procedures_defreturn" deletable="false" editable="false" id="XH45#0:M(suDIRq]3O1l" x="550" y="250"><field name="NAME">usercode</field><comment pinned="false" h="80" w="160">The base function block used for grading</comment></block></xml>';
 
 class LessonScreen extends Component {
