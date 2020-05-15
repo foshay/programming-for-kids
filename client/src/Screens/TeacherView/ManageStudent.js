@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+
 import { Button, ButtonGroup, Card, HTMLTable} from "@blueprintjs/core";
+
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
+import DisplayBlocks from '../../Blockly_comps/DisplayBlocks';
 
 class ManageStudent extends Component {
   state={
     student: [{}],
     grades: [{}],
+    viewed_xml: '',
+    viewed_id: '',
+    viewed_name: '',
+    shown: false,
     isLoading: true,
   }
 
@@ -68,16 +75,11 @@ class ManageStudent extends Component {
       return (<LoadingSymbol/>);
     }
     var student = this.state.student;
-    if (student === [{}]) {
-      return (
-        <h1 className="Body">Loading...</h1>
-      )
-    }
-    else {
-      return (
-        <div className="Body">
+    return (
+      <div>
+        <div className="Body" >
+
           <ButtonGroup vertical>
-            <h1> Manage Student </h1>
             <h3>{student.first_name + " " + student.last_name} </h3>
             <h5>{"(" + student.username + ")"}</h5>
             <Button
@@ -87,10 +89,21 @@ class ManageStudent extends Component {
             />
             <br />
           </ButtonGroup>
+        </div>
 
-          <Card>
-            {/* <HTMLTable striped interactive bordered> */}
-            <HTMLTable striped bordered>
+        <DisplayBlocks
+          hidden={!this.state.shown}
+          initialXml={this.state.viewed_xml}
+          lesson_id={this.state.viewed_id}
+          lesson_name={this.state.viewed_name}
+          key={this.state.viewed_id}
+        />
+        <br/>
+
+        <div className="Manage-Table">
+          <Card >
+            <HTMLTable striped interactive bordered>
+              {/* <HTMLTable striped bordered> */}
               <thead>
                 <tr>
                   <th />
@@ -99,13 +112,29 @@ class ManageStudent extends Component {
                 </tr>
               </thead>
               <tbody key="table-body">
-                {this.state.grades.map((value, key) => {
+                {this.state.grades.map((lesson, key) => {
                   return (
-                    <tr key ={key}> 
-                      {/* <tr onClick={() => this.showXml(value.progress_xml)} key={key}> */}
-                      <td > {value.lesson_number} </td>
-                      <td > {value.name} </td>
-                      <td > {value.score} </td>
+                    <tr onClick={() => {
+                      if (this.state.shown) {
+                        this.setState({
+                          shown: false,
+                          viewed_xml: '',
+                          viewed_id: '',
+                          viewed_name: ''
+                        });
+                      }
+                      else {
+                        this.setState({
+                          shown: !this.state.shown,
+                          viewed_xml: lesson.progress_xml,
+                          viewed_id: lesson.lesson_id,
+                          viewed_name: lesson.name
+                        });
+                      }
+                    }} key={key}>
+                      <td > {lesson.lesson_number} </td>
+                      <td > {lesson.name} </td>
+                      <td > {lesson.score} </td>
                     </tr>
                   )
                 })}
@@ -113,10 +142,8 @@ class ManageStudent extends Component {
             </HTMLTable>
           </Card>
         </div>
-        // we want to see the grade for each lesson
-        // we also want to access the saved xml for each lesson
-      );
-    }
+      </div>
+    );
   }
 }
 
