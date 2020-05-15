@@ -4,6 +4,7 @@ import { Button, ButtonGroup, Card, HTMLTable, Text} from "@blueprintjs/core";
 
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 import DisplayBlocks from '../../Blockly_comps/DisplayBlocks';
+import { Link } from 'react-router-dom';
 
 class ManageStudent extends Component {
   state={
@@ -113,19 +114,24 @@ class ManageStudent extends Component {
     return (
       <div>
         <div className="Body" >
-
           <ButtonGroup vertical>
-            <Card>
+            <Link to="/ManageStudents">
+              <Button
+                className="vertical-margin"
+                text="Back"
+                intent="warning"
+              />
+            </Link>
+            <Card className="vertical-margin" >
               <Text>{student.first_name + " " + student.last_name} </Text>
               <Text>{"(" + student.username + ")"}</Text>
             </Card>
-            <br/>
             <Button
+              className="vertical-margin"
               text="Remove Student"
               intent="danger"
               onClick={(e) => this.onRemoveStudent(e)}
             />
-            <br />
           </ButtonGroup>
         </div>
 
@@ -139,7 +145,7 @@ class ManageStudent extends Component {
         />
         <br/>
 
-        <div className="Manage-Table">
+        <div className="centered horizontal-margin">
           <Card >
             <HTMLTable striped interactive bordered>
               <thead>

@@ -92,9 +92,8 @@ class LessonScreen extends Component {
                 <BlocklyComp
                     lessonID={this.props.match.params.lessonID}
                     initialXml={this.state.progressXml}
-                    username={this.state.username}
                 />
-                <h3>Expected Answer: {this.state.answer}</h3>
+                {/* <h3>Expected Answer: {this.state.answer}</h3> */}
             </div>
         );
     }

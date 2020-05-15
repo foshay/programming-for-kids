@@ -4,7 +4,7 @@ import { Card, Text, EditableText } from '@blueprintjs/core';
 class EditField extends Component {
     render(){
         return(
-            <Card>
+            <Card className={'horizontal-margin'}>
                 <Text className="Text-Edit-Title">
                     {this.props.title}
                 </Text>

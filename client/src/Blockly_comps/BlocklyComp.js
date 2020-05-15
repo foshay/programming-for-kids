@@ -256,6 +256,8 @@ class BlocklyComp extends Component{
           <Card className={"vertical-margin"} >
             <p>{this.state.gradeResponse}</p>
           </Card>
+          {/* empty div so easier view of grade */}
+          <div style={{'height': '100px'}}/>
         </div>
       )
     }
@@ -276,4 +278,5 @@ class BlocklyComp extends Component{
     )
   }
 }
+
 export default BlocklyComp

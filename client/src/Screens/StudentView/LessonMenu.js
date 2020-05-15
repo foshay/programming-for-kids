@@ -9,6 +9,10 @@ class LessonMenu extends Component {
     isLoading: true,
   };
 
+  componentDidMount(){
+      this.getLessons();
+  }
+
   getLessons = async () => {
     fetch('api/Lesson/all')
       .then(response => {
@@ -22,16 +26,12 @@ class LessonMenu extends Component {
       })
   }
 
-  componentDidMount(){
-      this.getLessons();
-  }
-
   render() {
     if (this.state.isLoading) {
       return (<LoadingSymbol/>);
     }
     return (
-      <div className="Body">
+      <div className="lesson-menu">
         <ButtonGroup large vertical>
           { /* This map prints out a bunch of buttons based on arrays
                   These arrays are taken from the database*/}
@@ -40,12 +40,11 @@ class LessonMenu extends Component {
               <div key={index}>
                 <Link to={"/Lesson/" + value.lesson_id}>
                   <Button
+                    className={"vertical-margin"}
                     // example text: Lesson 1: Proof of Concept 1
                     text={"Lesson " + value.lesson_number + ": " + value.name}
                   />
                 </Link>
-                <br />
-                <br />
               </div>
             )
           })}

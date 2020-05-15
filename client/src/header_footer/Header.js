@@ -82,17 +82,18 @@ class Header extends Component {
                     disabled={loggedOut}
                 />
                 <MenuItem
-                    icon={teacher ? "clipboard" : "ninja"}
-                    text={teacher ? "Manage Students" : "Card Game"}
-                    href={teacher ? "/ManageStudents" : "/CardGame"}
+                    icon={"clipboard"}
+                    text={teacher ? "Manage Students" : "View Grades"}
+                    // href={teacher ? "/ManageStudents" : "/Grades"}
+                    href={teacher ? "/ManageStudents" : "/"}
                     disabled={loggedOut}
                 />
                 <MenuDivider />
-                <MenuItem disabled icon="cog" text="Settings">
                     {/* TODO add Settings*/}
+                {/* <MenuItem disabled icon="cog" text="Settings">
                     <MenuItem text="option coming soon" />
                 </MenuItem>
-                <MenuDivider />
+                <MenuDivider /> */}
                 <MenuItem
                     text={loggedOut ? "Log In" : "Log Out"}
                     intent={loggedOut ? "success" : "danger"}
@@ -104,13 +105,16 @@ class Header extends Component {
         );
 
         return(
-            <div className="Header">
-                <h2 className="Header-Title">Native Code Creator</h2>
-                <div className="Header-Hamburger">
-                    <Popover content={popMenu} position={Position.LEFT_TOP} >
-                        <Button onClick={()=>{ this.checkTokenMenu()}}icon="menu" />
-                    </Popover>
+            <div>
+                <div className="Header">
+                    <h2 className="Header-Title">Native Code Creator</h2>
+                    <div className="Header-Hamburger">
+                        <Popover content={popMenu} position={Position.LEFT_TOP} >
+                            <Button onClick={() => { this.checkTokenMenu() }} icon="menu" />
+                        </Popover>
+                    </div>
                 </div>
+                <div style={{ 'height': '10vh' }} />
             </div>
         )
     }

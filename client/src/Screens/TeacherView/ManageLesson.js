@@ -100,17 +100,6 @@ class ManageLesson extends Component {
           alert("Database Error");
         }
       });
-
-/*      if (body === "Success"){
-        console.info("Created " + name);
-        alert("Lesson Created");
-        // TODO add redirect back to manageLessons,
-        //  similar to LoginScreen Redirect
-      }
-      else {
-        console.info("Error: " + body);
-        alert("Database Error");
-    } */
     }
     else {
       // If we are editing an existing lesson
@@ -150,7 +139,6 @@ class ManageLesson extends Component {
   handleRemove = async e => {
   // onRemove = () => {
     var lesson_id = this.props.match.params.lessonID;
-    // TODO possibly add OTP for confirmation
       console.log("handling remove");
     var result = window.confirm("Are you sure you want to delete this lesson?");
     console.log("result == " + result);
@@ -186,16 +174,13 @@ class ManageLesson extends Component {
     if (this.props.match.params.lessonID !== "NewLesson") {
       return (
         <Button
-          style={{ marginLeft: "1vh" }}
+          className='horizontal-margin'
           text="Delete"
           intent="warning"
           icon="small-cross"
           onClick={(e) => {
               this.handleRemove(e);
-
-            }
-          }
-
+            }} 
         />
       );
     }
@@ -210,18 +195,18 @@ class ManageLesson extends Component {
     }
     return (
       <div className="Edit-Lesson">
-        <ButtonGroup large style={{ paddingBottom: "1vh" }}>
+        <ButtonGroup large className="vertical-margin">
           <Link to="/ManageLessons">
             <Button
               text="Back"
-              className={"Top-Left-Back"}
-              style={{ marginRight: "1vh" }}
+              className='horizontal-margin'
               intent="warning"
               icon="small-cross"
             />
           </Link>
           <Button
             text="Save"
+            className="horizontal-margin"
             intent="success"
             icon="small-cross"
             onClick={(e) => this.handleSave(e)}

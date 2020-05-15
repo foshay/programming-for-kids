@@ -14,9 +14,10 @@ class ToggleToolbox extends Component {
             // this hides/shows the toolbox
             item.style["display"] = this.state.toolboxShown ? "none" : "block";
         }
+        // Must hide blocklyFlyout as well in case the student clicked on a category
         array = document.getElementsByClassName("blocklyFlyout");
         for (let item of array) {
-            // this hides/shows the toolbox
+            // this hides/shows the toolbox flyouts
             item.style["display"] = this.state.toolboxShown ? "none" : "block";
         }
     }
@@ -25,7 +26,7 @@ class ToggleToolbox extends Component {
         return (
             <div>
                 <button
-                    className={"Toolbox-Toggle-Button"}
+                    className={"toolbox-toggle-button"}
                     icon={this.state.toolboxShown ? "menu-closed" : "menu-open"}
                     onClick={this.toggleToolbox}
                 >

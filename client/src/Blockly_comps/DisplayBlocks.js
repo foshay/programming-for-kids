@@ -95,7 +95,7 @@ class DisplayBlocks extends Component{
           </Card>
         </div>
         <br/>
-        <div className="Display-blocks">
+        <div className="display-blocks">
           <div style={{ height: '600px', width: `100%` }} id="blockly" />
         </div>
       </div>

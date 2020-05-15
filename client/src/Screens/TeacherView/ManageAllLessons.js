@@ -38,11 +38,11 @@ class ManageAllLessons extends Component {
         <Link to="/ManageLessons/NewLesson">
           <Button
             text="Create New Lesson"
+            className="vertical-margin"
             icon="build"
             intent="success"
           />
         </Link>
-        <br />
         <Card>
           <HTMLTable striped interactive bordered>
             <thead>
