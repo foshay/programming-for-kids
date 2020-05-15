@@ -253,7 +253,7 @@ class BlocklyComp extends Component{
             intent="success"
             onClick={(e) => this.handleGrade(e)}
           />
-          <Card className={"vertical-margin"} >
+          <Card className={"vertical-margin horizontal-margin"} >
             <p>{this.state.gradeResponse}</p>
           </Card>
           {/* empty div so easier view of grade */}
