@@ -80,3 +80,10 @@
 .OTP-container{
     margin: 1vh;
 }
+
+.Display-blocks {
+    position: flex;
+    z-index: -1;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}

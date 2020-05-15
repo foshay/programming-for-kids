@@ -76,19 +76,32 @@ class DisplayBlocks extends Component{
     if (!this.props.initialXml){
       return(
         <div className="Manage-Table">
-          <Card>
+          <Card onClick={() => this.props.hidePopup()}>
             <Text>Student has not attempted</Text>
             <Text>{"\"" + this.props.lesson_name + "\""}</Text>
+            <br/>
+            <Text>Click here to hide</Text>
           </Card>
         </div>
         )
     }
     return (
-      <div className="Edit-Lesson">
-        <div style={{ height: '600px', width: `100%` }} id="blockly" />
+      <div >
+        <div className="Manage-Table">
+          <Card onClick={() => this.props.hidePopup()}>
+            <Text>{"\"" + this.props.lesson_name + "\""}</Text>
+            <br/>
+            <Text>Click here to hide lesson progress</Text>
+          </Card>
+        </div>
+        <br/>
+        <div className="Display-blocks">
+          <div style={{ height: '600px', width: `100%` }} id="blockly" />
+        </div>
       </div>
     )
   }
 }
+
 
 export default DisplayBlocks

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, ButtonGroup, Card, HTMLTable} from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, HTMLTable, Text} from "@blueprintjs/core";
 
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol';
 import DisplayBlocks from '../../Blockly_comps/DisplayBlocks';
@@ -70,6 +70,41 @@ class ManageStudent extends Component {
     }
   }
 
+  clickOnRow = (lesson) => {
+    if (this.state.shown) {
+      // If another lesson is shown, just switch to this one
+      if (this.state.viewed_id !== lesson.lesson_id) {
+        this.showPopup(lesson);
+      }
+      else {
+        // Clicked on the same lesson to hide
+        this.hidePopup();
+      }
+    }
+    else {
+      // No lesson is shown, show this lesson
+      this.showPopup(lesson);
+    }
+  }
+
+  hidePopup = () => {
+    this.setState({
+      shown: false,
+      viewed_xml: '',
+      viewed_id: '',
+      viewed_name: ''
+    });
+  }
+
+  showPopup = (lesson) => {
+    this.setState({
+      shown: true,
+      viewed_xml: lesson.progress_xml,
+      viewed_id: lesson.lesson_id,
+      viewed_name: lesson.name
+    });
+  }
+
   render() {
     if (this.state.isLoading){
       return (<LoadingSymbol/>);
@@ -80,8 +115,11 @@ class ManageStudent extends Component {
         <div className="Body" >
 
           <ButtonGroup vertical>
-            <h3>{student.first_name + " " + student.last_name} </h3>
-            <h5>{"(" + student.username + ")"}</h5>
+            <Card>
+              <Text>{student.first_name + " " + student.last_name} </Text>
+              <Text>{"(" + student.username + ")"}</Text>
+            </Card>
+            <br/>
             <Button
               text="Remove Student"
               intent="danger"
@@ -96,6 +134,7 @@ class ManageStudent extends Component {
           initialXml={this.state.viewed_xml}
           lesson_id={this.state.viewed_id}
           lesson_name={this.state.viewed_name}
+          hidePopup={() => this.hidePopup()}
           key={this.state.viewed_id}
         />
         <br/>
@@ -103,57 +142,41 @@ class ManageStudent extends Component {
         <div className="Manage-Table">
           <Card >
             <HTMLTable striped interactive bordered>
-              {/* <HTMLTable striped bordered> */}
               <thead>
                 <tr>
                   <th />
                   <th>Lesson Name</th>
                   <th>Score</th>
+                  <th>Attempted</th>
                 </tr>
               </thead>
               <tbody key="table-body">
                 {this.state.grades.map((lesson, key) => {
                   return (
-                    <tr onClick={() => {
-                      if (this.state.shown){
-                        // If another lesson is shown, just switch to this one
-                        if (this.state.viewed_id !== lesson.lesson_id) {
-                          this.setState({
-                            // shown: !this.state.shown,
-                            viewed_xml: lesson.progress_xml,
-                            viewed_id: lesson.lesson_id,
-                            viewed_name: lesson.name
-                          });
-                        }
-                        else {
-                          // clicked on the same lesson to hide
-                          this.setState({
-                            shown: false,
-                            viewed_xml: '',
-                            viewed_id: '',
-                            viewed_name: ''
-                          });
-                        }
+                    <tr
+                      onClick={() => this.clickOnRow(lesson)}
+                      style={
+                        {'background-color': 
+                        (this.state.viewed_id === lesson.lesson_id) ?
+                          { 'backgroud-color': 'blue' } :
+                          { 'backgroud-color': 'black' }
+                          }
+                        // (this.state.viewed_id === lesson.lesson_id) ?
+                        //   { 'backgroud-color': 'blue' } :
+                        //   { 'backgroud-color': 'black' }
                       }
-                      else {
-                        // No lesson is shown, show this lesson
-                        this.setState({
-                          shown: !this.state.shown,
-                          viewed_xml: lesson.progress_xml,
-                          viewed_id: lesson.lesson_id,
-                          viewed_name: lesson.name
-                        });
-                      }
-                    }} key={key}>
+                      key={key}>
                       <td > {lesson.lesson_number} </td>
                       <td > {lesson.name} </td>
                       <td > {lesson.score} </td>
+                      <td > {lesson.progress_xml ? "yes" : "no"} </td>
                     </tr>
                   )
                 })}
               </tbody>
             </HTMLTable>
           </Card>
+          <br/>
         </div>
       </div>
     );
