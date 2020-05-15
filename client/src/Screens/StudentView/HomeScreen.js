@@ -5,38 +5,43 @@ import { Button, ButtonGroup } from "@blueprintjs/core";
 class HomeScreen extends Component {
   render() {
     return (
-      <div className="Body">
+      <div className="home-menu">
         <ButtonGroup large vertical>
           <Link to="/LessonMenu">
             <Button
+              className={"vertical-margin"}
               text="Lessons"
               icon="book"
               intent="primary"
             />
           </Link>
-          <br />
-          <Link to="/CardGame">
+          {/* <Link to="/CardGame">
             <Button
+              className={"vertical-margin"}
               text="Card Game"
               type="button"
               icon="ninja"
             />
-          </Link>
-          <br />
-          <Button
+          </Link> */}
+          {/* <Button
+            className={"vertical-margin"}
             text="Settings"
             icon="cog"
             disabled
-          />
-          <br />
-          {/* <Link to="/">
+          /> */}
+          <Link to="/">
             <Button
+              className={"vertical-margin"}
               text="Log-Out"
               icon="log-out"
               intent="danger"
-              onClick={() => localStorage.setItem('nccjwt', '')}
+              onClick={() =>{
+                localStorage.setItem('nccjwt', '')
+                window.location.reload(true);
+              }
+              } 
             />
-          </Link> */}
+          </Link>
         </ButtonGroup>
       </div>
 
