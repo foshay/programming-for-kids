@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // Our components
 import BlocklyComp from '../../Blockly_comps/BlocklyComp.js'
 import LoadingSymbol from '../../SmallComponents/LoadingSymbol.js';
+import { Card, Text } from '@blueprintjs/core';
 
 // Token things
 const jwt = require('jsonwebtoken');
@@ -11,6 +12,7 @@ const initialXml = '<xml xmlns="https://developers.google.com/blockly/xml"><bloc
 
 class LessonScreen extends Component {
     state = {
+        name: "[Loading]",
         question: "[Loading]",
         hint: "[Loading]",
         answer: "[Loading]",
@@ -51,6 +53,7 @@ class LessonScreen extends Component {
                 .then(json => {
                     console.log(json);
                     this.setState({
+                        name: json.data.name,
                         question: json.data.question,
                         hint: json.data.hint,
                         answer: json.data.answer,
@@ -77,9 +80,15 @@ class LessonScreen extends Component {
             return (<div/>)
         }
         return (
-            <div className="BodyMenu-Lesson">
-                <h3>Goal: {this.state.question}</h3>
-                <h3>Hint: {this.state.hint}</h3>
+            <div>
+                <div className="Body">
+                    <Card>
+                        <Text><h1>{this.state.name} </h1> </Text>
+                        <Text> {"Goal: " + this.state.question} </Text>
+                        {"Hint: " + this.state.hint}
+                    </Card>
+                    <br />
+                </div>
                 <BlocklyComp
                     lessonID={this.props.match.params.lessonID}
                     initialXml={this.state.progressXml}
