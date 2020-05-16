@@ -231,6 +231,7 @@ app.post('/api/grade', (req, res) => {
             let params = [text, username, lesson_id];
             db.run(sql, params, (error) => {
                 if (error) {
+                    console.log(error);
                     messageText = "Database Error";
                     errorText = error;
                 }
@@ -481,19 +482,39 @@ app.put('/api/UpdateLesson', (req, res,next) => {
 app.delete('/api/RemoveLesson', (req, res,next) => {
     let body = req.body;
     let lesson_id = body.lesson_id;
+    let lesson_number;
 
-    let sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+    let sql = 'SELECT lesson_number FROM Lesson WHERE lesson_id=?';
     let params = [lesson_id];
-
-    db.run(sql, params, (err) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             console.log(err);
             res.send("DB Failure");
-        } else {
-            runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
-            console.log("Lesson removal succecssful: " + lesson_id);
-            res.send("Success");
-        }
+            return;
+        } 
+        lesson_number = row.lesson_number;
+        sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+        params = [lesson_id];
+        db.run(sql, params, (err) => {
+            if (err) {
+                console.log(err);
+                res.send("DB Failure");
+                return;
+            }
+
+            sql = 'UPDATE Lesson SET lesson_number = lesson_number -1 WHERE lesson_number > ?'
+            params = [lesson_number];
+            db.run(sql, params, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.send("DB Failure");
+                } else {
+                    runCmd("rm ./grading_scripts/" + lesson_id, function (text, error) { });
+                    console.log("Lesson removal succecssful: " + lesson_id);
+                    res.send("Success");
+                }
+            });
+        });
     });
 });
 
