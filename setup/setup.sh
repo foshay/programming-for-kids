@@ -5,12 +5,8 @@ export NVM_DIR="$HOME/.nvm"
 nvm install node
 npm install npm@latest -g
 cd "$(dirname "$0")"
-sudo apt-get install sqlite3
+sudo apt-get install sqlite3 network-manager
 ./resetUsers.sh
-git clone https://github.com/oblique/create_ap
-cd create_ap
-sudo make install
-cd ../
 cd ../
 npm install
 cd ./client

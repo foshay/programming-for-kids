@@ -1,1 +1,4 @@
-sudo create_ap -n $(iwgetid | sed 's/ .*//') 'learn cs' & npx npm-run-all --parallel client server
+cd "$(dirname "$0")"
+./setup/create_hotspot.sh
+npx npm-run-all --parallel client server & pid=$!
+./setup/delete_hotspot.sh
