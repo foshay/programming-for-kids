@@ -34,7 +34,7 @@ class ManageAllLessons extends Component {
       return (<LoadingSymbol/>);
     }
     return (
-      <div className="Body">
+      <div className="home-menu">
         <Link to="/ManageLessons/NewLesson">
           <Button
             text="Create New Lesson"

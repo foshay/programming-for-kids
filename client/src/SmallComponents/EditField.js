@@ -13,6 +13,7 @@ class EditField extends Component {
                     placeholder={this.props.placeholder}
                     value={this.props.value}
                     onChange={(e) => this.props.onChange(e)}
+                    multiline
                 />
             </Card>
         );
