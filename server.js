@@ -228,7 +228,7 @@ app.post('/api/grade', (req, res) => {
             console.log(text);
             messageText = "Results of grading your code: " + text;
             let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
-            let params = [text, username, lesson_id];
+            let params = [text, lesson_id, username];
             db.run(sql, params, (error) => {
                 if (error) {
                     console.log(error);
