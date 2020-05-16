@@ -34,15 +34,15 @@ class ManageAllLessons extends Component {
       return (<LoadingSymbol/>);
     }
     return (
-      <div className="Body">
+      <div className="home-menu">
         <Link to="/ManageLessons/NewLesson">
           <Button
             text="Create New Lesson"
+            className="vertical-margin"
             icon="build"
             intent="success"
           />
         </Link>
-        <br />
         <Card>
           <HTMLTable striped interactive bordered>
             <thead>

@@ -1,23 +1,88 @@
 .Body {
-    padding-top: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1vh;
+}
+
+.home-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1vh;
+    margin-top: 10vh;
+}
+
+.lesson-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1vh;
+    margin-top: 10vh;
+}
+
+.toolbox-toggle-button{
+    position: fixed;
+    bottom: 1vh;
+    left: 0;
+    z-index: 10;
+    border-radius: 50%;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 10px;
+    margin: 2vh;
+}
+
+.injectionDiv{
+    z-index: 2;
+}
+
+.OTP-container{
+    margin: 1vh;
+}
+
+.display-blocks {
+    position: flex;
+    z-index: -1;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+
+.centered{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.Body2 {
+.vertical-margin {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+.horizontal-margin {
+    margin-left: 1vh;
+    margin-right: 1vh;
+}
+
+.Manage-Table{
+    padding-left: 1vh;
+    padding-right: 1vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* .BackTopLeft {
-    padding-top: 130px;
+/* .Body2 {
     display: flex;
-    justify-content: left;
-} */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 .BodyTable {
     display: flex;
@@ -25,20 +90,20 @@
     align-items: center;
     left: 0;
     right: 0;
-}
-
+} */
+/* 
 .BodyMenu-Lesson{
     position: absolute;
     /* setting the z index so that
     none of the components display above header
     or footer */
-    z-index: -1;
+    /* z-index: -1;
     width:100%;
     padding-top: 10vh;
     padding-bottom: 10vh;
-    margin: 1vh;
-}
-
+    margin: 1vh; */
+/* } */ 
+/* 
 .Edit-Lesson{
     position: flex;
     z-index: -1;
@@ -49,24 +114,4 @@
 
 .Text-Edit-Title{
     font-size: large;
-}
-
-.Toolbox-Toggle-Button{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
-    border-radius: 50%;
-    background-color: cornflowerblue;
-    color: white;
-    padding: 10px;
-    margin: 1vh;
-}
-
-.injectionDiv{
-    z-index: 2;
-}
-
-.OTP-container{
-    margin: 1vh;
-}
+} */

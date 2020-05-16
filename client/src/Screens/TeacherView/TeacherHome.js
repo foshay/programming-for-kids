@@ -11,30 +11,28 @@ import "../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css"
 class TeacherHome extends Component {
   render() {
     return (
-      <div className="Body">
+      <div className="home-menu">
           <ButtonGroup vertical large >
             <Link to="/ManageStudents">
               <Button
                 text="Manage Students"
-                className="MenuItem"
+                className="vertical-margin"
                 icon="clipboard"
                 intent="success"
               />
             </Link>
-            <br />
             <Link to="/ManageLessons">
               <Button
-                className="MenuItem"
+                className="vertical-margin"
                 text="Manage Lessons"
                 icon="wrench"
                 intent="primary"
               />
             </Link>
-            <br />
             <Link to="/ManageLessons/NewLesson">
               <Button
                 text="New Lesson"
-                className="MenuItem"
+                className="vertical-margin"
                 icon="build"
                 intent="none"
               />

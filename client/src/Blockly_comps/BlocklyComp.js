@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 // blueprint imports
-import { Button } from '@blueprintjs/core';
+import { Button, Card } from '@blueprintjs/core';
 
 // Our components
 import ToggleToolbox from './ToggleToolbox.js';
@@ -17,6 +17,11 @@ require('blockly/python');
 const jwt = require('jsonwebtoken');
 const secret = "this is temporary"
 
+// Contains:
+//  the toolbox toggle button
+//  blockly workspace
+//  connected response
+//  grade button and response when not in edit mode
 class BlocklyComp extends Component{
   state ={
     toolboxCategories: '',
@@ -24,8 +29,8 @@ class BlocklyComp extends Component{
     newXml: '',
     initialXml: this.props.initialXml,
 
-    gradeResponse: '',
     connectedResponse: '',
+    gradeResponse: 'Click \'Grade Code\' to send your code to the grading server.',
   }
 
   componentDidMount = () => {
@@ -45,25 +50,17 @@ class BlocklyComp extends Component{
     // This runs if a new intialXml has loaded from the database
     if (this.props.initialXml !== prevProps.initialXml) {
       console.log("InitialXml updated");
-      this.renderEditor();
+      this.renderEditor(this.state.toolboxCategories);
     }
   }
 
   // This renders the blockly editor by setting the div with id='blockly'
   // to be a blocklyEditor
-  renderEditor = (toolbox) => {
-    // toolboxCategories is passed in if there was no waiting
-    // for a promise to finish. Otherwise, toolbox has been
-    // loaded into the toolboxCategories state because the page
-    // was re rendered when the new initialXml was passed in through the
-    // props after being loaded in the api call
-    var toolboxCategories;
-    if (toolbox) { toolboxCategories = toolbox; }
-    else { toolboxCategories = this.state.toolboxCategories; }
+  renderEditor = (toolboxCategories) => {
     const Editor =
       <ReactBlocklyComponent.BlocklyEditor
         // The block categories to be available.
-        toolboxCategories={toolboxCategories} //this is obvious what it does
+        toolboxCategories={toolboxCategories} 
         workspaceConfiguration={{
           grid: {
             spacing: 20,
@@ -72,11 +69,10 @@ class BlocklyComp extends Component{
             snap: true,
           },
         }}
-        //we can possibly change the initial xml on a per lesson basis... or not
         initialXml={this.props.initialXml}
-        //the div wrapper that will be generated for blockly
+        // The div wrapper that will be generated for blockly
         wrapperDivClassName="fill-height"
-        //what method to call when the workspace changes
+        // What method to call when the workspace changes
         workspaceDidChange={(workspace) => this.workspaceDidChange(workspace)}
       />
 
@@ -85,6 +81,9 @@ class BlocklyComp extends Component{
       ReactDOM.render(Editor, document.getElementById('blockly'));
   }
 
+  // Loads in default toolbox as well as
+  //  user code block in teacher mode
+  //  AI blocks in student mode
   loadBlocks = () => {
     var toolboxCategories = parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML);
     if (this.props.edit) {
@@ -135,9 +134,6 @@ class BlocklyComp extends Component{
   checkApiConnection = () => {
     fetch('/api/connect')
     .then(response => {
-      // if (response.status !== 200) {
-      //   throw Error(response.json.message);
-      // }
       return response.json();
     })
     .then(json => {
@@ -146,8 +142,10 @@ class BlocklyComp extends Component{
     });
   }
 
-  // Checks the token and calls the api/grade call if the token is valid
-  handleSubmit = (e) => {
+  // Checks the token and if valid
+  //  in student mode: calls the api/grade call
+  //  in teacher mode: button not shown, function cannot be called
+  handleGrade = (e) => {
     e.preventDefault();
     var username;
     var token = localStorage.getItem('nccjwt');
@@ -185,6 +183,7 @@ class BlocklyComp extends Component{
     }
   }
 
+  // Called when the workspace changes
   workspaceDidChange = (workspace) => {
     workspace.addChangeListener(Blockly.Events.disableOrphans);
     const oldCode = this.state.code;
@@ -244,14 +243,22 @@ class BlocklyComp extends Component{
     }
     else {
       return (
-        <Button
-          text={"Grade code"}
-          large
-          icon="tick"
-          id="gradeButton"
-          intent="success"
-          onClick={(e) => this.handleSubmit(e)}
-        />
+        <div className="centered">
+          <Button
+            className={"vertical-margin"}
+            text={"Grade code"}
+            large
+            icon="tick"
+            id="gradeButton"
+            intent="success"
+            onClick={(e) => this.handleGrade(e)}
+          />
+          <Card className={"vertical-margin horizontal-margin"} >
+            <p>{this.state.gradeResponse}</p>
+          </Card>
+          {/* empty div so easier view of grade */}
+          <div style={{'height': '100px'}}/>
+        </div>
       )
     }
   }
@@ -260,13 +267,16 @@ class BlocklyComp extends Component{
     return (
       <div>
         <ToggleToolbox/>
-        <div style={{ height: '600px', width: `100%` }} id="blockly" />
-        <p>{this.state.gradeResponse}</p>
-        <this.GradeButton/>
-        <p>{this.state.connectedResponse}</p>
+        <div className="display-blocks" >
+          <div style={{ height: '600px', width: `100%` }} id="blockly" />
+        </div >
+        <div className="centered">
+          <p className={"vertical-margin"}> {this.state.connectedResponse}</p>
+          <this.GradeButton />
+        </div>
       </div>
     )
   }
-
 }
+
 export default BlocklyComp

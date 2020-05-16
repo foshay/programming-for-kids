@@ -6,24 +6,24 @@ class LoginMenu extends Component {
 
   render() {
     return (
-      <div className="Body">
+      <div className="home-menu">
         <ButtonGroup vertical large>
           <Link to="/login">
             <Button
               type="submit"
               id="loginButton"
-              className="bp3-button bp3-icon-layout-log-in bp3-large"
+              className="vertical-margin"
               icon="log-in"
               text="Log In"
               intent="success"
             />
           </Link>
-          <br/>
           <Link to="/register">
             <Button
               type="submit"
               id="registerButton"
-              className="bp3-button bp3-icon-layout-confirm bp3-large"
+              className="vertical-margin"
+              icon="log-in"
               icon="confirm"
               text="Register"
               intent="primary"

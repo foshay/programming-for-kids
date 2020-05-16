@@ -37,7 +37,7 @@ class ManageAllStudents extends Component {
       return (<LoadingSymbol/>);
     }
     return (
-      <div className="Body">
+      <div className="home-menu">
         <Card>
           <HTMLTable striped interactive bordered>
             <thead>

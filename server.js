@@ -95,7 +95,8 @@ app.post('/api/register', async (req, res, next) => {
             }
 
             // Insert new user to database
-            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) VALUES (?,?,?,?,?)';
+            sql = 'INSERT INTO User(first_name, last_name, username, password, is_teacher) \
+                    VALUES (?,?,?,?,?)';
             params = [first_name, last_name, username, password_hash, is_teacher];
             console.log("Attempting user creation:");
             console.log(params);
@@ -227,9 +228,10 @@ app.post('/api/grade', (req, res) => {
             console.log(text);
             messageText = "Results of grading your code: " + text;
             let sql = 'UPDATE Grade SET score=? WHERE lesson_id=? AND username=?';
-            let params = [text, username, lesson_id];
+            let params = [text, lesson_id, username];
             db.run(sql, params, (error) => {
                 if (error) {
+                    console.log(error);
                     messageText = "Database Error";
                     errorText = error;
                 }
@@ -396,7 +398,8 @@ app.post('/api/NewLesson', (req, res,next) => {
             lesson_number = row["MAX (lesson_number)"] + 1;
             // console.log(lesson_number);
             // TODO change this to be just one call
-            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) VALUES (?,?,?,?,?,?,?)';
+            sql = 'INSERT INTO Lesson(lesson_id, lesson_number, question, answer, name, hint, xml) \
+                    VALUES (?,?,?,?,?,?,?)';
             let params = [lesson_id, lesson_number, question, answer, name, hint, xml];
             db.run(sql, params, (err) => {
                 if (err) {
@@ -413,7 +416,8 @@ app.post('/api/NewLesson', (req, res,next) => {
                     else {
                         // TODO set grade for this lesson for all students to 0
                         // make an entry for all the usernames in the Grade table...?
-                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username FROM User WHERE is_teacher=0';
+                        sql = 'INSERT INTO Grade(lesson_id, username) SELECT ?, username \
+                                FROM User WHERE is_teacher=0';
                         let params = [lesson_id];
                         db.run(sql, params, (err) => {
                             if (err){
@@ -478,46 +482,87 @@ app.put('/api/UpdateLesson', (req, res,next) => {
 app.delete('/api/RemoveLesson', (req, res,next) => {
     let body = req.body;
     let lesson_id = body.lesson_id;
+    let lesson_number;
 
-    let sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+    let sql = 'SELECT lesson_number FROM Lesson WHERE lesson_id=?';
     let params = [lesson_id];
-
-    db.run(sql, params, (err) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             console.log(err);
             res.send("DB Failure");
-        } else {
-            runCmd("rm ./grading_scripts/"+lesson_id, function (text, error) {});
-            console.log("Lesson removal succecssful: " + lesson_id);
-            res.send("Success");
-        }
+            return;
+        } 
+        lesson_number = row.lesson_number;
+        sql = 'DELETE FROM Lesson WHERE lesson_id=?';
+        params = [lesson_id];
+        db.run(sql, params, (err) => {
+            if (err) {
+                console.log(err);
+                res.send("DB Failure");
+                return;
+            }
+
+            sql = 'UPDATE Lesson SET lesson_number = lesson_number -1 WHERE lesson_number > ?'
+            params = [lesson_number];
+            db.run(sql, params, (err) => {
+                if (err) {
+                    console.log(err);
+                    res.send("DB Failure");
+                } else {
+                    runCmd("rm ./grading_scripts/" + lesson_id, function (text, error) { });
+                    console.log("Lesson removal succecssful: " + lesson_id);
+                    res.send("Success");
+                }
+            });
+        });
     });
 });
 
 /****************** User Requests *****************/
 
 app.get('/api/User/:username', (req, res) => {
-    console.log("Student requested");
     let sql = 'SELECT * FROM User WHERE username = ?';
     let username = req.params.username;
     let params = [username];
-
-    // TODO also return scores for each lesson, stored in Grade
-    // scores should be in data.scores
+    console.log("Student requested: " + username);
+    let data = {};
 
     db.get(sql, params, (err, row) => {
         if (err) {
+            console.log(err);
             res.status(400).json({
                 "error": err.message,
                 "message": "Failure"
             })
             return;
         }
+        data.username = row.username;
+        data.first_name = row.first_name;
+        data.last_name = row.last_name;
         console.log("Retrieving user:");
-        console.log(row);
-        res.json({
-            message: "Success",
-            data: row
+        console.log(data);
+        // Get the lesson number, name, id, progress_xml, and score for the student
+        // with requested username, and sort by lesson_number
+        sql = 'SELECT Lesson.lesson_number, Lesson.name, Lesson.lesson_id, \
+                Grade.progress_xml, Grade.score FROM Lesson \
+                LEFT JOIN Grade ON Lesson.lesson_id = Grade.lesson_id \
+                WHERE username=? GROUP BY Lesson.lesson_number';
+        params = [username];
+        db.all(sql, params, (err, row) => {
+            console.log(row);
+            if (err) {
+                console.log(err);
+                res.status(400).json({
+                    "error": err.message,
+                    "message": "Failure"
+                })
+                return;
+            }
+            data.grades = row;
+            res.json({
+                message: "Success",
+                data: data
+            });
         });
     });
 });
