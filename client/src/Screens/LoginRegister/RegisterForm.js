@@ -127,7 +127,7 @@ class RegisterForm extends Component {
         if (this.state.created){
             return ( <Redirect to="/login"/>);
         }
-        var hasSymbol = new RegExp(/[!@#$%^&*()]/);
+        var hasSymbol = new RegExp(/[!@#$%^&*(),./?<>\\|{}\[\]+'"_=-]/);
         var hasNum = new RegExp(/\d/);
         var hasSpace = new RegExp(/\s/);
         var startWithLetter = new RegExp(/^[a-zA-Z].*$/);
