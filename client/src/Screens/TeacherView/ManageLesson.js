@@ -219,28 +219,27 @@ class ManageLesson extends Component {
           value={this.state.name}
           onChange={(value) => { this.setState({ name: value }); }}
         />
-        <br />
         <EditField
           title="Question"
           placeholder="Click to edit..."
           value={this.state.question}
           onChange={(value) => this.setState({ question: value })}
+          multiline
         />
-        <br />
         <EditField
           title="Hint"
           placeholder="Click to edit..."
           value={this.state.hint}
           onChange={(value) => this.setState({ hint: value })}
+          multiline
         />
-        <br />
         <EditField
           title="Answer"
           placeholder="Click to edit..."
           value={this.state.answer}
           onChange={(value) => this.setState({ answer: value })}
+          multiline
         />
-        <br />
         <BlocklyComp edit
         lessonID={this.props.match.params.lessonID}
         initialXml={this.state.initialXml}
