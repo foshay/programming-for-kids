@@ -10,7 +10,7 @@
     "@blueprintjs/core": "^3.23.1",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "image-data-uri": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.3",
